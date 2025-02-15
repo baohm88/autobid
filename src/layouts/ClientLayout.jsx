@@ -6,7 +6,7 @@ export default function ClientLayout({ children }) {
         <div>
             <header>
                 <nav className="navbar navbar-expand-lg bg-body-tertiary">
-                    <div className="container">
+                    <div className="container-xxl">
                         <NavLink className="navbar-brand" to={"/"}>
                             <img
                                 src="/logo-autobid.svg"
@@ -92,21 +92,8 @@ export default function ClientLayout({ children }) {
                                     </NavLink>
                                 </li>
                                 <li className="nav-item">
-                                    <NavLink className="nav-link" to="#">
-                                        Logout
-                                    </NavLink>
-                                </li>
-                                <li className="nav-item">
                                     <NavLink className="nav-link" to="/login">
                                         Login
-                                    </NavLink>
-                                </li>
-                                <li className="nav-item">
-                                    <NavLink
-                                        className="nav-link"
-                                        to="/register"
-                                    >
-                                        Register
                                     </NavLink>
                                 </li>
                             </ul>

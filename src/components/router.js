@@ -1,6 +1,5 @@
 import ClientLayout from "../layouts/ClientLayout";
-import EmployeeComponent from "./EmployeeComponent";
-import EmployeesList from "./EmployeesList";
+import Car from "./Car";
 import Home from "./Home";
 import Login from "./Login";
 import Register from "./Register";
@@ -25,16 +24,9 @@ const routes = [
         layout: ClientLayout,
     },
     { path: "/user-wallet", component: UserWallet, layout: ClientLayout },
-
-    { path: "/employees", component: EmployeesList, layout: ClientLayout },
     {
-        path: "/edit-employee/:id",
-        component: EmployeeComponent,
-        layout: ClientLayout,
-    },
-    {
-        path: "/add-employee",
-        component: EmployeeComponent,
+        path: "/cars/:id",
+        component: Car,
         layout: ClientLayout,
     },
 ];
