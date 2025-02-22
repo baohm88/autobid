@@ -73,6 +73,18 @@ export default function ClientLayout({ children }) {
                                                 ? "nav-link active"
                                                 : "nav-link"
                                         }
+                                        to={"/add-car"}
+                                    >
+                                        Sell Car
+                                    </NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink
+                                        className={({ isActive }) =>
+                                            isActive
+                                                ? "nav-link active"
+                                                : "nav-link"
+                                        }
                                         to={"/user-wallet"}
                                     >
                                         My Wallet
