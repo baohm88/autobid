@@ -7,6 +7,7 @@ import Home from "./Home";
 import Login from "./Login";
 import Register from "./Register";
 import CarForm from "./user/CarForm";
+import SellerDashBoard from "./user/SellerDashBoard";
 import UserBids from "./user/UserBids";
 import UserOrders from "./user/UserOrders";
 import UserProducts from "./user/UserProducts";
@@ -32,6 +33,11 @@ const routes = [
     {
         path: "/cars/:id",
         component: Car,
+        layout: ClientLayout,
+    },
+    {
+        path: "/account/listings",
+        component: SellerDashBoard,
         layout: ClientLayout,
     },
     { path: "/auctions", component: Auctions, layout: AdminLayout },

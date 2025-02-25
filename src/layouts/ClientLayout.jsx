@@ -97,6 +97,18 @@ export default function ClientLayout({ children }) {
                                                 ? "nav-link active"
                                                 : "nav-link"
                                         }
+                                        to={"/account/listings"}
+                                    >
+                                        Dashboard
+                                    </NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink
+                                        className={({ isActive }) =>
+                                            isActive
+                                                ? "nav-link active"
+                                                : "nav-link"
+                                        }
                                         to={"/watch-list"}
                                     >
                                         <i className="bi bi-heart-fill text-danger"></i>{" "}
