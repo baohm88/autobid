@@ -28,6 +28,8 @@ export default function Home() {
         },
     ];
 
+    document.title = "AutoBid: Car Auctions";
+
     return (
         <div className="container">
             <h1>All products</h1>

@@ -1,4 +1,7 @@
+import AdminLayout from "../layouts/AdminLayout";
 import ClientLayout from "../layouts/ClientLayout";
+import Auctions from "./admin/Auctions";
+import Orders from "./admin/Orders";
 import Car from "./Car";
 import Home from "./Home";
 import Login from "./Login";
@@ -31,6 +34,8 @@ const routes = [
         component: Car,
         layout: ClientLayout,
     },
+    { path: "/auctions", component: Auctions, layout: AdminLayout },
+    { path: "/orders", component: Orders, layout: AdminLayout },
 ];
 
 export { routes };
