@@ -1,7 +1,15 @@
 import { NavLink } from "react-router-dom";
 import Footer from "../components/Footer";
+import { useContext } from "react";
+import { UserContext } from "../context/user-context";
 
 export default function ClientLayout({ children }) {
+    const { user, logOut } = useContext(UserContext);
+    const isLoggedIn = !!user;
+
+    console.log(user);
+    console.log(isLoggedIn);
+
     return (
         <div>
             <header>
@@ -37,87 +45,14 @@ export default function ClientLayout({ children }) {
                                                 ? "nav-link active"
                                                 : "nav-link"
                                         }
-                                        to={"/user-products"}
-                                    >
-                                        My Products
-                                    </NavLink>
-                                </li>
-                                <li className="nav-item">
-                                    <NavLink
-                                        className={({ isActive }) =>
-                                            isActive
-                                                ? "nav-link active"
-                                                : "nav-link"
-                                        }
-                                        to={"/user-bids"}
-                                    >
-                                        My Bids
-                                    </NavLink>
-                                </li>
-                                <li className="nav-item">
-                                    <NavLink
-                                        className={({ isActive }) =>
-                                            isActive
-                                                ? "nav-link active"
-                                                : "nav-link"
-                                        }
-                                        to={"/user-orders"}
-                                    >
-                                        My Orders
-                                    </NavLink>
-                                </li>
-                                <li className="nav-item">
-                                    <NavLink
-                                        className={({ isActive }) =>
-                                            isActive
-                                                ? "nav-link active"
-                                                : "nav-link"
-                                        }
                                         to={"/add-car"}
                                     >
-                                        Sell Car
-                                    </NavLink>
-                                </li>
-                                <li className="nav-item">
-                                    <NavLink
-                                        className={({ isActive }) =>
-                                            isActive
-                                                ? "nav-link active"
-                                                : "nav-link"
-                                        }
-                                        to={"/user-wallet"}
-                                    >
-                                        My Wallet
-                                    </NavLink>
-                                </li>
-                                <li className="nav-item">
-                                    <NavLink
-                                        className={({ isActive }) =>
-                                            isActive
-                                                ? "nav-link active"
-                                                : "nav-link"
-                                        }
-                                        to={"/account/listings"}
-                                    >
-                                        Dashboard
-                                    </NavLink>
-                                </li>
-                                <li className="nav-item">
-                                    <NavLink
-                                        className={({ isActive }) =>
-                                            isActive
-                                                ? "nav-link active"
-                                                : "nav-link"
-                                        }
-                                        to={"/watch-list"}
-                                    >
-                                        <i className="bi bi-heart-fill text-danger"></i>{" "}
-                                        Favorites
-                                    </NavLink>
-                                </li>
-                                <li className="nav-item">
-                                    <NavLink className="nav-link" to="/login">
-                                        Login
+                                        <button
+                                            type="button"
+                                            className="btn btn-success btn-sm rounded-pill"
+                                        >
+                                            Sell Car
+                                        </button>
                                     </NavLink>
                                 </li>
                             </ul>
@@ -128,13 +63,125 @@ export default function ClientLayout({ children }) {
                                     placeholder="Search for cars (ex. BMW, Audi, Ford)"
                                     aria-label="Search"
                                 />
-                                <button
-                                    className="btn btn-outline-success"
+                                {/* <button
+                                    className="btn btn-outline-success btn-sm"
                                     type="submit"
                                 >
                                     Search
-                                </button>
+                                </button> */}
                             </form>
+
+                            {isLoggedIn ? (
+                                <div className="dropdown mx-3">
+                                    <div
+                                        className="dropdown-toggle"
+                                        type="button"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false"
+                                    >
+                                        <i className="bi bi-bell-fill mx-3"></i>
+                                        <i className="bi bi-person-circle"></i>
+                                    </div>
+                                    <ul className="dropdown-menu dropdown-menu-lg-end">
+                                        <>
+                                            <li className="dropdown-item">
+                                                <NavLink
+                                                    className={({ isActive }) =>
+                                                        isActive
+                                                            ? "nav-link active"
+                                                            : "nav-link"
+                                                    }
+                                                    to={"/user-products"}
+                                                >
+                                                    <i className="bi bi-ev-front-fill"></i>{" "}
+                                                    My Products
+                                                </NavLink>
+                                            </li>
+                                            <li className="dropdown-item">
+                                                <NavLink
+                                                    className={({ isActive }) =>
+                                                        isActive
+                                                            ? "nav-link active"
+                                                            : "nav-link"
+                                                    }
+                                                    to={"/user-bids"}
+                                                >
+                                                    <i className="bi bi-envelope-arrow-up-fill"></i>{" "}
+                                                    My Bids
+                                                </NavLink>
+                                            </li>
+                                            <li className="dropdown-item">
+                                                <NavLink
+                                                    className={({ isActive }) =>
+                                                        isActive
+                                                            ? "nav-link active"
+                                                            : "nav-link"
+                                                    }
+                                                    to={"/user-orders"}
+                                                >
+                                                    <i className="bi bi-briefcase-fill"></i>{" "}
+                                                    My Orders
+                                                </NavLink>
+                                            </li>
+                                            <li className="dropdown-item">
+                                                <NavLink
+                                                    className={({ isActive }) =>
+                                                        isActive
+                                                            ? "nav-link active"
+                                                            : "nav-link"
+                                                    }
+                                                    to={"/user-wallet"}
+                                                >
+                                                    <i className="bi bi-wallet-fill"></i>{" "}
+                                                    My Wallet
+                                                </NavLink>
+                                            </li>
+                                            <li className="dropdown-item">
+                                                <NavLink
+                                                    className={({ isActive }) =>
+                                                        isActive
+                                                            ? "nav-link active"
+                                                            : "nav-link"
+                                                    }
+                                                    to={"/account/listings"}
+                                                >
+                                                    <i className="bi bi-clipboard-data-fill"></i>{" "}
+                                                    Dashboard
+                                                </NavLink>
+                                            </li>
+                                            <li className="dropdown-item">
+                                                <NavLink
+                                                    className={({ isActive }) =>
+                                                        isActive
+                                                            ? "nav-link"
+                                                            : "nav-link"
+                                                    }
+                                                    to={"/watch-list"}
+                                                >
+                                                    <i className="bi bi-heart-fill text-danger"></i>{" "}
+                                                    Favorites
+                                                </NavLink>
+                                            </li>
+                                            <li className="dropdown-item">
+                                                <button
+                                                    className="nav-link btn btn-link text-start w-100"
+                                                    onClick={logOut}
+                                                >
+                                                    <i className="bi bi-box-arrow-right"></i>{" "}
+                                                    Logout
+                                                </button>
+                                            </li>
+                                        </>
+                                    </ul>
+                                </div>
+                            ) : (
+                                <button className="btn btn-success btn-sm">
+                                    <NavLink className="nav-link" to={"/login"}>
+                                        <i className="bi bi-box-arrow-left"></i>{" "}
+                                        Login
+                                    </NavLink>
+                                </button>
+                            )}
                         </div>
                     </div>
                 </nav>

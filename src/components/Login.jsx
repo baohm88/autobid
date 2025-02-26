@@ -1,11 +1,14 @@
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../context/user-context";
 
 export default function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(false);
+
+    const { setUser } = useContext(UserContext);
     const navigate = useNavigate();
     document.title = "Account Login";
 
@@ -30,11 +33,10 @@ export default function Login() {
                 const user = resData.data[0];
                 console.log(resData.data[0]);
 
-                // Set user in the context
-                // setUser(user);
                 setError(false);
                 alert("Welcome, " + resData.data[0].username);
 
+                setUser(user);
                 // Save the user object to localStorage as a JSON string
                 localStorage.setItem("user", JSON.stringify(user));
 
