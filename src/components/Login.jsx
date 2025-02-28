@@ -31,7 +31,6 @@ export default function Login() {
 
             if (resData.success === true) {
                 const user = resData.data[0];
-                console.log(resData.data[0]);
 
                 setError(false);
                 alert("Welcome, " + resData.data[0].username);
