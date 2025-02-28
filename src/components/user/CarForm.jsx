@@ -1,20 +1,35 @@
+import { useActionState } from "react";
+
 export default function CarForm() {
+    useActionState;
 
+    document.title = "Add new car";
 
-    
+    function carFormAction(fd) {
+        const data = Object.fromEntries(fd.entries());
+        
+
+        console.log(data);
+    }
+
     return (
         <div className="container">
             <h1 className="text-center">Add a new car</h1>
 
             <div className="card">
-                <form className="row g-3 bg-body-tertiary p-3">
+                <form
+                    className="row g-3 bg-body-tertiary p-3"
+                    action={carFormAction}
+                >
                     <div className="col-md-4">
-                        <label htmlFor="inputEmail4" className="form-label">
+                        <label htmlFor="year" className="form-label">
                             Year
                         </label>
                         <select
                             className="form-select"
                             aria-label="Default select example"
+                            id="year"
+                            name="year"
                         >
                             <option selected>Choose</option>
                             <option value="2025">2025</option>
@@ -23,33 +38,37 @@ export default function CarForm() {
                         </select>
                     </div>
                     <div className="col-md-4">
-                        <label htmlFor="inputPassword4" className="form-label">
+                        <label htmlFor="make" className="form-label">
                             Make
                         </label>
                         <input
-                            type="password"
+                            type="text"
                             className="form-control"
-                            id="inputPassword4"
+                            id="make"
+                            name="make"
                         />
                     </div>
                     <div className="col-md-4">
-                        <label htmlFor="inputPassword4" className="form-label">
+                        <label htmlFor="model" className="form-label">
                             Model
                         </label>
                         <input
-                            type="password"
+                            type="text"
                             className="form-control"
-                            id="inputPassword4"
+                            id="model"
+                            name="model"
                         />
                     </div>
 
                     <div className="col-md-6">
-                        <label htmlFor="inputCity" className="form-label">
+                        <label htmlFor="transmission" className="form-label">
                             Transmission
                         </label>
                         <select
                             className="form-select"
                             aria-label="Default select example"
+                            id="transmission"
+                            name="transmission"
                         >
                             <option selected>Select transmission type</option>
                             <option value="automatic">Automatic</option>
@@ -77,17 +96,19 @@ export default function CarForm() {
                             placeholder='Separate each item with ",". For example: sport package, long-range battery, FSD or other important factory-installed features'
                             rows="5"
                             id="equipment"
-                            name="text"
+                            name="equipment"
                         ></textarea>
                     </div>
 
                     <div className="mb-3 mt-3">
-                        <label htmlFor="inputEmail4" className="form-label">
+                        <label htmlFor="modified" className="form-label">
                             Has the car been modified?
                         </label>
                         <select
                             className="form-select"
                             aria-label="Default select example"
+                            id="modified"
+                            name="modified"
                         >
                             <option selected>Choose</option>
                             <option value="new">Brand New</option>
@@ -104,18 +125,20 @@ export default function CarForm() {
                             placeholder='Separate each item with ",".'
                             rows="5"
                             id="modification"
-                            name="text"
+                            name="modification"
                         ></textarea>
                     </div>
 
                     <div className="mb-3 mt-3">
-                        <label htmlFor="inputEmail4" className="form-label">
+                        <label htmlFor="flaw" className="form-label">
                             Are there any significant mechanical or cosmetic
                             flaws that we should know about?
                         </label>
                         <select
                             className="form-select"
                             aria-label="Default select example"
+                            id="flaw"
+                            name="flaw"
                         >
                             <option selected>Choose</option>
                             <option value="yes">Yes</option>
@@ -132,14 +155,12 @@ export default function CarForm() {
                             placeholder='Separate each item with ",".'
                             rows="5"
                             id="flaws"
-                            name="text"
+                            name="flaws"
                         ></textarea>
                     </div>
 
                     <div className="col-12">
-                        <button type="submit" className="btn btn-primary">
-                            Save
-                        </button>
+                        <button className="btn btn-primary">Save</button>
                     </div>
                 </form>
             </div>

@@ -1,6 +1,6 @@
 export default function Auctions() {
     return (
-        <div className="container">
+        <div>
             <h1>List of Auctions</h1>
         </div>
     );
