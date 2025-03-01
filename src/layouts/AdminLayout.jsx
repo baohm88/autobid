@@ -1,75 +1,88 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 export default function AdminLayout({ children }) {
+    const location = useLocation();
+    // Hide sidebar on the home page; adjust condition as needed.
+    const showSidebar = location.pathname !== "/home";
+
     return (
-        <>
-            <div className="container-fluid">
-                <div className="row">
-                    {/* side bar */}
+        <div className="container-fluid">
+            <div className="row">
+                {showSidebar && (
                     <div className="col-sm-auto bg-light sticky-top">
                         <div className="d-flex flex-sm-column flex-row flex-nowrap bg-light align-items-center sticky-top">
                             <NavLink
-                                // to="/"
+                                to="/homes"
                                 className="d-block p-3 link-dark text-decoration-none"
-                                title=""
+                                title="Back to Home"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="right"
-                                data-bs-original-title="Back to Home"
                             >
-                                <img
-                                    src="/logo-autobid.svg"
-                                    alt="auto bid"
-                                    height={30}
-                                />
+                                <img src="/logo-autobid.svg" alt="auto bid" height={30} />
                             </NavLink>
                             <ul className="nav nav-flush flex-sm-column flex-row flex-nowrap mb-auto mx-auto text-center align-items-center">
                                 <li className="nav-item">
                                     <NavLink
-                                        to={"/auctions"}
-                                        className="nav-link py-3 px-1"
-                                        title=""
+                                        to="/homes"
+                                        className="nav-link py-3 px-1 link-dark"
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="right"
-                                        data-bs-original-title="Home"
+                                        title="Home"
                                     >
-                                        <i className="bi-house fs-1"></i>
+                                        {({ isActive }) => (
+                                            <i
+                                                className="bi-house fs-1"
+                                                style={{ color: isActive ? "red" : "inherit" }}
+                                            ></i>
+                                        )}
                                     </NavLink>
                                 </li>
                                 <li>
                                     <NavLink
-                                        to={"/auctions"}
-                                        className="nav-link py-3 px-1"
-                                        title=""
+                                        to="/auctions"
+                                        className="nav-link py-3 px-1 link-dark"
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="right"
-                                        data-bs-original-title="Dashboard"
+                                        title="Dashboard"
                                     >
-                                        <i className="bi-speedometer2 fs-1"></i>
+                                        {({ isActive }) => (
+                                            <i
+                                                className="bi-speedometer2 fs-1"
+                                                style={{ color: isActive ? "red" : "inherit" }}
+                                            ></i>
+                                        )}
                                     </NavLink>
                                 </li>
                                 <li>
                                     <NavLink
-                                        to={"/orders"}
-                                        className="nav-link py-3 px-1"
-                                        title=""
+                                        to="/orders"
+                                        className="nav-link py-3 px-1 link-dark"
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="right"
-                                        data-bs-original-title="Orders"
+                                        title="Orders"
                                     >
-                                        <i className="bi-table fs-1"></i>
+                                        {({ isActive }) => (
+                                            <i
+                                                className="bi-table fs-1"
+                                                style={{ color: isActive ? "red" : "inherit" }}
+                                            ></i>
+                                        )}
                                     </NavLink>
                                 </li>
-
                                 <li>
                                     <NavLink
-                                        to={"/users"}
-                                        className="nav-link py-3 px-1"
-                                        title=""
+                                        to="/users"
+                                        className="nav-link py-3 px-1 link-dark"
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="right"
-                                        data-bs-original-title="Users"
+                                        title="Users"
                                     >
-                                        <i className="bi-people fs-1"></i>
+                                        {({ isActive }) => (
+                                            <i
+                                                className="bi-people fs-1"
+                                                style={{ color: isActive ? "red" : "inherit" }}
+                                            ></i>
+                                        )}
                                     </NavLink>
                                 </li>
                             </ul>
@@ -88,18 +101,12 @@ export default function AdminLayout({ children }) {
                                     aria-labelledby="dropdownUser3"
                                 >
                                     <li>
-                                        <NavLink
-                                            className="dropdown-item "
-                                            to="#"
-                                        >
+                                        <NavLink className="dropdown-item" to="#">
                                             Profile
                                         </NavLink>
                                     </li>
                                     <li>
-                                        <NavLink
-                                            className="dropdown-item "
-                                            to="#"
-                                        >
+                                        <NavLink className="dropdown-item" to="#">
                                             Logout
                                         </NavLink>
                                     </li>
@@ -107,11 +114,11 @@ export default function AdminLayout({ children }) {
                             </div>
                         </div>
                     </div>
-
-                    {/* main content */}
-                    <div className="col-sm p-3 min-vh-100">{children}</div>
+                )}
+                <div className={showSidebar ? "col-sm p-3 min-vh-100" : "col-12 p-3 min-vh-100"}>
+                    {children}
                 </div>
             </div>
-        </>
+        </div>
     );
 }
