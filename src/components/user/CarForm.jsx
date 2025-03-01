@@ -75,11 +75,11 @@ export default function CarForm() {
 
             <div className="card">
                 <form
-                    className="row g-3 bg-body-tertiary p-3"
+                    className="row g-3 bg-body-tertiary py-3"
                     action={carFormAction}
                 >
                     {/* 1st row */}
-                    <div className="row mb-3">
+                    <div className="row mb-3 mx-auto">
                         <div className="col-md-4">
                             <label htmlFor="year" className="form-label">
                                 Year
@@ -133,7 +133,7 @@ export default function CarForm() {
                     </div>
 
                     {/* 2nd row */}
-                    <div className="row mb-3">
+                    <div className="row mb-3 mx-auto">
                         <div className="col-md-4">
                             <label
                                 htmlFor="transmission"
@@ -177,7 +177,7 @@ export default function CarForm() {
                     </div>
 
                     {/* 3rd row */}
-                    <div className="row mb-3">
+                    <div className="row mb-3 mx-auto">
                         <div className="col-md-4">
                             <label htmlFor="bodyStyle" className="form-label">
                                 Body Style
@@ -221,7 +221,7 @@ export default function CarForm() {
                     </div>
 
                     {/* 4th row */}
-                    <div className="row mb-3">
+                    <div className="row mb-3 mx-auto">
                         <div className="col-md-4">
                             <label
                                 htmlFor="starting_bid"
@@ -262,34 +262,38 @@ export default function CarForm() {
                         </div>
                     </div>
 
-                    <div className="mb-3">
-                        <label htmlFor="equipment" className="form-label">
-                            Special options/equipment
-                        </label>
-                        <textarea
-                            className="form-control"
-                            placeholder='Separate each item with ",". For example: sport package, long-range battery, FSD or other important factory-installed features'
-                            rows="3"
-                            id="equipment"
-                            name="equipment"
-                        ></textarea>
+                    <div className="row mb-3 mx-auto">
+                        <div>
+                            <label htmlFor="equipment" className="form-label">
+                                Special options/equipment
+                            </label>
+                            <textarea
+                                className="form-control"
+                                placeholder='Separate each item with ",". For example: sport package, long-range battery, FSD or other important factory-installed features'
+                                rows="3"
+                                id="equipment"
+                                name="equipment"
+                            ></textarea>
+                        </div>
                     </div>
 
-                    <div className="mb-3">
-                        <label htmlFor="modified" className="form-label">
-                            Has the car been modified?
-                        </label>
-                        <select
-                            className="form-select"
-                            aria-label="Default select example"
-                            id="modified"
-                            name="modified"
-                            onChange={(e) => setModified(e.target.value)}
-                        >
-                            <option selected>Choose</option>
-                            <option value="new">Brand New</option>
-                            <option value="modified">Modified</option>
-                        </select>
+                    <div className="row mb-3 mx-auto">
+                        <div>
+                            <label htmlFor="modified" className="form-label">
+                                Has the car been modified?
+                            </label>
+                            <select
+                                className="form-select"
+                                aria-label="Default select example"
+                                id="modified"
+                                name="modified"
+                                onChange={(e) => setModified(e.target.value)}
+                            >
+                                <option selected>Choose</option>
+                                <option value="new">Brand New</option>
+                                <option value="modified">Modified</option>
+                            </select>
+                        </div>
                     </div>
 
                     {modified === "modified" && (
@@ -310,61 +314,72 @@ export default function CarForm() {
                         </div>
                     )}
 
-                    <div className="mb-3">
-                        <label htmlFor="flaw" className="form-label">
-                            Are there any significant mechanical or cosmetic
-                            flaws that we should know about?
-                        </label>
-                        <select
-                            className="form-select"
-                            aria-label="Default select example"
-                            id="flaw"
-                            name="flaw"
-                            onChange={(e) => setHasFlow(e.target.value)}
-                        >
-                            <option selected>Choose</option>
-                            <option value="yes">Yes</option>
-                            <option value="no">No</option>
-                        </select>
+                    <div className="row mb-3 mx-auto">
+                        <div>
+                            <label htmlFor="flaw" className="form-label">
+                                Are there any significant mechanical or cosmetic
+                                flaws that we should know about?
+                            </label>
+                            <select
+                                className="form-select"
+                                aria-label="Default select example"
+                                id="flaw"
+                                name="flaw"
+                                onChange={(e) => setHasFlow(e.target.value)}
+                            >
+                                <option selected>Choose</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
                     </div>
 
                     {hasFlaw === "yes" && (
-                        <div className="mb-3">
-                            <label htmlFor="flaws" className="form-label">
-                                Please give details.
-                            </label>
-                            <textarea
-                                className="form-control"
-                                placeholder='Separate each item with ",".'
-                                rows="3"
-                                id="flaws"
-                                name="flaws"
-                            ></textarea>
+                        <div className="row mb-3 mx-auto">
+                            <div>
+                                <label htmlFor="flaws" className="form-label">
+                                    Please give details.
+                                </label>
+                                <textarea
+                                    className="form-control"
+                                    placeholder='Separate each item with ",".'
+                                    rows="3"
+                                    id="flaws"
+                                    name="flaws"
+                                ></textarea>
+                            </div>
                         </div>
                     )}
 
                     {/* images */}
 
-                    <div className="mb-3">
-                        <label htmlFor="carImages" className="form-label">
-                            Car Images (Insert up to 10 image URLs)
-                        </label>
-                        {imageLinks.map((link, index) => (
-                            <input
-                                key={index}
-                                type="url"
-                                className="form-control mb-2"
-                                placeholder={`Image URL ${index + 1}`}
-                                value={link}
-                                onChange={(e) =>
-                                    handleImageLinkChange(index, e.target.value)
-                                }
-                            />
-                        ))}
+                    <div className="row mb-3 mx-auto">
+                        <div>
+                            <label htmlFor="carImages" className="form-label">
+                                Car Images (Insert up to 10 image URLs)
+                            </label>
+                            {imageLinks.map((link, index) => (
+                                <input
+                                    key={index}
+                                    type="url"
+                                    className="form-control mb-2"
+                                    placeholder={`Image URL ${index + 1}`}
+                                    value={link}
+                                    onChange={(e) =>
+                                        handleImageLinkChange(
+                                            index,
+                                            e.target.value
+                                        )
+                                    }
+                                />
+                            ))}
+                        </div>
                     </div>
 
-                    <div className="col-12">
-                        <button className="btn btn-primary">Save</button>
+                    <div className="row mb-3 mx-auto">
+                        <div className="col-12">
+                            <button className="btn btn-primary">Save</button>
+                        </div>
                     </div>
                 </form>
             </div>
