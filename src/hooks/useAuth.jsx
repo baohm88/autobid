@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const useAuth = () => {
+export default function useAuth() {
     const navigate = useNavigate();
 
     const [user, setUser] = useState(() => {
@@ -30,9 +30,15 @@ export const useAuth = () => {
         if (window.confirm("Are you sure you want to log out?")) {
             setUser(null);
             localStorage.removeItem("user"); // Clear user from localStorage
-            navigate("/");
+
+            // Wait for the user state to be updated before navigating
+            setTimeout(() => {
+                navigate("/");
+            }, 100);
         }
     };
 
     return { user, setUser, logOut };
 };
+
+

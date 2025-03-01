@@ -173,21 +173,6 @@ export default function ClientLayout({ children }) {
                                                     </NavLink>
                                                 </li>
                                                 <li className="dropdown-item">
-                                                    <NavLink
-                                                        className={({
-                                                            isActive,
-                                                        }) =>
-                                                            isActive
-                                                                ? "nav-link"
-                                                                : "nav-link"
-                                                        }
-                                                        to={"/user-profile"}
-                                                    >
-                                                        <i className="bi bi-person-fill-gear"></i>{" "}
-                                                        My Profile
-                                                    </NavLink>
-                                                </li>
-                                                <li className="dropdown-item">
                                                     <button
                                                         className="nav-link btn btn-link text-start w-100"
                                                         onClick={logOut}

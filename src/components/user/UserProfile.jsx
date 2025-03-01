@@ -270,7 +270,15 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/user-context";
 import axios from "axios";
-import { Modal, Button, Form, Card, Row, Col } from "react-bootstrap";
+import {
+    Modal,
+    Button,
+    Form,
+    Card,
+    Row,
+    Col,
+    Container,
+} from "react-bootstrap";
 
 export default function UserProfile() {
     const { user, setUser } = useContext(UserContext);
@@ -315,7 +323,7 @@ export default function UserProfile() {
     }
 
     return (
-        <div className="container mt-3">
+        <Container className="mt-3">
             <Card className="mb-3">
                 <Row className="g-0">
                     <Col
@@ -446,6 +454,6 @@ export default function UserProfile() {
                     </Form>
                 </Modal.Body>
             </Modal>
-        </div>
+        </Container>
     );
 }
