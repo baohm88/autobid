@@ -9,6 +9,8 @@ import {
     InputGroup,
     Pagination,
     Modal,
+    Dropdown,
+    DropdownButton,
 } from "react-bootstrap";
 import {
     FaSearch,
@@ -16,46 +18,289 @@ import {
     FaSync,
     FaPlus,
     FaTrash,
-    FaCheck,
     FaEdit,
 } from "react-icons/fa";
 import * as XLSX from "xlsx";
 
 export default function Users() {
-    // Search and pagination states
+    // Search, pagination, sort & filter states
     const [searchValue, setSearchValue] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 18;
+    const itemsPerPage = 16;
+
+    // Thêm 2 state cho lọc và sắp xếp
+    // statusFilter: "All", "Active", "Inactive" (tùy bạn định nghĩa)
+    // sortBy: "default", "Ending Soon", "Newly Listed" (hoặc tùy ý)
+    const [statusFilter, setStatusFilter] = useState("All");
+    const [sortBy, setSortBy] = useState("default");
 
     // Users state (30 sample users)
     const [users, setUsers] = useState([
         {
-            id: 1,
-            fullname: "User One",
-            name: "user1",
-            password: "pass1",
-            email: "user1@example.com",
-            blance: 1000000,
-            bio: "Bio of user one",
-            image_url:
-                "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
-            create: "2023-01-01",
-            active: false,
+            id: 2,
+            fullname: "User Two",
+            name: "user2",
+            password: "pass2",
+            email: "user2@example.com",
+            blance: 2000000,
+            bio: "Bio of user two",
+            image_url: "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+            create: "2023-01-02",
+            active: true,
         },
-        // ... Users from 2 to 29 ...
         {
-            id: 30,
-            fullname: "User Thirty",
-            name: "user30",
-            password: "pass30",
-            email: "user30@example.com",
+            id: 3,
+            fullname: "User Three",
+            name: "user3",
+            password: "pass3",
+            email: "user3@example.com",
             blance: 3000000,
-            bio: "Bio of user thirty",
-            image_url:
-                "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
-            create: "2023-01-30",
+            bio: "Bio of user three",
+            image_url: "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+            create: "2023-01-03",
+            active: true,
+        },
+        {
+            id: 4,
+            fullname: "User Four",
+            name: "user4",
+            password: "pass4",
+            email: "user4@example.com",
+            blance: 4000000,
+            bio: "Bio of user four",
+            image_url: "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+            create: "2023-01-04",
+            active: true,
+        },
+        {
+            id: 5,
+            fullname: "User Five",
+            name: "user5",
+            password: "pass5",
+            email: "user5@example.com",
+            blance: 5000000,
+            bio: "Bio of user five",
+            image_url: "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+            create: "2023-01-05",
+            active: true,
+        },
+        {
+            id: 6,
+            fullname: "User Six",
+            name: "user6",
+            password: "pass6",
+            email: "user6@example.com",
+            blance: 6000000,
+            bio: "Bio of user six",
+            image_url: "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+            create: "2023-01-06",
             active: false,
         },
+        {
+            id: 7,
+            fullname: "User Seven",
+            name: "user7",
+            password: "pass7",
+            email: "user7@example.com",
+            blance: 7000000,
+            bio: "Bio of user seven",
+            image_url: "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+            create: "2023-01-07",
+            active: false,
+        },
+        {
+            id: 8,
+            fullname: "User Eight",
+            name: "user8",
+            password: "pass8",
+            email: "user8@example.com",
+            blance: 8000000,
+            bio: "Bio of user eight",
+            image_url: "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+            create: "2023-01-08",
+            active: false,
+        },
+        {
+            id: 9,
+            fullname: "User Nine",
+            name: "user9",
+            password: "pass9",
+            email: "user9@example.com",
+            blance: 9000000,
+            bio: "Bio of user nine",
+            image_url: "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+            create: "2023-01-09",
+            active: false,
+        },
+        {
+            id: 10,
+            fullname: "User Ten",
+            name: "user10",
+            password: "pass10",
+            email: "user10@example.com",
+            blance: 10000000,
+            bio: "Bio of user ten",
+            image_url: "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+            create: "2023-01-10",
+            active: false,
+        },
+        {
+            id: 11,
+            fullname: "User Eleven",
+            name: "user11",
+            password: "pass11",
+            email: "user11@example.com",
+            blance: 11000000,
+            bio: "Bio of user eleven",
+            image_url: "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+            create: "2023-01-11",
+            active: false,
+        },
+        {
+            id: 12,
+            fullname: "User Twelve",
+            name: "user12",
+            password: "pass12",
+            email: "user12@example.com",
+            blance: 12000000,
+            bio: "Bio of user twelve",
+            image_url: "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+            create: "2023-01-12",
+            active: false,
+        },
+        {
+            id: 13,
+            fullname: "User Thirteen",
+            name: "user13",
+            password: "pass13",
+            email: "user13@example.com",
+            blance: 13000000,
+            bio: "Bio of user thirteen",
+            image_url: "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+            create: "2023-01-13",
+            active: false,
+        },
+        {
+            id: 14,
+            fullname: "User Fourteen",
+            name: "user14",
+            password: "pass14",
+            email: "user14@example.com",
+            blance: 14000000,
+            bio: "Bio of user fourteen",
+            image_url: "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+            create: "2023-01-14",
+            active: false,
+        },
+        {
+            id: 15,
+            fullname: "User Fifteen",
+            name: "user15",
+            password: "pass15",
+            email: "user15@example.com",
+            blance: 15000000,
+            bio: "Bio of user fifteen",
+            image_url: "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+            create: "2023-01-15",
+            active: false,
+        },
+        {
+            id: 16,
+            fullname: "User Sixteen",
+            name: "user16",
+            password: "pass16",
+            email: "user16@example.com",
+            blance: 16000000,
+            bio: "Bio of user sixteen",
+            image_url: "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+            create: "2023-01-16",
+            active: false,
+        },
+        {
+            id: 17,
+            fullname: "User Seventeen",
+            name: "user17",
+            password: "pass17",
+            email: "user17@example.com",
+            blance: 17000000,
+            bio: "Bio of user seventeen",
+            image_url: "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+            create: "2023-01-17",
+            active: false,
+        },
+        {
+            id: 18,
+            fullname: "User Eighteen",
+            name: "user18",
+            password: "pass18",
+            email: "user18@example.com",
+            blance: 18000000,
+            bio: "Bio of user eighteen",
+            image_url: "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+            create: "2023-01-18",
+            active: false,
+        },
+        {
+            id: 19,
+            fullname: "User Nineteen",
+            name: "user19",
+            password: "pass19",
+            email: "user19@example.com",
+            blance: 19000000,
+            bio: "Bio of user nineteen",
+            image_url: "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+            create: "2023-01-19",
+            active: false,
+        },
+        {
+            id: 20,
+            fullname: "User Twenty",
+            name: "user20",
+            password: "pass20",
+            email: "user20@example.com",
+            blance: 20000000,
+            bio: "Bio of user twenty",
+            image_url: "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+            create: "2023-01-20",
+            active: true,
+        },
+        {
+            id: 21,
+            fullname: "User Twenty-one",
+            name: "user21",
+            password: "pass21",
+            email: "user21@example.com",
+            blance: 21000000,
+            bio: "Bio of user twenty-one",
+            image_url: "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+            create: "2023-01-21",
+            active: false,
+        },
+        {
+            id: 22,
+            fullname: "User Twenty-two",
+            name: "user22",
+            password: "pass22",
+            email: "user22@example.com",
+            blance: 22000000,
+            bio: "Bio of user twenty-two",
+            image_url: "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+            create: "2023-01-22",
+            active: false,
+        },
+        {
+            id: 23,
+            fullname: "User Twenty-three",
+            name: "user23",
+            password: "pass23",
+            email: "user23@example.com",
+            blance: 23000000,
+            bio: "Bio of user twenty-three",
+            image_url: "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+            create: "2023-01-23",
+            active: false,
+        },
+
     ]);
 
     // State for selected users (checkbox)
@@ -72,16 +317,43 @@ export default function Users() {
         setCurrentPage(1);
     };
 
-    // Filter users by username
-    const filteredUsers = users.filter((u) =>
+    // 1) Lọc theo statusFilter
+    // Ở đây, giả sử "Active" => user.active === true, "Inactive" => user.active === false
+    // "All" => trả về tất cả.
+    const filteredByStatus = users.filter((u) => {
+        if (statusFilter === "All") return true;
+        if (statusFilter === "Active") return u.active === true;
+        if (statusFilter === "Inactive") return u.active === false;
+        return true;
+    });
+
+    // 2) Lọc theo tên (searchValue)
+    const filteredBySearch = filteredByStatus.filter((u) =>
         u.name.toLowerCase().includes(searchValue.toLowerCase())
     );
 
+    // 3) Sắp xếp theo sortBy (ví dụ ta sắp xếp theo create)
+    // "default": không sắp xếp, "Ending Soon": ngày tạo cũ lên trước,
+    // "Newly Listed": ngày tạo mới lên trước.
+    const sortedUsers = [...filteredBySearch].sort((a, b) => {
+        const dateA = new Date(a.create);
+        const dateB = new Date(b.create);
+
+        if (sortBy === "Ending Soon") {
+            // sort by ngày tạo tăng dần
+            return dateA - dateB;
+        } else if (sortBy === "Newly Listed") {
+            // sort by ngày tạo giảm dần
+            return dateB - dateA;
+        }
+        return 0; // "default": không đổi
+    });
+
     // Pagination calculations
-    const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+    const totalPages = Math.ceil(sortedUsers.length / itemsPerPage);
     const indexOfLastUser = currentPage * itemsPerPage;
     const indexOfFirstUser = indexOfLastUser - itemsPerPage;
-    const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+    const currentUsers = sortedUsers.slice(indexOfFirstUser, indexOfLastUser);
 
     // Action functions
     const handleCreate = () => {
@@ -136,15 +408,6 @@ export default function Users() {
         if (window.confirm("Are you sure you want to delete all selected users?")) {
             setUsers((prev) => prev.filter((u) => !selectedUserIds.includes(u.id)));
             setSelectedUserIds([]);
-        }
-    };
-
-    // Active action: update active state to true for a user by id
-    const handleActive = (id) => {
-        if (window.confirm("Are you sure you want to activate?")) {
-            setUsers((prev) =>
-                prev.map((u) => (u.id === id ? { ...u, active: true } : u))
-            );
         }
     };
 
@@ -225,6 +488,37 @@ export default function Users() {
                 </Col>
             </Row>
 
+            {/* Row chứa Dropdown filter & sort */}
+            <Row className="mb-3">
+                <Col>
+                    <div className="d-flex flex-wrap gap-2">
+                        <DropdownButton
+                            id="dropdown-status"
+                            title={`Status: ${statusFilter}`}
+                            onSelect={(eventKey) => {
+                                setStatusFilter(eventKey);
+                                setCurrentPage(1);
+                            }}
+                        >
+                            <Dropdown.Item eventKey="All">All</Dropdown.Item>
+                            <Dropdown.Item eventKey="Active">Active</Dropdown.Item>
+                            <Dropdown.Item eventKey="Inactive">Inactive</Dropdown.Item>
+                        </DropdownButton>
+                        <DropdownButton
+                            id="dropdown-sort"
+                            title={`Sort by: ${sortBy}`}
+                            onSelect={(eventKey) => setSortBy(eventKey)}
+                        >
+                            <Dropdown.Item eventKey="default">Default</Dropdown.Item>
+                            <Dropdown.Item eventKey="Ending Soon">Ending Soon</Dropdown.Item>
+                            <Dropdown.Item eventKey="Newly Listed">
+                                Newly Listed
+                            </Dropdown.Item>
+                        </DropdownButton>
+                    </div>
+                </Col>
+            </Row>
+
             {/* Data Table */}
             <Row>
                 <Col>
@@ -251,8 +545,7 @@ export default function Users() {
                             <tr
                                 key={user.id}
                                 style={{
-                                    backgroundColor:
-                                        index % 2 === 0 ? "#ffffff" : "#f8f9fa",
+                                    backgroundColor: index % 2 === 0 ? "#ffffff" : "#f8f9fa",
                                 }}
                             >
                                 <td className="text-center">
@@ -283,8 +576,8 @@ export default function Users() {
                                                 backgroundColor: "green",
                                             }}
                                         >
-                        Active
-                      </span>
+                                                Active
+                                            </span>
                                     ) : (
                                         <span
                                             style={{
@@ -292,8 +585,8 @@ export default function Users() {
                                                 backgroundColor: "red",
                                             }}
                                         >
-                        Inactive
-                      </span>
+                                                Inactive
+                                            </span>
                                     )}
                                 </td>
                                 <td>{user.id}</td>
@@ -306,33 +599,30 @@ export default function Users() {
                                 <td>{user.image_url}</td>
                                 <td>{user.create}</td>
                                 <td>
-                                    <div className="d-flex gap-1">
-                                        <Button
-                                            variant="warning"
-                                            size="sm"
-                                            onClick={() => handleEdit(user)}
-                                        >
-                                            <FaEdit size={16} />
-                                        </Button>
-                                        <Button
-                                            variant="danger"
-                                            size="sm"
-                                            onClick={() => handleDelete(user.id)}
-                                        >
-                                            <FaTrash size={16} />
-                                        </Button>
-                                        <Button
-                                            variant="success"
-                                            size="sm"
-                                            onClick={() => handleActive(user.id)}
-                                        >
-                                            <FaCheck size={16} />
-                                        </Button>
+                                    <div className="d-flex">
+                                        <div className="flex-fill text-center">
+                                            <Button
+                                                variant="warning"
+                                                size="sm"
+                                                onClick={() => handleEdit(user)}
+                                            >
+                                                <FaEdit size={16} />
+                                            </Button>
+                                        </div>
+                                        <div className="flex-fill text-center">
+                                            <Button
+                                                variant="danger"
+                                                size="sm"
+                                                onClick={() => handleDelete(user.id)}
+                                            >
+                                                <FaTrash size={16} />
+                                            </Button>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
                         ))}
-                        {filteredUsers.length === 0 && (
+                        {sortedUsers.length === 0 && (
                             <tr>
                                 <td colSpan={13} className="text-center">
                                     No matching account found.
@@ -391,10 +681,7 @@ export default function Users() {
                                     type="text"
                                     value={userToEdit.fullname}
                                     onChange={(e) =>
-                                        setUserToEdit({
-                                            ...userToEdit,
-                                            fullname: e.target.value,
-                                        })
+                                        setUserToEdit({ ...userToEdit, fullname: e.target.value })
                                     }
                                 />
                             </Form.Group>
@@ -404,10 +691,7 @@ export default function Users() {
                                     type="text"
                                     value={userToEdit.name}
                                     onChange={(e) =>
-                                        setUserToEdit({
-                                            ...userToEdit,
-                                            name: e.target.value,
-                                        })
+                                        setUserToEdit({ ...userToEdit, name: e.target.value })
                                     }
                                 />
                             </Form.Group>
@@ -417,12 +701,24 @@ export default function Users() {
                                     type="text"
                                     value={userToEdit.password}
                                     onChange={(e) =>
-                                        setUserToEdit({
-                                            ...userToEdit,
-                                            password: e.target.value,
-                                        })
+                                        setUserToEdit({ ...userToEdit, password: e.target.value })
                                     }
                                 />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Status</Form.Label>
+                                <Form.Select
+                                    value={userToEdit.active ? "Active" : "Inactive"}
+                                    onChange={(e) =>
+                                        setUserToEdit({
+                                            ...userToEdit,
+                                            active: e.target.value === "Active",
+                                        })
+                                    }
+                                >
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </Form.Select>
                             </Form.Group>
                             <Form.Group className="mb-3">
                                 <Form.Label>Email</Form.Label>
@@ -430,10 +726,7 @@ export default function Users() {
                                     type="email"
                                     value={userToEdit.email}
                                     onChange={(e) =>
-                                        setUserToEdit({
-                                            ...userToEdit,
-                                            email: e.target.value,
-                                        })
+                                        setUserToEdit({ ...userToEdit, email: e.target.value })
                                     }
                                 />
                             </Form.Group>
@@ -457,10 +750,7 @@ export default function Users() {
                                     rows={3}
                                     value={userToEdit.bio}
                                     onChange={(e) =>
-                                        setUserToEdit({
-                                            ...userToEdit,
-                                            bio: e.target.value,
-                                        })
+                                        setUserToEdit({ ...userToEdit, bio: e.target.value })
                                     }
                                 />
                             </Form.Group>
@@ -470,10 +760,7 @@ export default function Users() {
                                     type="text"
                                     value={userToEdit.image_url}
                                     onChange={(e) =>
-                                        setUserToEdit({
-                                            ...userToEdit,
-                                            image_url: e.target.value,
-                                        })
+                                        setUserToEdit({ ...userToEdit, image_url: e.target.value })
                                     }
                                 />
                             </Form.Group>
