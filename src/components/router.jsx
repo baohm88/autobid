@@ -16,6 +16,7 @@ import UserWatchList from "./user/UserWatchList";
 import ProtectedRoute from "./ProtectedRoute";
 import Orders from "./admin/Orders";
 import Users from "./admin/Users";
+import Homes from "./admin/Homes";
 
 const routes = [
     { path: "/", component: Home, layout: ClientLayout },
@@ -121,6 +122,15 @@ const routes = [
         component: (props) => (
             <ProtectedRoute>
                 <Users {...props} />
+            </ProtectedRoute>
+        ),
+        layout: AdminLayout,
+    },
+    {
+        path: "/homes",
+        component: (props) => (
+            <ProtectedRoute>
+                <Homes {...props} />
             </ProtectedRoute>
         ),
         layout: AdminLayout,
