@@ -7,7 +7,7 @@ export default function Home() {
         <Container className="py-4">
             <h1 className="mb-4">Home</h1>
             <Row className="g-4">
-                {/* Phần Users */}
+                {/* Users Section */}
                 <Col md={4}>
                     <Card className="h-100 shadow-sm">
                         <Card.Body>
@@ -16,19 +16,19 @@ export default function Home() {
                                 <Card.Title className="mb-0">Users</Card.Title>
                             </div>
                             <Card.Text>
-                                Quản lý người dùng, thêm mới, chỉnh sửa, xóa, tìm kiếm...
+                                Manage users, add, edit, delete, search...
                             </Card.Text>
-                            {/* Link đến /users */}
+                            {/* Link to /users */}
                             <div className="d-flex align-items-center mb-3 justify-content-center">
-                            <Link to="/users">
-                                <Button variant="primary">Go to Users</Button>
-                            </Link>
+                                <Link to="/users">
+                                    <Button className="mt-4" variant="primary">Go to Users</Button>
+                                </Link>
                             </div>
                         </Card.Body>
                     </Card>
                 </Col>
 
-                {/* Phần Orders */}
+                {/* Orders Section */}
                 <Col md={4}>
                     <Card className="h-100 shadow-sm">
                         <Card.Body>
@@ -37,20 +37,19 @@ export default function Home() {
                                 <Card.Title className="mb-0">Orders</Card.Title>
                             </div>
                             <Card.Text>
-                                Quản lý đơn hàng, thống kê, cập nhật tình trạng...
+                                Manage orders, statistics, update status...
                             </Card.Text>
-                            {/* Link đến /orders */}
+                            {/* Link to /orders */}
                             <Link to="/orders">
                                 <div className="d-flex align-items-center mb-3 justify-content-center">
                                     <Button className="mt-4" variant="primary">Go to Orders</Button>
                                 </div>
-
                             </Link>
                         </Card.Body>
                     </Card>
                 </Col>
 
-                {/* Phần Auctions */}
+                {/* Auctions Section */}
                 <Col md={4}>
                     <Card className="h-100 shadow-sm">
                         <Card.Body>
@@ -59,13 +58,13 @@ export default function Home() {
                                 <Card.Title className="mb-0">Auctions</Card.Title>
                             </div>
                             <Card.Text>
-                                Quản lý phiên đấu giá, thông tin sản phẩm, thời gian...
+                                Manage auctions, product information, timing...
                             </Card.Text>
-                            {/* Link đến /auctions */}
+                            {/* Link to /auctions */}
                             <div className="d-flex align-items-center mb-3 justify-content-center">
-                            <Link to="/auctions">
-                                <Button variant="primary">Go to Auctions</Button>
-                            </Link>
+                                <Link to="/auctions">
+                                    <Button className="mt-4" variant="primary">Go to Auctions</Button>
+                                </Link>
                             </div>
                         </Card.Body>
                     </Card>
