@@ -10,7 +10,6 @@ import SellerDashBoard from "./user/SellerDashBoard";
 import UserBids from "./user/UserBids";
 import UserOrders from "./user/UserOrders";
 import UserProducts from "./user/UserProducts";
-import UserProfile from "./user/UserProfile";
 import UserWallet from "./user/UserWallet";
 import UserWatchList from "./user/UserWatchList";
 import ProtectedRoute from "./ProtectedRoute";
@@ -49,15 +48,7 @@ const routes = [
         ),
         layout: ClientLayout,
     },
-    {
-        path: "/user-profile",
-        component: (props) => (
-            <ProtectedRoute>
-                <UserProfile {...props} />
-            </ProtectedRoute>
-        ),
-        layout: ClientLayout,
-    },
+
     {
         path: "/add-car",
         component: (props) => (

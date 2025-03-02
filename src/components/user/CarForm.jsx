@@ -1,57 +1,260 @@
+// import axios from "axios";
+// import { useContext, useState } from "react";
+// import { UserContext } from "../../context/user-context";
+// import { useNavigate } from "react-router-dom";
+// import {
+//     Container,
+//     Card,
+//     Form,
+//     Row,
+//     Col,
+//     Button,
+//     Image,
+// } from "react-bootstrap";
+
+// export default function CarForm() {
+//     const [uploadedImages, setUploadedImages] = useState([]);
+//     const { user } = useContext(UserContext);
+//     const navigate = useNavigate();
+
+//     document.title = "Add new car";
+
+//     const handleImageUpload = (event) => {
+//         const files = event.target.files;
+//         const imagesArray = [];
+
+//         for (let i = 0; i < files.length; i++) {
+//             const file = files[i];
+//             const reader = new FileReader();
+
+//             reader.onloadend = () => {
+//                 imagesArray.push(reader.result);
+//                 if (imagesArray.length === files.length) {
+//                     setUploadedImages([...uploadedImages, ...imagesArray]);
+//                 }
+//             };
+
+//             reader.readAsDataURL(file);
+//         }
+//     };
+
+//     const handleRemoveImage = (index) => {
+//         const newImages = [...uploadedImages];
+//         newImages.splice(index, 1);
+//         setUploadedImages(newImages);
+//     };
+
+//     async function carFormAction(event) {
+//         event.preventDefault();
+//         const formData = new FormData(event.target);
+//         const carData = Object.fromEntries(formData.entries());
+//         carData.user = user.id;
+//         carData.description = `~${carData.mileage}, ${carData.engine}, ${carData.exterior}`;
+
+//         console.log(carData);
+
+//         try {
+//             const res = await axios.post(
+//                 "http://localhost:8080/listings/add-listing",
+//                 carData,
+//                 {
+//                     headers: { "Content-Type": "application/json" },
+//                 }
+//             );
+//             if (res.status === 200) {
+//                 alert(res.data.message);
+//                 navigate("/");
+//             } else {
+//                 console.log("Something went wrong");
+//             }
+//         } catch (error) {
+//             console.error("Failed to add a listing!", error);
+//         }
+//     }
+
+//     return (
+//         <Container>
+//             <h1 className="text-center">Add a new car</h1>
+//             <Card className="bg-body-tertiary">
+//                 <Card.Body>
+//                     <Form onSubmit={carFormAction}>
+//                         {/* 1st row */}
+//                         <Row className="mb-3">
+//                             <Col md={4}>
+//                                 <Form.Group>
+//                                     <Form.Label>Year</Form.Label>
+//                                     <Form.Select name="year" defaultValue="">
+//                                         <option value="" disabled>
+//                                             Choose
+//                                         </option>
+//                                         {Array.from(
+//                                             { length: 2025 - 1960 },
+//                                             (_, index) => 2025 - index
+//                                         ).map((year) => (
+//                                             <option key={year} value={year}>
+//                                                 {year}
+//                                             </option>
+//                                         ))}
+//                                     </Form.Select>
+//                                 </Form.Group>
+//                             </Col>
+//                             <Col md={4}>
+//                                 <Form.Group>
+//                                     <Form.Label>Make</Form.Label>
+//                                     <Form.Control type="text" name="make" />
+//                                 </Form.Group>
+//                             </Col>
+//                             <Col md={4}>
+//                                 <Form.Group>
+//                                     <Form.Label>Model</Form.Label>
+//                                     <Form.Control type="text" name="model" />
+//                                 </Form.Group>
+//                             </Col>
+//                         </Row>
+
+//                         {/* Image upload */}
+//                         <Form.Group controlId="imageUpload" className="mb-3">
+//                             <Form.Label>Upload Images</Form.Label>
+//                             <Form.Control
+//                                 type="file"
+//                                 multiple
+//                                 onChange={handleImageUpload}
+//                             />
+//                         </Form.Group>
+
+//                         {/* Display uploaded images */}
+//                         <Row className="mb-3">
+//                             {uploadedImages.map((image, index) => (
+//                                 <Col key={index} md={2} className="mb-2">
+//                                     <Image
+//                                         src={image}
+//                                         thumbnail
+//                                         className="mr-2"
+//                                     />
+//                                     <Button
+//                                         variant="danger"
+//                                         size="sm"
+//                                         onClick={() => handleRemoveImage(index)}
+//                                     >
+//                                         Remove
+//                                     </Button>
+//                                 </Col>
+//                             ))}
+//                         </Row>
+
+//                         <Button type="submit" variant="primary">
+//                             Save
+//                         </Button>
+//                     </Form>
+//                 </Card.Body>
+//             </Card>
+//         </Container>
+//     );
+// }
+
 import axios from "axios";
 import { useContext, useState } from "react";
 import { UserContext } from "../../context/user-context";
 import { useNavigate } from "react-router-dom";
-
-const BODY_STYLES = [
-    "Coupe",
-    "Convertible",
-    "Hatchback",
-    "Sedan",
-    "SUV/Crossover",
-    "Truck",
-    "Van/Minivan",
-    "Wagon",
-];
+import {
+    Container,
+    Card,
+    Form,
+    Row,
+    Col,
+    Button,
+    Image,
+} from "react-bootstrap";
 
 export default function CarForm() {
-    const [modified, setModified] = useState("");
-    const [hasFlaw, setHasFlow] = useState("");
-    const [imageLinks, setImageLinks] = useState(Array(10).fill(""));
+    const [uploadedImages, setUploadedImages] = useState([]);
+    const [imageUrls, setImageUrls] = useState([]); // To store Cloudinary URLs
     const { user } = useContext(UserContext);
     const navigate = useNavigate();
 
     document.title = "Add new car";
 
-    async function carFormAction(fd) {
-        const carData = Object.fromEntries(fd.entries());
+    const handleImageUpload = (event) => {
+        const files = event.target.files;
+        const imagesArray = [];
 
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+
+            reader.onloadend = () => {
+                imagesArray.push(reader.result);
+                if (imagesArray.length === files.length) {
+                    setUploadedImages([...uploadedImages, ...imagesArray]);
+                }
+            };
+
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleRemoveImage = (index) => {
+        const newImages = [...uploadedImages];
+        newImages.splice(index, 1);
+        setUploadedImages(newImages);
+
+        // Also remove the corresponding URL from imageUrls
+        const newUrls = [...imageUrls];
+        newUrls.splice(index, 1);
+        setImageUrls(newUrls);
+    };
+
+    const uploadImageToCloudinary = async (file) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", "ml_default"); // Replace with your Cloudinary upload preset
+
+        try {
+            const response = await axios.post(
+                "https://api.cloudinary.com/v1_1/dppk10edk/image/upload",
+                formData
+            );
+            console.log(response);
+
+            return response.data.secure_url; // Return the secure URL of the uploaded image
+        } catch (error) {
+            console.error("Error uploading image to Cloudinary:", error);
+            return null;
+        }
+    };
+
+    async function carFormAction(event) {
+        event.preventDefault();
+
+        // Upload images to Cloudinary and get their URLs
+        const uploadedUrls = [];
+        for (const image of uploadedImages) {
+            const file = dataURLtoFile(image, `image_${Date.now()}.jpg`);
+            const url = await uploadImageToCloudinary(file);
+            if (url) {
+                uploadedUrls.push(url);
+            }
+        }
+
+        // Add the URLs to carData
+        const formData = new FormData(event.target);
+        const carData = Object.fromEntries(formData.entries());
         carData.user = user.id;
-        carData.description =
-            "~" +
-            carData.mileage +
-            ", " +
-            carData.engine +
-            ", " +
-            carData.exterior;
-
-        carData.images = imageLinks.filter((link) => link.trim() !== "");
+        carData.description = `~${carData.mileage}, ${carData.engine}, ${carData.exterior}`;
+        carData.images = uploadedUrls; // Add Cloudinary URLs to carData
 
         console.log(carData);
 
         try {
             const res = await axios.post(
-                `http://localhost:8080/listings/add-listing`,
+                "http://localhost:8080/listings/add-listing",
                 carData,
                 {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
+                    headers: { "Content-Type": "application/json" },
                 }
             );
 
-            console.log(res);
-
+            
             if (res.status === 200) {
                 alert(res.data.message);
                 navigate("/");
@@ -63,326 +266,95 @@ export default function CarForm() {
         }
     }
 
-    const handleImageLinkChange = (index, value) => {
-        const newImageLinks = [...imageLinks];
-        newImageLinks[index] = value;
-        setImageLinks(newImageLinks);
+    // Helper function to convert data URL to a File object
+    const dataURLtoFile = (dataurl, filename) => {
+        const arr = dataurl.split(",");
+        const mime = arr[0].match(/:(.*?);/)[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, { type: mime });
     };
 
     return (
-        <div className="container">
+        <Container>
             <h1 className="text-center">Add a new car</h1>
-
-            <div className="card">
-                <form
-                    className="row g-3 bg-body-tertiary py-3"
-                    action={carFormAction}
-                >
-                    {/* 1st row */}
-                    <div className="row mb-3 mx-auto">
-                        <div className="col-md-4">
-                            <label htmlFor="year" className="form-label">
-                                Year
-                            </label>
-                            <select
-                                className="form-select"
-                                aria-label="Default select example"
-                                id="year"
-                                name="year"
-                                defaultValue=""
-                            >
-                                <option value="" disabled>
-                                    Choose
-                                </option>
-                                {Array.from(
-                                    { length: 2025 - 1960 },
-                                    (_, index) => {
-                                        const year = 2025 - index;
-                                        return (
+            <Card className="bg-body-tertiary">
+                <Card.Body>
+                    <Form onSubmit={carFormAction}>
+                        {/* 1st row */}
+                        <Row className="mb-3">
+                            <Col md={4}>
+                                <Form.Group>
+                                    <Form.Label>Year</Form.Label>
+                                    <Form.Select name="year" defaultValue="">
+                                        <option value="" disabled>
+                                            Choose
+                                        </option>
+                                        {Array.from(
+                                            { length: 2025 - 1960 },
+                                            (_, index) => 2025 - index
+                                        ).map((year) => (
                                             <option key={year} value={year}>
                                                 {year}
                                             </option>
-                                        );
-                                    }
-                                )}
-                            </select>
-                        </div>
-                        <div className="col-md-4">
-                            <label htmlFor="make" className="form-label">
-                                Make
-                            </label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                id="make"
-                                name="make"
+                                        ))}
+                                    </Form.Select>
+                                </Form.Group>
+                            </Col>
+                            <Col md={4}>
+                                <Form.Group>
+                                    <Form.Label>Make</Form.Label>
+                                    <Form.Control type="text" name="make" />
+                                </Form.Group>
+                            </Col>
+                            <Col md={4}>
+                                <Form.Group>
+                                    <Form.Label>Model</Form.Label>
+                                    <Form.Control type="text" name="model" />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+
+                        {/* Image upload */}
+                        <Form.Group controlId="imageUpload" className="mb-3">
+                            <Form.Label>Upload Images</Form.Label>
+                            <Form.Control
+                                type="file"
+                                multiple
+                                onChange={handleImageUpload}
                             />
-                        </div>
-                        <div className="col-md-4">
-                            <label htmlFor="model" className="form-label">
-                                Model
-                            </label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                id="model"
-                                name="model"
-                                defaultValue=""
-                            />
-                        </div>
-                    </div>
+                        </Form.Group>
 
-                    {/* 2nd row */}
-                    <div className="row mb-3 mx-auto">
-                        <div className="col-md-4">
-                            <label
-                                htmlFor="transmission"
-                                className="form-label"
-                            >
-                                Transmission
-                            </label>
-                            <select
-                                className="form-select"
-                                aria-label="Default select example"
-                                id="transmission"
-                                name="transmission"
-                            >
-                                <option selected>Select transmission</option>
-                                <option value="automatic">Automatic</option>
-                                <option value="manual">Manual</option>
-                            </select>
-                        </div>
-                        <div className="col-md-4">
-                            <label htmlFor="mileage" className="form-label">
-                                Mileage (in miles)
-                            </label>
-                            <input
-                                className="form-control"
-                                type="number"
-                                id="mileage"
-                                name="mileage"
-                            />
-                        </div>
-                        <div className="col-md-4">
-                            <label htmlFor="engine" className="form-label">
-                                Engine
-                            </label>
-                            <input
-                                className="form-control"
-                                type="text"
-                                id="engine"
-                                name="engine"
-                            />
-                        </div>
-                    </div>
-
-                    {/* 3rd row */}
-                    <div className="row mb-3 mx-auto">
-                        <div className="col-md-4">
-                            <label htmlFor="bodyStyle" className="form-label">
-                                Body Style
-                            </label>
-                            <select
-                                className="form-select"
-                                aria-label="Default select example"
-                                id="bodyStyle"
-                                name="bodyStyle"
-                            >
-                                <option selected>Select Body Style</option>
-                                {BODY_STYLES.map((style) => (
-                                    <option key={style} value={style}>
-                                        {style}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        <div className="col-md-4">
-                            <label htmlFor="interior" className="form-label">
-                                Interior Color
-                            </label>
-                            <input
-                                className="form-control"
-                                type="text"
-                                id="interior"
-                                name="interior"
-                            />
-                        </div>
-                        <div className="col-md-4">
-                            <label htmlFor="exterior" className="form-label">
-                                Exterior Color
-                            </label>
-                            <input
-                                className="form-control"
-                                type="text"
-                                id="exterior"
-                                name="exterior"
-                            />
-                        </div>
-                    </div>
-
-                    {/* 4th row */}
-                    <div className="row mb-3 mx-auto">
-                        <div className="col-md-4">
-                            <label
-                                htmlFor="starting_bid"
-                                className="form-label"
-                            >
-                                Starting Bid ($)
-                            </label>
-                            <input
-                                className="form-control"
-                                type="number"
-                                id="starting_bid"
-                                name="starting_bid"
-                            />
-                        </div>
-                        <div className="col-md-4">
-                            <label htmlFor="start_time" className="form-label">
-                                Start Time
-                            </label>
-                            <input
-                                className="form-control"
-                                type="datetime-local" // Change type to datetime-local
-                                id="start_time"
-                                name="start_time"
-                                min={new Date().toISOString().slice(0, 16)}
-                            />
-                        </div>
-                        <div className="col-md-4">
-                            <label htmlFor="end_time" className="form-label">
-                                End Time
-                            </label>
-                            <input
-                                className="form-control"
-                                type="datetime-local" // Change type to datetime-local
-                                id="end_time"
-                                name="end_time"
-                                min={new Date().toISOString().slice(0, 16)}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="row mb-3 mx-auto">
-                        <div>
-                            <label htmlFor="equipment" className="form-label">
-                                Special options/equipment
-                            </label>
-                            <textarea
-                                className="form-control"
-                                placeholder='Separate each item with ",". For example: sport package, long-range battery, FSD or other important factory-installed features'
-                                rows="3"
-                                id="equipment"
-                                name="equipment"
-                            ></textarea>
-                        </div>
-                    </div>
-
-                    <div className="row mb-3 mx-auto">
-                        <div>
-                            <label htmlFor="modified" className="form-label">
-                                Has the car been modified?
-                            </label>
-                            <select
-                                className="form-select"
-                                aria-label="Default select example"
-                                id="modified"
-                                name="modified"
-                                onChange={(e) => setModified(e.target.value)}
-                            >
-                                <option selected>Choose</option>
-                                <option value="new">Brand New</option>
-                                <option value="modified">Modified</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    {modified === "modified" && (
-                        <div className="mb-3">
-                            <label
-                                htmlFor="modification"
-                                className="form-label"
-                            >
-                                List any modifications.
-                            </label>
-                            <textarea
-                                className="form-control"
-                                placeholder='Separate each item with ",".'
-                                rows="3"
-                                id="modification"
-                                name="modification"
-                            ></textarea>
-                        </div>
-                    )}
-
-                    <div className="row mb-3 mx-auto">
-                        <div>
-                            <label htmlFor="flaw" className="form-label">
-                                Are there any significant mechanical or cosmetic
-                                flaws that we should know about?
-                            </label>
-                            <select
-                                className="form-select"
-                                aria-label="Default select example"
-                                id="flaw"
-                                name="flaw"
-                                onChange={(e) => setHasFlow(e.target.value)}
-                            >
-                                <option selected>Choose</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    {hasFlaw === "yes" && (
-                        <div className="row mb-3 mx-auto">
-                            <div>
-                                <label htmlFor="flaws" className="form-label">
-                                    Please give details.
-                                </label>
-                                <textarea
-                                    className="form-control"
-                                    placeholder='Separate each item with ",".'
-                                    rows="3"
-                                    id="flaws"
-                                    name="flaws"
-                                ></textarea>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* images */}
-
-                    <div className="row mb-3 mx-auto">
-                        <div>
-                            <label htmlFor="carImages" className="form-label">
-                                Car Images (Insert up to 10 image URLs)
-                            </label>
-                            {imageLinks.map((link, index) => (
-                                <input
-                                    key={index}
-                                    type="url"
-                                    className="form-control mb-2"
-                                    placeholder={`Image URL ${index + 1}`}
-                                    value={link}
-                                    onChange={(e) =>
-                                        handleImageLinkChange(
-                                            index,
-                                            e.target.value
-                                        )
-                                    }
-                                />
+                        {/* Display uploaded images */}
+                        <Row className="mb-3">
+                            {uploadedImages.map((image, index) => (
+                                <Col key={index} md={2} className="mb-2">
+                                    <Image
+                                        src={image}
+                                        thumbnail
+                                        className="mr-2"
+                                    />
+                                    <Button
+                                        variant="danger"
+                                        size="sm"
+                                        onClick={() => handleRemoveImage(index)}
+                                    >
+                                        Remove
+                                    </Button>
+                                </Col>
                             ))}
-                        </div>
-                    </div>
+                        </Row>
 
-                    <div className="row mb-3 mx-auto">
-                        <div className="col-12">
-                            <button className="btn btn-primary">Save</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+                        <Button type="submit" variant="primary">
+                            Save
+                        </Button>
+                    </Form>
+                </Card.Body>
+            </Card>
+        </Container>
     );
 }

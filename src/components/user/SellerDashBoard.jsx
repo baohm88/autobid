@@ -1,238 +1,87 @@
-// import { NavLink } from "react-router-dom";
-// import { Container, Row, Col, Card, Button, Carousel } from "react-bootstrap";
-
-// export default function SellerDashboard() {
-//     return (
-//         <Container>
-//             <Row>
-//                 {/* Sidebar */}
-//                 <Col
-//                     sm="auto"
-//                     // className="bg-light sticky-top p-3 d-flex flex-column flex-sm-row align-items-start align-items-sm-center"
-//                     className="sticky-top p-3 d-flex flex-column flex-sm-row align-items-start align-items-sm-center"
-//                 >
-//                     <ul className="nav nav-pills mb-auto flex-row flex-sm-column w-100">
-//                         <li className="nav-item">
-//                             <NavLink
-//                                 to="/dashboard"
-//                                 className="nav-link py-2 px-3 d-flex align-items-center"
-//                             >
-//                                 <i className="bi-speedometer2 fs-5 me-2"></i>
-//                                 <span>Dashboard</span>
-//                             </NavLink>
-//                         </li>
-//                         <li className="nav-item">
-//                             <NavLink
-//                                 to="/in-progress"
-//                                 className="nav-link py-2 px-3 d-flex align-items-center"
-//                             >
-//                                 <i className="bi-clock fs-5 me-2"></i>
-//                                 <span>In Progress</span>
-//                             </NavLink>
-//                         </li>
-//                         <li className="nav-item">
-//                             <NavLink
-//                                 to="/live-auctions"
-//                                 className="nav-link py-2 px-3 d-flex align-items-center"
-//                             >
-//                                 <i className="bi-lightning fs-5 me-2"></i>
-//                                 <span>Live Auctions</span>
-//                             </NavLink>
-//                         </li>
-//                         <li className="nav-item">
-//                             <NavLink
-//                                 to="/comments"
-//                                 className="nav-link py-2 px-3 d-flex align-items-center"
-//                             >
-//                                 <i className="bi-chat fs-5 me-2"></i>
-//                                 <span>Comments</span>
-//                             </NavLink>
-//                         </li>
-//                         <li className="nav-item">
-//                             <NavLink
-//                                 to="/past-listings"
-//                                 className="nav-link py-2 px-3 d-flex align-items-center"
-//                             >
-//                                 <i className="bi-archive fs-5 me-2"></i>
-//                                 <span>Past Listings</span>
-//                             </NavLink>
-//                         </li>
-//                     </ul>
-//                 </Col>
-
-//                 {/* Main Content */}
-//                 <Col sm className="p-4 min-vh-100">
-//                     {/* Heading */}
-//                     <h3 className="mb-3">Dashboard</h3>
-
-//                     {/* Profile Card */}
-//                     <Card className="mb-4">
-//                         <Card.Body>
-//                             <Card.Title>MinhTong</Card.Title>
-//                             <Card.Text>Joined February 2025</Card.Text>
-//                             <Button variant="success">Edit Profile</Button>
-//                         </Card.Body>
-//                     </Card>
-
-//                     {/* Quick Access Boxes */}
-//                     <Row className="mb-5">
-//                         {[
-//                             {
-//                                 name: "In Progress",
-//                                 icon: "bi-clock",
-//                                 link: "/in-progress",
-//                             },
-//                             {
-//                                 name: "Live Auctions",
-//                                 icon: "bi-lightning",
-//                                 link: "/live-auctions",
-//                             },
-//                             {
-//                                 name: "Auction Comments",
-//                                 icon: "bi-chat",
-//                                 link: "/comments",
-//                             },
-//                             {
-//                                 name: "Past Listings",
-//                                 icon: "bi-archive",
-//                                 link: "/past-listings",
-//                             },
-//                         ].map((item, index) => (
-//                             <Col xs={6} md={3} key={index} className="mb-3">
-//                                 <NavLink
-//                                     to={item.link}
-//                                     className="text-decoration-none"
-//                                 >
-//                                     <Card className="text-center p-3 h-100">
-//                                         <Card.Body>
-//                                             <i
-//                                                 className={`bi ${item.icon} fs-1 mb-2 d-block`}
-//                                             ></i>
-//                                             <Card.Title className="fs-5">
-//                                                 {item.name}
-//                                             </Card.Title>
-//                                         </Card.Body>
-//                                     </Card>
-//                                 </NavLink>
-//                             </Col>
-//                         ))}
-//                     </Row>
-
-//                     {/* Why Sell on Cars & Bids? Section */}
-//                     <Row className="mb-5">
-//                         <Col md={6}>
-//                             <h4>Why Sell on Cars &amp; Bids?</h4>
-//                             <ul className="list-unstyled mt-3">
-//                                 <li className="mb-2">
-//                                     <i className="bi-search me-2"></i>
-//                                     <strong>Live support</strong> from listing
-//                                     to post-sale
-//                                 </li>
-//                                 <li className="mb-2">
-//                                     <i className="bi-calendar-check me-2"></i>
-//                                     Sell your car <strong>faster</strong> and
-//                                     get to auction in under a week
-//                                 </li>
-//                                 <li className="mb-2">
-//                                     <i className="bi-people me-2"></i>
-//                                     Access our <strong>huge audience</strong> of
-//                                     car enthusiasts
-//                                 </li>
-//                                 <li className="mb-2">
-//                                     <i className="bi-cash me-2"></i>
-//                                     <strong>Sell for free</strong> and receive
-//                                     100% of the sale price
-//                                 </li>
-//                             </ul>
-//                         </Col>
-//                         <Col md={6}>
-//                             {/* Carousel of Comments */}
-//                             <Carousel interval={3000} controls indicators>
-//                                 {[
-//                                     {
-//                                         name: "Andrew G.",
-//                                         date: "Apr 2024",
-//                                         comment:
-//                                             "I have bought and sold on other auction websites, but Cars & Bids definitely tops everyone in customer service.",
-//                                         rating: 5,
-//                                     },
-//                                     {
-//                                         name: "Sophia L.",
-//                                         date: "Jan 2024",
-//                                         comment:
-//                                             "Fast, easy, and hassle-free experience. Highly recommended!",
-//                                         rating: 5,
-//                                     },
-//                                     {
-//                                         name: "Michael B.",
-//                                         date: "Feb 2024",
-//                                         comment:
-//                                             "Got a great price for my car and the process was super smooth!",
-//                                         rating: 5,
-//                                     },
-//                                 ].map((review, index) => (
-//                                     <Carousel.Item key={index}>
-//                                         <Card className="bg-light p-3">
-//                                             <Card.Body>
-//                                                 <div className="d-flex align-items-center mb-2">
-//                                                     {Array(review.rating)
-//                                                         .fill()
-//                                                         .map((_, i) => (
-//                                                             <i
-//                                                                 key={i}
-//                                                                 className="bi-star-fill text-warning me-1"
-//                                                             ></i>
-//                                                         ))}
-//                                                 </div>
-//                                                 <Card.Title>
-//                                                     {review.name}{" "}
-//                                                     <small className="text-muted">
-//                                                         {review.date}
-//                                                     </small>
-//                                                 </Card.Title>
-//                                                 <Card.Text>
-//                                                     {review.comment}
-//                                                 </Card.Text>
-//                                             </Card.Body>
-//                                         </Card>
-//                                     </Carousel.Item>
-//                                 ))}
-//                             </Carousel>
-//                         </Col>
-//                     </Row>
-//                 </Col>
-//             </Row>
-//         </Container>
-//     );
-// }
-
 import { useContext, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
     Container,
     Row,
     Col,
     Card,
     Button,
-    Carousel,
     Modal,
     Form,
+    Image,
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { UserContext } from "../../context/user-context";
 import axios from "axios";
 
+import QuickAccessBoxes from "./QuickAccessBoxes";
+import RandomComments from "./RandomComments";
+import DashboardSidebar from "./DashboardSidebar";
+
 export default function SellerDashboard() {
     const { user, setUser } = useContext(UserContext);
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
+    const [newAvatar, setNewAvatar] = useState(null); // To store the newly selected avatar
+    const [newAvatarPreview, setNewAvatarPreview] = useState(null); // To display the preview of the new avatar
 
-    const handleClose = () => setShowModal(false);
+    console.log(user);
+
+    const handleClose = () => {
+        setShowModal(false);
+        setNewAvatar(null); // Reset the new avatar when the modal is closed
+        setNewAvatarPreview(null); // Reset the preview
+    };
     const handleShow = () => setShowModal(true);
 
-    async function useProfileFormAction(fd) {
+    const handleAvatarChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setNewAvatar(file); // Store the new file
+                setNewAvatarPreview(reader.result); // Set the preview URL
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const uploadImageToCloudinary = async (file) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", "ml_default"); // Replace with your Cloudinary upload preset
+
+        try {
+            const response = await axios.post(
+                "https://api.cloudinary.com/v1_1/dppk10edk/image/upload",
+                formData
+            );
+            return response.data.secure_url; // Return the secure URL of the uploaded image
+        } catch (error) {
+            console.error("Error uploading image to Cloudinary:", error);
+            return null;
+        }
+    };
+
+    async function useProfileFormAction(event) {
+        event.preventDefault();
+        const fd = new FormData(event.target);
         const userData = Object.fromEntries(fd.entries());
         userData.id = user.id;
+
+        // Upload new avatar to Cloudinary if selected
+        if (newAvatar) {
+            const avatarUrl = await uploadImageToCloudinary(newAvatar);
+            if (avatarUrl) {
+                userData.image_url = avatarUrl; // Add Cloudinary URL to userData
+            } else {
+                alert("Failed to upload avatar.");
+                return;
+            }
+        } else {
+            // Preserve the existing image_url if no avatar is selected
+            userData.image_url = user.image_url;
+        }
 
         console.log(userData);
 
@@ -252,15 +101,14 @@ export default function SellerDashboard() {
             if (res.status === 200) {
                 alert(res.data.message);
                 handleClose();
-                navigate("/user-profile");
-                setUser(userData);
-                // Save the user object to localStorage as a JSON string
-                localStorage.setItem("user", JSON.stringify(userData));
+                navigate("/account/listings");
+                setUser(userData); // Update the user context
+                localStorage.setItem("user", JSON.stringify(userData)); // Update localStorage
             } else {
                 console.log("Something went wrong");
             }
         } catch (error) {
-            console.error("Failed to add a listing!", error);
+            console.error("Failed to update profile!", error);
         }
     }
 
@@ -268,59 +116,7 @@ export default function SellerDashboard() {
         <Container>
             <Row>
                 {/* Sidebar */}
-                <Col
-                    sm="auto"
-                    className="p-3 d-flex flex-column flex-sm-row align-items-start align-items-sm-center"
-                    style={{ position: "sticky", top: 0, zIndex: 1020 }}
-                >
-                    <ul className="nav nav-pills mb-auto flex-row flex-sm-column w-100">
-                        <li className="nav-item">
-                            <NavLink
-                                to="/dashboard"
-                                className="nav-link py-2 px-3 d-flex align-items-center"
-                            >
-                                <i className="bi-speedometer2 fs-5 me-2"></i>
-                                <span>Dashboard</span>
-                            </NavLink>
-                        </li>
-                        <li className="nav-item">
-                            <NavLink
-                                to="/in-progress"
-                                className="nav-link py-2 px-3 d-flex align-items-center"
-                            >
-                                <i className="bi-clock fs-5 me-2"></i>
-                                <span>In Progress</span>
-                            </NavLink>
-                        </li>
-                        <li className="nav-item">
-                            <NavLink
-                                to="/live-auctions"
-                                className="nav-link py-2 px-3 d-flex align-items-center"
-                            >
-                                <i className="bi-lightning fs-5 me-2"></i>
-                                <span>Live Auctions</span>
-                            </NavLink>
-                        </li>
-                        <li className="nav-item">
-                            <NavLink
-                                to="/comments"
-                                className="nav-link py-2 px-3 d-flex align-items-center"
-                            >
-                                <i className="bi-chat fs-5 me-2"></i>
-                                <span>Comments</span>
-                            </NavLink>
-                        </li>
-                        <li className="nav-item">
-                            <NavLink
-                                to="/past-listings"
-                                className="nav-link py-2 px-3 d-flex align-items-center"
-                            >
-                                <i className="bi-archive fs-5 me-2"></i>
-                                <span>Past Listings</span>
-                            </NavLink>
-                        </li>
-                    </ul>
-                </Col>
+                <DashboardSidebar />
 
                 {/* Main Content */}
                 <Col sm className="p-4 min-vh-100">
@@ -329,40 +125,65 @@ export default function SellerDashboard() {
 
                     {/* Profile Card */}
 
-                    <Card className="mb-3">
+                    <Card className="mb-3 shadow-sm">
+                        {" "}
+                        {/* Added shadow for depth */}
                         <Row className="g-0">
+                            {/* Left Column: Profile Picture and Edit Button */}
                             <Col
-                                md={3}
-                                lg={2}
-                                className="p-3 d-flex justify-content-center align-items-center"
+                                md={4}
+                                lg={3}
+                                className="p-4 d-flex flex-column justify-content-center align-items-center bg-light" // Added bg-light for contrast
                             >
-                                <div className="d-flex flex-column align-items-center gap-3">
+                                <div className="text-center">
                                     <img
-                                        src={user.image_url}
-                                        className="img-fluid rounded-circle"
+                                        src={newAvatarPreview || user.image_url}
+                                        className="img-fluid rounded-circle mb-3" // Added margin-bottom
                                         alt={user.username}
                                         style={{
                                             width: "130px",
                                             height: "130px",
                                             objectFit: "cover",
+                                            border: "3px solid #fff", // Added border for emphasis
+                                            boxShadow:
+                                                "0 4px 6px rgba(0, 0, 0, 0.1)", // Added shadow for depth
                                         }}
                                     />
                                     <Button
                                         variant="primary"
                                         size="sm"
                                         onClick={handleShow}
+                                        className="w-75" // Made the button wider
                                     >
                                         Edit Profile
                                     </Button>
                                 </div>
                             </Col>
-                            <Col md={9} lg={10}>
-                                <Card.Body>
-                                    <Card.Title>{user.username}</Card.Title>
-                                    <Card.Text>{user.bio}</Card.Text>
-                                    <Card.Text>
-                                        <small className="text-muted">
-                                            Joined January 2025
+
+                            {/* Right Column: User Info */}
+                            <Col md={8} lg={9} className="p-4">
+                                <Card.Body className="h-100 d-flex flex-column justify-content-center">
+                                    <Card.Title className="mb-3 fs-3 fw-bold">
+                                        {" "}
+                                        {/* Increased font size and weight */}
+                                        {user.username}
+                                    </Card.Title>
+                                    <Card.Text className="text-muted mb-4 fs-5">
+                                        {" "}
+                                        {/* Increased font size */}
+                                        {user.bio || "No bio available."}{" "}
+                                        {/* Fallback text if bio is empty */}
+                                    </Card.Text>
+                                    <Card.Text className="text-muted">
+                                        <small>
+                                            Member since{" "}
+                                            <span className="fw-bold">
+                                                {" "}
+                                                {/* Added bold for emphasis */}
+                                                {new Date(
+                                                    user.created_at
+                                                ).toDateString()}
+                                            </span>
                                         </small>
                                     </Card.Text>
                                 </Card.Body>
@@ -370,15 +191,16 @@ export default function SellerDashboard() {
                         </Row>
                     </Card>
 
+                    {/* Edit Profile Modal */}
                     <Modal show={showModal} onHide={handleClose} centered>
                         <Modal.Header closeButton>
                             <Modal.Title>Edit Profile</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            <Form action={useProfileFormAction}>
+                            <Form onSubmit={useProfileFormAction}>
                                 <div className="d-flex flex-column align-items-center gap-3">
                                     <img
-                                        src={user.image_url}
+                                        src={newAvatarPreview || user.image_url} // Show new avatar preview if available
                                         className="img-fluid rounded-circle"
                                         alt={user.username}
                                         style={{
@@ -387,9 +209,24 @@ export default function SellerDashboard() {
                                             objectFit: "cover",
                                         }}
                                     />
-                                    {/* <Button variant="secondary" size="sm">
+                                    <Form.Control
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleAvatarChange}
+                                        style={{ display: "none" }}
+                                        id="avatar-upload"
+                                    />
+                                    <Button
+                                        variant="secondary"
+                                        size="sm"
+                                        onClick={() =>
+                                            document
+                                                .getElementById("avatar-upload")
+                                                .click()
+                                        }
+                                    >
                                         Choose a different picture
-                                    </Button> */}
+                                    </Button>
                                 </div>
 
                                 <Form.Group className="mb-3" controlId="email">
@@ -436,18 +273,6 @@ export default function SellerDashboard() {
                                     />
                                 </Form.Group>
 
-                                <Form.Group
-                                    className="mb-3"
-                                    controlId="image_url"
-                                >
-                                    <Form.Label>Avatar link:</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        name="image_url"
-                                        defaultValue={user.image_url}
-                                    />
-                                </Form.Group>
-
                                 <Form.Group className="mb-3" controlId="bio">
                                     <Form.Label>Bio:</Form.Label>
                                     <Form.Control
@@ -473,131 +298,10 @@ export default function SellerDashboard() {
                     </Modal>
 
                     {/* Quick Access Boxes */}
-                    <Row className="mb-5">
-                        {[
-                            {
-                                name: "In Progress",
-                                icon: "bi-clock",
-                                link: "/in-progress",
-                            },
-                            {
-                                name: "Live Auctions",
-                                icon: "bi-lightning",
-                                link: "/live-auctions",
-                            },
-                            {
-                                name: "Auction Comments",
-                                icon: "bi-chat",
-                                link: "/comments",
-                            },
-                            {
-                                name: "Past Listings",
-                                icon: "bi-archive",
-                                link: "/past-listings",
-                            },
-                        ].map((item, index) => (
-                            <Col xs={6} md={3} key={index} className="mb-3">
-                                <NavLink
-                                    to={item.link}
-                                    className="text-decoration-none"
-                                >
-                                    <Card className="text-center p-3 h-100">
-                                        <Card.Body>
-                                            <i
-                                                className={`bi ${item.icon} fs-1 mb-2 d-block`}
-                                            ></i>
-                                            <Card.Title className="fs-5">
-                                                {item.name}
-                                            </Card.Title>
-                                        </Card.Body>
-                                    </Card>
-                                </NavLink>
-                            </Col>
-                        ))}
-                    </Row>
+                    <QuickAccessBoxes />
 
                     {/* Why Sell on Cars & Bids? Section */}
-                    <Row className="mb-5">
-                        <Col md={6}>
-                            <h4>Why Sell on Cars &amp; Bids?</h4>
-                            <ul className="list-unstyled mt-3">
-                                <li className="mb-2">
-                                    <i className="bi-search me-2"></i>
-                                    <strong>Live support</strong> from listing
-                                    to post-sale
-                                </li>
-                                <li className="mb-2">
-                                    <i className="bi-calendar-check me-2"></i>
-                                    Sell your car <strong>faster</strong> and
-                                    get to auction in under a week
-                                </li>
-                                <li className="mb-2">
-                                    <i className="bi-people me-2"></i>
-                                    Access our <strong>huge audience</strong> of
-                                    car enthusiasts
-                                </li>
-                                <li className="mb-2">
-                                    <i className="bi-cash me-2"></i>
-                                    <strong>Sell for free</strong> and receive
-                                    100% of the sale price
-                                </li>
-                            </ul>
-                        </Col>
-                        <Col md={6}>
-                            {/* Carousel of Comments */}
-                            <Carousel interval={3000} controls indicators>
-                                {[
-                                    {
-                                        name: "Andrew G.",
-                                        date: "Apr 2024",
-                                        comment:
-                                            "I have bought and sold on other auction websites, but Cars & Bids definitely tops everyone in customer service.",
-                                        rating: 5,
-                                    },
-                                    {
-                                        name: "Sophia L.",
-                                        date: "Jan 2024",
-                                        comment:
-                                            "Fast, easy, and hassle-free experience. Highly recommended!",
-                                        rating: 5,
-                                    },
-                                    {
-                                        name: "Michael B.",
-                                        date: "Feb 2024",
-                                        comment:
-                                            "Got a great price for my car and the process was super smooth!",
-                                        rating: 5,
-                                    },
-                                ].map((review, index) => (
-                                    <Carousel.Item key={index}>
-                                        <Card className="bg-light p-3">
-                                            <Card.Body>
-                                                <div className="d-flex align-items-center mb-2">
-                                                    {Array(review.rating)
-                                                        .fill()
-                                                        .map((_, i) => (
-                                                            <i
-                                                                key={i}
-                                                                className="bi-star-fill text-warning me-1"
-                                                            ></i>
-                                                        ))}
-                                                </div>
-                                                <Card.Title>
-                                                    {review.name}{" "}
-                                                    <small className="text-muted">
-                                                        {review.date}
-                                                    </small>
-                                                </Card.Title>
-                                                <Card.Text>
-                                                    {review.comment}
-                                                </Card.Text>
-                                            </Card.Body>
-                                        </Card>
-                                    </Carousel.Item>
-                                ))}
-                            </Carousel>
-                        </Col>
-                    </Row>
+                    <RandomComments />
                 </Col>
             </Row>
         </Container>
