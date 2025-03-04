@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function useAuth() {
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
     const navigate = useNavigate();
 
     const [user, setUser] = useState(() => {
@@ -9,36 +10,45 @@ export default function useAuth() {
         return savedUser ? JSON.parse(savedUser) : null;
     });
 
-    // Effect to keep user state in sync with localStorage
+    const isMounted = useRef(true);
+
     useEffect(() => {
-        if (user) {
-            localStorage.setItem("user", JSON.stringify(user));
-        } else {
-            localStorage.removeItem("user");
+        isMounted.current = true;
+        return () => {
+            isMounted.current = false;
+        };
+    }, []);
+
+    useEffect(() => {
+        if (isMounted.current) {
+            if (user) {
+                localStorage.setItem("user", JSON.stringify(user));
+            } else {
+                localStorage.removeItem("user");
+            }
         }
     }, [user]);
 
-    // Ensure user state is initialized from localStorage on first load
-    useEffect(() => {
-        const savedUser = localStorage.getItem("user");
-        if (savedUser) {
-            setUser(JSON.parse(savedUser));
-        }
-    }, []);
-
     const logOut = () => {
-        if (window.confirm("Are you sure you want to log out?")) {
-            setUser(null);
-            localStorage.removeItem("user"); // Clear user from localStorage
+        if (isLoggingOut) return; // Prevent multiple logout requests
 
-            // Wait for the user state to be updated before navigating
+        if (window.confirm("Are you sure you want to log out?")) {
+            setIsLoggingOut(true); // Set logging out state
+
+            // Navigate to home page first
+            navigate("/");
+
+            // Delay clearing the user state and localStorage
             setTimeout(() => {
-                navigate("/");
-            }, 100);
+                setUser(null); // Clear user state
+                localStorage.removeItem("user"); // Clear user from localStorage
+
+                if (isMounted.current) {
+                    setIsLoggingOut(false); // Reset logging out state
+                }
+            }, 100); // Adjust the delay as needed
         }
     };
 
-    return { user, setUser, logOut };
-};
-
-
+    return { user, setUser, logOut, isLoggingOut };
+}

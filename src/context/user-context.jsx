@@ -3,17 +3,14 @@ import useAuth from "../hooks/useAuth";
 
 export const UserContext = createContext({
     user: null,
+    isLoggingOut: false,
     setUser: () => {},
     logOut: () => {},
 });
 
 // Define the UserProvider component
 export const UserProvider = ({ children }) => {
-    const { user, setUser, logOut } = useAuth();
+    const auth = useAuth();
 
-    const ctxValue = { user, setUser, logOut };
-
-    return (
-        <UserContext.Provider value={ctxValue}>{children}</UserContext.Provider>
-    );
+    return <UserContext.Provider value={auth}>{children}</UserContext.Provider>;
 };

@@ -1,12 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-// import "bootstrap/dist/css/bootstrap.min.css";
 import "../assets/Car.css";
+import axios from "axios";
 
 export default function Car() {
     const { id } = useParams();
     const [modalImage, setModalImage] = useState(null);
     const [showGallery, setShowGallery] = useState(false);
+
+    useEffect(() => {
+        async function fetchListing() {
+            axios
+                .get("http://localhost:8080/listings/" + id)
+                .then((res) => {
+                    const data = res.data.data[0];
+
+                    console.log(data);
+                })
+                .catch((err) => {
+                    console.error("Failed to fetch listings:", err);
+                });
+        }
+
+        fetchListing();
+    }, [id]);
 
     // Ảnh chính demo (thay bằng link ảnh thật của bạn)
     const mainImageUrl =
@@ -358,154 +375,6 @@ export default function Car() {
                                 ></iframe>
                             </div>
                         </div>
-
-                        {/* Phần 8 cột: Sau Video, ta thêm các phần mới */}
-
-                        {/* Seller Q&A Header */}
-                        {/* Header Seller Q&A */}
-                        {/* Seller Q&A Header */}
-                        {/*<div className="d-flex justify-content-between align-items-center mb-3 mt-4">*/}
-                        {/*    <h5 className="fw-bold mb-0">Seller Q&A (3)</h5>*/}
-                        {/*    <div>*/}
-                        {/*        <a href="#!" className="text-decoration-none me-3">*/}
-                        {/*            Ask a question*/}
-                        {/*        </a>*/}
-                        {/*        <a href="#!" className="text-decoration-none">*/}
-                        {/*            View all*/}
-                        {/*        </a>*/}
-                        {/*    </div>*/}
-                        {/*</div>*/}
-
-                        {/*/!* Seller Q&A Content *!/*/}
-                        {/*<div className="row row-cols-1 row-cols-md-3 g-3">*/}
-                        {/*    /!* Q&A 1 *!/*/}
-                        {/*    <div className="col d-flex">*/}
-                        {/*        <div className="bg-dark p-3 rounded h-100 d-flex flex-column w-100">*/}
-                        {/*            /!* Người hỏi *!/*/}
-                        {/*            <div className="d-flex align-items-center mb-2">*/}
-                        {/*                <img*/}
-                        {/*                    src="https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp"*/}
-                        {/*                    alt="dhb2"*/}
-                        {/*                    className="rounded-circle me-2"*/}
-                        {/*                    style={{width: "32px", height: "32px", objectFit: "cover"}}*/}
-                        {/*                />*/}
-                        {/*                <span className="fw-bold me-2">dhb2</span>*/}
-                        {/*                <span className="text-success fw-bold">+22</span>*/}
-                        {/*            </div>*/}
-                        {/*            /!* Câu hỏi *!/*/}
-                        {/*            <p className="mb-2">*/}
-                        {/*                <strong>Q:</strong> Hello - What is the actual color of the car (under the wrap)?*/}
-                        {/*                I don see it in the invoice you attached. Thanks!*/}
-                        {/*            </p>*/}
-                        {/*            /!* Người trả lời (Seller) *!/*/}
-                        {/*            <div className="d-flex align-items-center text-muted mb-2">*/}
-                        {/*                <img*/}
-                        {/*                    src="https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp"*/}
-                        {/*                    alt="Raymondu.lu"*/}
-                        {/*                    className="rounded-circle me-2"*/}
-                        {/*                    style={{width: "32px", height: "32px", objectFit: "cover"}}*/}
-                        {/*                />*/}
-                        {/*                <span>Raymondu.lu</span>*/}
-                        {/*                <span className="badge bg-secondary ms-2">Seller</span>*/}
-                        {/*            </div>*/}
-                        {/*            /!* Câu trả lời *!/*/}
-                        {/*            <p className="mb-2">*/}
-                        {/*                <strong>A:</strong> Hi great question, it is not that difficult to take off the*/}
-                        {/*                wrap...*/}
-                        {/*            </p>*/}
-
-                        {/*            /!* Nút "View answer" nằm góc dưới phải *!/*/}
-                        {/*            <div className="mt-auto">*/}
-                        {/*                <div className="d-flex justify-content-end">*/}
-                        {/*                    <a href="#!" className="text-decoration-none">*/}
-                        {/*                        View answer*/}
-                        {/*                    </a>*/}
-                        {/*                </div>*/}
-                        {/*            </div>*/}
-                        {/*        </div>*/}
-                        {/*    </div>*/}
-
-                        {/*    /!* Q&A 2 *!/*/}
-                        {/*    <div className="col d-flex">*/}
-                        {/*        <div className="bg-dark p-3 rounded h-100 d-flex flex-column w-100">*/}
-                        {/*            <div className="d-flex align-items-center mb-2">*/}
-                        {/*                <img*/}
-                        {/*                    src="https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp"*/}
-                        {/*                    alt="Cinn"*/}
-                        {/*                    className="rounded-circle me-2"*/}
-                        {/*                    style={{width: "32px", height: "32px", objectFit: "cover"}}*/}
-                        {/*                />*/}
-                        {/*                <span className="fw-bold me-2">Cinn</span>*/}
-                        {/*                <span className="text-success fw-bold">+2</span>*/}
-                        {/*            </div>*/}
-                        {/*            <p className="mb-2">*/}
-                        {/*                <strong>Q:</strong> So... how difficult would it be to remove the green wrap!?*/}
-                        {/*            </p>*/}
-                        {/*            <div className="d-flex align-items-center text-muted mb-2">*/}
-                        {/*                <img*/}
-                        {/*                    src="https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp"*/}
-                        {/*                    alt="Raymondu.lu"*/}
-                        {/*                    className="rounded-circle me-2"*/}
-                        {/*                    style={{width: "32px", height: "32px", objectFit: "cover"}}*/}
-                        {/*                />*/}
-                        {/*                <span>Raymondu.lu</span>*/}
-                        {/*                <span className="badge bg-secondary ms-2">Seller</span>*/}
-                        {/*            </div>*/}
-                        {/*            <p className="mb-2">*/}
-                        {/*                <strong>A:</strong> It not that difficult to remove the wrap...*/}
-                        {/*            </p>*/}
-
-                        {/*            <div className="mt-auto">*/}
-                        {/*                <div className="d-flex justify-content-end">*/}
-                        {/*                    <a href="#!" className="text-decoration-none">*/}
-                        {/*                        View answer*/}
-                        {/*                    </a>*/}
-                        {/*                </div>*/}
-                        {/*            </div>*/}
-                        {/*        </div>*/}
-                        {/*    </div>*/}
-
-                        {/*    /!* Q&A 3 *!/*/}
-                        {/*    <div className="col d-flex">*/}
-                        {/*        <div className="bg-dark p-3 rounded h-100 d-flex flex-column w-100">*/}
-                        {/*            <div className="d-flex align-items-center mb-2">*/}
-                        {/*                <img*/}
-                        {/*                    src="https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp"*/}
-                        {/*                    alt="kvo"*/}
-                        {/*                    className="rounded-circle me-2"*/}
-                        {/*                    style={{width: "32px", height: "32px", objectFit: "cover"}}*/}
-                        {/*                />*/}
-                        {/*                <span className="fw-bold me-2">kvo</span>*/}
-                        {/*                <span className="text-success fw-bold">+7</span>*/}
-                        {/*            </div>*/}
-                        {/*            <p className="mb-2">*/}
-                        {/*                <strong>Q:</strong> On the pictures, the color near the trunk — is it the original*/}
-                        {/*                or the wrap?*/}
-                        {/*            </p>*/}
-                        {/*            <div className="d-flex align-items-center text-muted mb-2">*/}
-                        {/*                <img*/}
-                        {/*                    src="https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp"*/}
-                        {/*                    alt="Raymondu.lu"*/}
-                        {/*                    className="rounded-circle me-2"*/}
-                        {/*                    style={{width: "32px", height: "32px", objectFit: "cover"}}*/}
-                        {/*                />*/}
-                        {/*                <span>Raymondu.lu</span>*/}
-                        {/*                <span className="badge bg-secondary ms-2">Seller</span>*/}
-                        {/*            </div>*/}
-                        {/*            <p className="mb-2">*/}
-                        {/*                <strong>A:</strong> Yes, partially original. The trunk area was left unwrapped.*/}
-                        {/*            </p>*/}
-
-                        {/*            <div className="mt-auto">*/}
-                        {/*                <div className="d-flex justify-content-end">*/}
-                        {/*                    <a href="#!" className="text-decoration-none">*/}
-                        {/*                        View answer*/}
-                        {/*                    </a>*/}
-                        {/*                </div>*/}
-                        {/*            </div>*/}
-                        {/*        </div>*/}
-                        {/*    </div>*/}
-                        {/*</div>*/}
 
                         <div className="container my-4">
                             <div className="d-flex justify-content-between align-items-center mb-3 mt-4">

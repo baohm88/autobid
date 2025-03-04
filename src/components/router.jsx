@@ -77,7 +77,7 @@ const routes = [
         layout: ClientLayout,
     },
     {
-        path: "/cars/:id",
+        path: "/listings/:id",
         component: Car,
         layout: ClientLayout,
     },
