@@ -17,6 +17,7 @@ import axios from "axios";
 import QuickAccessBoxes from "./QuickAccessBoxes";
 import RandomComments from "./RandomComments";
 import DashboardSidebar from "./DashboardSidebar";
+import { formatter } from "../../utils/formatter";
 
 export default function SellerDashboard() {
     const { user, setUser } = useContext(UserContext);
@@ -253,58 +254,78 @@ export default function SellerDashboard() {
                                     />
                                 </Form.Group>
 
-                                <Form.Group
-                                    className="mb-3"
-                                    controlId="username"
-                                >
-                                    <Form.Label>Username:</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        name="username"
-                                        value={user.username}
-                                        onChange={(e) =>
-                                            setUser({
-                                                ...user,
-                                                username: e.target.value,
-                                            })
-                                        }
-                                    />
-                                </Form.Group>
-                                <Form.Group
-                                    className="mb-3"
-                                    controlId="password"
-                                >
-                                    <Form.Label>New Password:</Form.Label>
-                                    <Form.Control
-                                        type="password"
-                                        name="password"
-                                        // value={user.password}
-                                        onChange={(e) =>
-                                            setUser({
-                                                ...user,
-                                                password: e.target.value,
-                                            })
-                                        }
-                                    />
-                                </Form.Group>
+                                <Row>
+                                    <Col>
+                                        <Form.Group
+                                            className="mb-3"
+                                            controlId="username"
+                                        >
+                                            <Form.Label>Username:</Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                name="username"
+                                                value={user.username}
+                                                onChange={(e) =>
+                                                    setUser({
+                                                        ...user,
+                                                        username:
+                                                            e.target.value,
+                                                    })
+                                                }
+                                            />
+                                        </Form.Group>
+                                    </Col>
+                                    <Col>
+                                        <Form.Group
+                                            className="mb-3"
+                                            controlId="password"
+                                        >
+                                            <Form.Label>
+                                                New Password:
+                                            </Form.Label>
+                                            <Form.Control
+                                                type="password"
+                                                name="password"
+                                                // value={user.password}
+                                                onChange={(e) =>
+                                                    setUser({
+                                                        ...user,
+                                                        password:
+                                                            e.target.value,
+                                                    })
+                                                }
+                                            />
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
 
-                                <Form.Group
-                                    className="mb-3"
-                                    controlId="balance"
-                                >
-                                    <Form.Label>New Balance:</Form.Label>
-                                    <Form.Control
-                                        type="number"
-                                        name="balance"
-                                        value={user.balance}
-                                        onChange={(e) =>
-                                            setUser({
-                                                ...user,
-                                                balance: e.target.value,
-                                            })
-                                        }
-                                    />
-                                </Form.Group>
+                                {/* Balance */}
+                                <Row>
+                                    <Col>
+                                        <span>Balance: </span>{" "}
+                                        <span className="fw-bold">
+                                            {formatter.format(user.balance)}
+                                        </span>
+                                    </Col>
+                                    <Col>
+                                        <Form.Group
+                                            className="mb-3"
+                                            controlId="balance"
+                                        >
+                                            <Form.Label>Deposit:</Form.Label>
+                                            <Form.Control
+                                                type="number"
+                                                name="balance"
+                                                onChange={(e) =>
+                                                    setUser({
+                                                        ...user,
+                                                        balance: e.target.value,
+                                                    })
+                                                }
+                                            />
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
 
                                 <Form.Group className="mb-3" controlId="bio">
                                     <Form.Label>Bio:</Form.Label>

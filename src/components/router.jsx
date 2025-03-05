@@ -1,7 +1,7 @@
 import AdminLayout from "../layouts/AdminLayout";
 import ClientLayout from "../layouts/ClientLayout";
 import Auctions from "./admin/Auctions";
-import Car from "./Car";
+
 import Home from "./Home";
 import Login from "./Login";
 import Register from "./Register";
@@ -16,6 +16,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import Orders from "./admin/Orders";
 import Users from "./admin/Users";
 import Homes from "./admin/Homes";
+import CarDetails from "./car/CarDetails";
 
 const routes = [
     { path: "/", component: Home, layout: ClientLayout },
@@ -78,7 +79,7 @@ const routes = [
     },
     {
         path: "/listings/:id",
-        component: Car,
+        component: CarDetails ,
         layout: ClientLayout,
     },
     {
