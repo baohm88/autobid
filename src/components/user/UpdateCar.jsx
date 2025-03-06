@@ -1,7 +1,7 @@
 import axios from "axios";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/user-context";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
     Container,
     Card,
@@ -10,18 +10,73 @@ import {
     Col,
     Button,
     Image,
+    Spinner,
+    Alert,
 } from "react-bootstrap";
 import { BODY_STYLES } from "./dashboardLInks";
+import { formatDateTimeForInput } from "../../utils/formatter";
 
-export default function CarForm() {
+export default function UpdateCar() {
+    const { id } = useParams();
     const [modified, setModified] = useState("");
     const [hasFlaw, setHasFlaw] = useState("");
     const [uploadedImages, setUploadedImages] = useState([]);
-    const [imageUrls, setImageUrls] = useState([]);
     const { user } = useContext(UserContext);
+    const [car, setCar] = useState(null);
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
-    document.title = "Add new car";
+    document.title = "Edit Car";
+
+    useEffect(() => {
+        async function fetchListing() {
+            try {
+                const res = await axios.get(
+                    `http://localhost:8080/listings/${id}`
+                );
+                const car = res.data.data[0];
+                setCar(car);
+                setUploadedImages(car.images || []); // Populate uploadedImages with existing images
+                console.log(car);
+                const isOwner = user && car && user.id === car.user;
+
+                if (!isOwner) {
+                    alert(
+                        "You are not the owner of this car. Please login as the owner first."
+                    );
+                    navigate("/");
+                }
+            } catch (err) {
+                console.error("Failed to fetch listings:", err);
+                setError(
+                    "Failed to fetch car details. Please try again later."
+                );
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchListing();
+    }, [id]);
+
+    if (loading) {
+        return (
+            <Container className="text-center mt-5">
+                <Spinner animation="border" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </Spinner>
+            </Container>
+        );
+    }
+
+    if (error) {
+        return (
+            <Container className="mt-5">
+                <Alert variant="danger">{error}</Alert>
+            </Container>
+        );
+    }
 
     // Handle image upload
     const handleImageUpload = (event) => {
@@ -35,7 +90,7 @@ export default function CarForm() {
             reader.onloadend = () => {
                 imagesArray.push(reader.result);
                 if (imagesArray.length === files.length) {
-                    setUploadedImages([...uploadedImages, ...imagesArray]);
+                    setUploadedImages((prev) => [...prev, ...imagesArray]); // Add new images to existing ones
                 }
             };
 
@@ -48,10 +103,6 @@ export default function CarForm() {
         const newImages = [...uploadedImages];
         newImages.splice(index, 1);
         setUploadedImages(newImages);
-
-        const newUrls = [...imageUrls];
-        newUrls.splice(index, 1);
-        setImageUrls(newUrls);
     };
 
     // Upload image to Cloudinary
@@ -65,8 +116,6 @@ export default function CarForm() {
                 "https://api.cloudinary.com/v1_1/dppk10edk/image/upload",
                 formData
             );
-            console.log(response);
-
             return response.data.secure_url; // Return the secure URL of the uploaded image
         } catch (error) {
             console.error("Error uploading image to Cloudinary:", error);
@@ -90,29 +139,35 @@ export default function CarForm() {
     async function carFormAction(event) {
         event.preventDefault();
 
-        // Upload images to Cloudinary and get their URLs
-        const uploadedUrls = [];
+        // Upload new images to Cloudinary and get their URLs
+        const newImageUrls = [];
         for (const image of uploadedImages) {
-            const file = dataURLtoFile(image, `image_${Date.now()}.jpg`);
-            const url = await uploadImageToCloudinary(file);
-            if (url) {
-                uploadedUrls.push(url);
+            if (image.startsWith("data:")) {
+                // Only upload new images (data URLs)
+                const file = dataURLtoFile(image, `image_${Date.now()}.jpg`);
+                const url = await uploadImageToCloudinary(file);
+                if (url) {
+                    newImageUrls.push(url);
+                }
+            } else {
+                // Keep existing image URLs
+                newImageUrls.push(image);
             }
         }
 
-        // Add the URLs to carData
+        // Prepare the updated car data
         const formData = new FormData(event.target);
         const carData = Object.fromEntries(formData.entries());
         carData.user = user.id;
         carData.description = `~${carData.mileage}, ${carData.engine}, ${carData.exterior}`;
-        carData.images = uploadedUrls; // Add Cloudinary URLs to carData
+        carData.images = newImageUrls; // Combine existing and new image URLs
 
         console.log(carData);
 
-        // Submit car data to the backend
+        // Submit updated car data to the backend
         try {
             const res = await axios.post(
-                "http://localhost:8080/listings/add-listing",
+                `http://localhost:8080/listings/update-listings/${id}`,
                 carData,
                 {
                     headers: { "Content-Type": "application/json" },
@@ -126,13 +181,13 @@ export default function CarForm() {
                 console.log("Something went wrong");
             }
         } catch (error) {
-            console.error("Failed to add a listing!", error);
+            console.error("Failed to update car details:", error);
         }
     }
 
     return (
         <Container>
-            <h1 className="text-center">Add a new car</h1>
+            <h1 className="text-center">Edit Car</h1>
             <Card className="bg-body-tertiary">
                 <Card.Body>
                     <Form onSubmit={carFormAction}>
@@ -141,7 +196,10 @@ export default function CarForm() {
                             <Col md={4}>
                                 <Form.Group>
                                     <Form.Label>Year</Form.Label>
-                                    <Form.Select name="year_model" defaultValue="">
+                                    <Form.Select
+                                        name="year_model"
+                                        defaultValue={car?.year_model || ""}
+                                    >
                                         <option value="" disabled>
                                             Choose
                                         </option>
@@ -159,13 +217,21 @@ export default function CarForm() {
                             <Col md={4}>
                                 <Form.Group>
                                     <Form.Label>Make</Form.Label>
-                                    <Form.Control type="text" name="make" />
+                                    <Form.Control
+                                        type="text"
+                                        name="make"
+                                        defaultValue={car?.make || ""}
+                                    />
                                 </Form.Group>
                             </Col>
                             <Col md={4}>
                                 <Form.Group>
                                     <Form.Label>Model</Form.Label>
-                                    <Form.Control type="text" name="model" />
+                                    <Form.Control
+                                        type="text"
+                                        name="model"
+                                        defaultValue={car?.model || ""}
+                                    />
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -175,7 +241,10 @@ export default function CarForm() {
                             <Col md={4}>
                                 <Form.Group>
                                     <Form.Label>Transmission</Form.Label>
-                                    <Form.Select name="transmission">
+                                    <Form.Select
+                                        name="transmission"
+                                        defaultValue={car?.transmission || ""}
+                                    >
                                         <option>Select transmission</option>
                                         <option value="Automatic">
                                             Automatic
@@ -190,13 +259,18 @@ export default function CarForm() {
                                     <Form.Control
                                         type="number"
                                         name="mileage"
+                                        defaultValue={car?.mileage || ""}
                                     />
                                 </Form.Group>
                             </Col>
                             <Col md={4}>
                                 <Form.Group>
                                     <Form.Label>Engine</Form.Label>
-                                    <Form.Control type="text" name="engine" />
+                                    <Form.Control
+                                        type="text"
+                                        name="engine"
+                                        defaultValue={car?.engine || ""}
+                                    />
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -206,7 +280,10 @@ export default function CarForm() {
                             <Col md={4}>
                                 <Form.Group>
                                     <Form.Label>Body Style</Form.Label>
-                                    <Form.Select name="body_style">
+                                    <Form.Select
+                                        name="body_style"
+                                        defaultValue={car?.body_style || ""}
+                                    >
                                         <option>Select Body Style</option>
                                         {BODY_STYLES.map((style) => (
                                             <option key={style} value={style}>
@@ -222,6 +299,7 @@ export default function CarForm() {
                                     <Form.Control
                                         type="text"
                                         name="interial_color"
+                                        defaultValue={car?.interial_color || ""}
                                     />
                                 </Form.Group>
                             </Col>
@@ -231,6 +309,7 @@ export default function CarForm() {
                                     <Form.Control
                                         type="text"
                                         name="exterior_color"
+                                        defaultValue={car?.exterior_color || ""}
                                     />
                                 </Form.Group>
                             </Col>
@@ -244,6 +323,7 @@ export default function CarForm() {
                                     <Form.Control
                                         type="number"
                                         name="starting_bid"
+                                        defaultValue={car?.starting_bid || ""}
                                     />
                                 </Form.Group>
                             </Col>
@@ -256,6 +336,7 @@ export default function CarForm() {
                                         min={new Date()
                                             .toISOString()
                                             .slice(0, 16)}
+                                        defaultValue={formatDateTimeForInput(car?.start_time)}
                                     />
                                 </Form.Group>
                             </Col>
@@ -265,6 +346,10 @@ export default function CarForm() {
                                     <Form.Control
                                         type="datetime-local"
                                         name="end_time"
+                                        min={new Date()
+                                            .toISOString()
+                                            .slice(0, 16)}
+                                            defaultValue={formatDateTimeForInput(car?.end_time)}
                                     />
                                 </Form.Group>
                             </Col>
@@ -281,6 +366,7 @@ export default function CarForm() {
                                     name="equipment"
                                     rows={3}
                                     placeholder='Separate each item with ",".'
+                                    defaultValue={car?.equipment}
                                 />
                             </Form.Group>
                         </Row>
@@ -297,6 +383,11 @@ export default function CarForm() {
                                     onChange={(e) =>
                                         setModified(e.target.value)
                                     }
+                                    defaultValue={
+                                        car?.modifications !== null
+                                            ? "modified"
+                                            : ""
+                                    }
                                 >
                                     <option>Choose</option>
                                     <option value="new">Brand New</option>
@@ -305,7 +396,8 @@ export default function CarForm() {
                             </Form.Group>
                         </Row>
 
-                        {modified === "modified" && (
+                        {(modified === "modified" ||
+                            car?.modifications !== null) && (
                             <Row className="mb-3">
                                 <Form.Group controlId="modification">
                                     <Form.Label>
@@ -316,6 +408,7 @@ export default function CarForm() {
                                         name="modifications"
                                         rows={3}
                                         placeholder='Separate each item with ",".'
+                                        defaultValue={car?.modifications}
                                     />
                                 </Form.Group>
                             </Row>
@@ -332,6 +425,9 @@ export default function CarForm() {
                                     as="select"
                                     name="flaw"
                                     onChange={(e) => setHasFlaw(e.target.value)}
+                                    defaultValue={
+                                        car?.flaws !== null ? "yes" : ""
+                                    }
                                 >
                                     <option>Choose</option>
                                     <option value="yes">Yes</option>
@@ -340,7 +436,7 @@ export default function CarForm() {
                             </Form.Group>
                         </Row>
 
-                        {hasFlaw === "yes" && (
+                        {(hasFlaw === "yes" || car?.flaws !== null) && (
                             <Row className="mb-3">
                                 <Form.Group controlId="flaws">
                                     <Form.Label>
@@ -351,6 +447,7 @@ export default function CarForm() {
                                         name="flaws"
                                         rows={3}
                                         placeholder='Separate each item with ";".'
+                                        defaultValue={car?.flaws}
                                     />
                                 </Form.Group>
                             </Row>
@@ -388,7 +485,7 @@ export default function CarForm() {
 
                         {/* Submit Button */}
                         <Button type="submit" variant="primary">
-                            Save
+                            {loading ? "Saving..." : "Save Changes"}
                         </Button>
                     </Form>
                 </Card.Body>

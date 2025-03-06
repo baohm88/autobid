@@ -2,11 +2,12 @@ import axios from "axios";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/user-context";
+import { Alert } from "react-bootstrap"; // Import Alert component
 
 export default function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState(false);
+    const [error, setError] = useState(null); // Change to null initially
 
     const { setUser } = useContext(UserContext);
     const navigate = useNavigate();
@@ -17,7 +18,7 @@ export default function Login() {
 
         const userData = { username, password };
         try {
-            const response = await axios.post(
+            const res = await axios.post(
                 "http://localhost:8080/login",
                 userData,
                 {
@@ -27,12 +28,14 @@ export default function Login() {
                 }
             );
 
-            const resData = await response.data;
+            console.log(res);
+
+            const resData = await res.data;
 
             if (resData.success === true) {
                 const user = resData.data[0];
 
-                setError(false);
+                setError(null); // Clear any previous error
                 alert("Welcome, " + resData.data[0].username);
 
                 setUser(user);
@@ -46,16 +49,29 @@ export default function Login() {
                     navigate("/");
                 }
             } else {
-                setError(resData.message);
+                setError(resData.message); // Set error message
             }
         } catch (error) {
             console.error("Login request failed:", error);
+            setError("Login failed. Please try again."); // Set generic error message
         }
     }
 
     return (
         <div className="container mt-4">
             <h2 className="text-center">Login</h2>
+
+            {/* Dismissible Alert for Error Messages */}
+            {error && (
+                <Alert
+                    variant="danger"
+                    onClose={() => setError(null)} 
+                    dismissible 
+                    className="col-md-6 col-lg-4 mx-auto"
+                >
+                    {error}
+                </Alert>
+            )}
 
             <form className="col-md-6 col-lg-4 mx-auto" onSubmit={handleSubmit}>
                 <div className="form-floating mb-3">

@@ -5,7 +5,7 @@ import Auctions from "./admin/Auctions";
 import Home from "./Home";
 import Login from "./Login";
 import Register from "./Register";
-import CarForm from "./user/CarForm";
+import CarForm from "./user/UpdateCar";
 import SellerDashBoard from "./user/SellerDashBoard";
 import UserBids from "./user/UserBids";
 import UserOrders from "./user/UserOrders";
@@ -17,6 +17,8 @@ import Orders from "./admin/Orders";
 import Users from "./admin/Users";
 import Homes from "./admin/Homes";
 import CarDetails from "./car/CarDetails";
+import AddCar from "./user/AddCar";
+import UpdateCar from "./user/UpdateCar";
 
 const routes = [
     { path: "/", component: Home, layout: ClientLayout },
@@ -54,7 +56,7 @@ const routes = [
         path: "/add-car",
         component: (props) => (
             <ProtectedRoute>
-                <CarForm {...props} />
+                <AddCar {...props} />
             </ProtectedRoute>
         ),
         layout: ClientLayout,
@@ -79,7 +81,16 @@ const routes = [
     },
     {
         path: "/listings/:id",
-        component: CarDetails ,
+        component: CarDetails,
+        layout: ClientLayout,
+    },
+    {
+        path: "/listings/:id/edit",
+        component: (props) => (
+            <ProtectedRoute>
+                <UpdateCar {...props} />
+            </ProtectedRoute>
+        ),
         layout: ClientLayout,
     },
     {

@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import {
     Container,
@@ -22,14 +22,17 @@ import ModificationsSection from "./ModificationsSection";
 import FlawsSection from "./FlawsSection";
 import VideosSection from "./VideosSection";
 import ButtonsGroup from "./ButtonsGroup";
+import { UserContext } from "../../context/user-context";
 
 export default function CarDetails() {
     const { id } = useParams();
+    const { user } = useContext(UserContext);
     const [car, setCar] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showModal, setShowModal] = useState(false); // State to control modal visibility
     const [selectedImageIndex, setSelectedImageIndex] = useState(0); // State to track the selected image index
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchListing() {
@@ -53,14 +56,16 @@ export default function CarDetails() {
         fetchListing();
     }, [id]);
 
+    const isOwner = user && car && user.id === car.user;
+
     // Handle keyboard navigation
     useEffect(() => {
         const handleKeyDown = (event) => {
             if (showModal) {
                 if (event.key === "ArrowLeft") {
-                    handlePrevious();
+                    showPreviousImage();
                 } else if (event.key === "ArrowRight") {
-                    handleNext();
+                    showNextImage();
                 }
             }
         };
@@ -74,7 +79,6 @@ export default function CarDetails() {
     const visibleThumbnails = car?.images?.slice(0, 8) || [];
     const hiddenCount = car?.images?.length > 8 ? car.images.length - 8 : 0;
 
-    // Handle loading and error states
     if (loading) {
         return (
             <Container className="text-center mt-5">
@@ -93,21 +97,18 @@ export default function CarDetails() {
         );
     }
 
-    // Function to open the modal and set the selected image index
     const openModal = (index) => {
         setSelectedImageIndex(index);
         setShowModal(true);
     };
 
-    // Function to navigate to the previous image
-    const handlePrevious = () => {
+    const showPreviousImage = () => {
         setSelectedImageIndex((prevIndex) =>
             prevIndex === 0 ? car.images.length - 1 : prevIndex - 1
         );
     };
 
-    // Function to navigate to the next image
-    const handleNext = () => {
+    const showNextImage = () => {
         setSelectedImageIndex((prevIndex) =>
             prevIndex === car.images.length - 1 ? 0 : prevIndex + 1
         );
@@ -124,6 +125,16 @@ export default function CarDetails() {
                 ~{car.mileage} Miles, {car.transmission} {car.engine} engine,{" "}
                 {car.exterior_color} exterior
             </p>
+            {/* Edit Button (only visible to the owner) */}
+            {isOwner && (
+                <Button
+                    className="mb-3"
+                    variant="primary"
+                    onClick={() => navigate(`/listings/${car.id}/edit`)}
+                >
+                    Edit Car Info
+                </Button>
+            )}
 
             {/* Row: Main Image + Thumbnails */}
             <Row>
@@ -156,13 +167,21 @@ export default function CarDetails() {
                                     fluid
                                     rounded
                                     style={{ cursor: "pointer" }}
-                                    onClick={() => openModal(index)} // Open modal with the clicked image
+                                    onClick={() => openModal(index)}
                                 />
                                 {index === 7 && hiddenCount > 0 && (
                                     <Button
                                         variant="dark"
-                                        className="w-100 overlay-thumbnail"
-                                        onClick={() => openModal(8)} // Open modal starting from the 9th image
+                                        className="w-100 position-absolute top-0 start-0 h-100"
+                                        style={{
+                                            opacity: 0.8, // Adjust opacity for better visibility
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            fontSize: "1.2rem",
+                                            color: "white",
+                                        }}
+                                        onClick={() => openModal(8)}
                                     >
                                         +{hiddenCount} Photos
                                     </Button>
@@ -173,14 +192,9 @@ export default function CarDetails() {
                 </Col>
             </Row>
 
-            {/* Time Left / High Bid / Bids / Comments + Place Bid + Auctions ending soon */}
             <Row>
                 <Col lg={8} className="mb-4">
-                    <Container>
-                        <h1>Car # {id}</h1>
-                        <ButtonsGroup />
-                    </Container>
-
+                    <ButtonsGroup />
                     <CarDetailsTable car={car} />
                     <EquipmentSection equipments={car.equipment.split(";")} />
                     <ModificationsSection
@@ -229,7 +243,7 @@ export default function CarDetails() {
                     {/* Previous Button */}
                     <Button
                         variant="light"
-                        onClick={handlePrevious}
+                        onClick={showPreviousImage}
                         style={{
                             position: "absolute",
                             left: "10px",
@@ -258,7 +272,7 @@ export default function CarDetails() {
                     {/* Next Button */}
                     <Button
                         variant="light"
-                        onClick={handleNext}
+                        onClick={showNextImage}
                         style={{
                             position: "absolute",
                             right: "10px",

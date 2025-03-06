@@ -1,135 +1,63 @@
-// export default function CarDetailsTable({ car }) {
-//     return (
-//         <div>
-//             <div className="card  border-secondary">
-//                 <div className="card-body">
-//                     <h5 className="card-title">Vehicle Details</h5>
-//                     <table className="table  table-striped table-bordered mb-0">
-//                         <tbody>
-//                             <tr>
-//                                 <th>Make</th>
-//                                 <td>{car.make}</td>
-//                             </tr>
-//                             <tr>
-//                                 <th>Model</th>
-//                                 <td>{car.model}</td>
-//                             </tr>
-//                             <tr>
-//                                 <th>Mileage</th>
-//                                 <td>{car.mileage}</td>
-//                             </tr>
-//                             <tr>
-//                                 <th>VIN</th>
-//                                 <td>WBSNB93528CX08328</td>
-//                             </tr>
-//                             <tr>
-//                                 <th>Title Status</th>
-//                                 <td>Clean (CA)</td>
-//                             </tr>
-//                             <tr>
-//                                 <th>Location</th>
-//                                 <td>Novato, CA 94945</td>
-//                             </tr>
-//                             <tr>
-//                                 <th>Seller</th>
-//                                 <td>Genau_AutoWerks</td>
-//                             </tr>
-//                             <tr>
-//                                 <th>Engine</th>
-//                                 <td>{car.engine}</td>
-//                             </tr>
-//                             <tr>
-//                                 <th>Drivetrain</th>
-//                                 <td>Rear-wheel drive</td>
-//                             </tr>
-//                             <tr>
-//                                 <th>Transmission</th>
-//                                 <td>{car.transmission}</td>
-//                             </tr>
-//                             <tr>
-//                                 <th>Body Style</th>
-//                                 <td>{car.body_style}</td>
-//                             </tr>
-//                             <tr>
-//                                 <th>Exterior Color</th>
-//                                 <td>{car.exterior_color}</td>
-//                             </tr>
-//                             <tr>
-//                                 <th>Interior Color</th>
-//                                 <td>{car.interial_color}</td>
-//                             </tr>
-//                             <tr>
-//                                 <th>Seller Type</th>
-//                                 <td>Private Party</td>
-//                             </tr>
-//                         </tbody>
-//                     </table>
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// }
-
 import { Table } from "react-bootstrap";
 
 export default function CarDetailsTable({ car }) {
     return (
-        <Table className="my-3" striped bordered hover>
+        <Table className="my-3 rounded-2 overflow-hidden" bordered hover>
             <tbody>
-                <tr>
-                    <th>Make</th>
+                <tr >
+                    <th className="bg-light">Make</th>
                     <td>{car.make}</td>
                 </tr>
                 <tr>
-                    <th>Model</th>
+                    <th className="bg-light">Model</th>
                     <td>{car.model}</td>
                 </tr>
-                <tr>
-                    <th>Mileage</th>
+                <tr >
+                    <th className="bg-light">Mileage</th>
                     <td>{car.mileage}</td>
                 </tr>
                 <tr>
-                    <th>VIN</th>
+                    <th className="bg-light">VIN</th>
                     <td>WBSNB93528CX08328</td>
                 </tr>
-                <tr>
-                    <th>Title Status</th>
+                <tr >
+                    <th className="bg-light">Title Status</th>
                     <td>Clean (CA)</td>
                 </tr>
                 <tr>
-                    <th>Location</th>
+                    <th className="bg-light">Location</th>
                     <td>Novato, CA 94945</td>
                 </tr>
-                <tr>
-                    <th>Seller</th>
+                <tr >
+                    <th className="bg-light">Seller</th>
                     <td>Genau_AutoWerks</td>
                 </tr>
                 <tr>
-                    <th>Engine</th>
+                    <th className="bg-light">Engine</th>
                     <td>{car.engine}</td>
                 </tr>
-                <tr>
-                    <th>Drivetrain</th>
+                <tr >
+                    <th className="bg-light">Drivetrain</th>
                     <td>Rear-wheel drive</td>
                 </tr>
                 <tr>
-                    <th>Transmission</th>
+                    <th className="bg-light">Transmission</th>
                     <td>{car.transmission}</td>
                 </tr>
-                <tr>
-                    <th>Body Style</th>
+                <tr >
+                    <th className="bg-light">Body Style</th>
                     <td>{car.body_style}</td>
                 </tr>
                 <tr>
-                    <th>Exterior Color</th>
+                    <th className="bg-light">Exterior Color</th>
                     <td>{car.exterior_color}</td>
                 </tr>
-                <tr>
-                    <th>Interior Color</th>
+                <tr >
+                    <th className="bg-light">Interior Color</th>
                     <td>{car.interial_color}</td>
                 </tr>
                 <tr>
-                    <th>Seller Type</th>
+                    <th className="bg-light">Seller Type</th>
                     <td>Private Party</td>
                 </tr>
             </tbody>
