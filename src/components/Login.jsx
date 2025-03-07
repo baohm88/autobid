@@ -282,7 +282,7 @@ export default function Login() {
                 </div>
 
                 <button
-                    className="btn btn-primary w-100 py-2 mb-3"
+                    className="btn btn-danger w-100 py-2 mb-3"
                     disabled={loading} // Disable button when loading
                 >
                     {loading ? "Signing in..." : "Sign in"}

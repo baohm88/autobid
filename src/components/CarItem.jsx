@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 
 export default function CarItem({ car }) {
     const [showFullText, setShowFullText] = useState(false);
-    const maxLength = 55;
+    const maxLength = 50;
 
     const truncateText = (text, maxLength) => {
         if (text.length <= maxLength) return text;

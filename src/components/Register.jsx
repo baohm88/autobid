@@ -237,7 +237,7 @@ export default function Register() {
                 </Form.Group>
 
                 <Button
-                    variant="primary"
+                    variant="danger"
                     type="submit"
                     className="w-100 py-2 mb-3"
                     disabled={loading} // Disable button when loading

@@ -20,7 +20,7 @@ export default function ClientLayout({ children }) {
                             />
                         </NavLink>
                         <button
-                            className="navbar-toggler"
+                            className="navbar-toggler custom-toggler"
                             type="button"
                             data-bs-toggle="collapse"
                             data-bs-target="#navbarTogglerDemo02"

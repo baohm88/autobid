@@ -10,18 +10,114 @@ import {
     Col,
     Button,
     Image,
+    Spinner,
+    Alert,
 } from "react-bootstrap";
 import { BODY_STYLES } from "./dummy_data";
+import * as yup from "yup";
+import { useFormik } from "formik";
+
+const validationSchema = yup.object().shape({
+    year_model: yup.string().required("Year is required"),
+    make: yup.string().required("Make is required"),
+    model: yup.string().required("Model is required"),
+    transmission: yup.string().required("Transmission is required"),
+    mileage: yup.number().required("Mileage is required"),
+    engine: yup.string().required("Engine is required"),
+    body_style: yup.string().required("Body style is required"),
+    interial_color: yup.string().required("Interior color is required"),
+    exterior_color: yup.string().required("Exterior color is required"),
+    starting_bid: yup.number().required("Starting bid is required"),
+    start_time: yup.date().required("Start time is required"),
+    end_time: yup.date().required("End time is required"),
+    equipment: yup.string(),
+    modified: yup.string(),
+    modifications: yup.string(),
+    flaw: yup.string(),
+    flaws: yup.string(),
+});
 
 export default function AddCar() {
     const [modified, setModified] = useState("");
     const [hasFlaw, setHasFlaw] = useState("");
     const [uploadedImages, setUploadedImages] = useState([]);
     const [imageUrls, setImageUrls] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [imageError, setImageError] = useState("");
     const { user } = useContext(UserContext);
     const navigate = useNavigate();
 
     document.title = "Add new car";
+
+    const formik = useFormik({
+        initialValues: {
+            year_model: "",
+            make: "",
+            model: "",
+            transmission: "",
+            mileage: "",
+            engine: "",
+            body_style: "",
+            interial_color: "",
+            exterior_color: "",
+            starting_bid: "",
+            start_time: "",
+            end_time: "",
+            equipment: "",
+            modified: "",
+            modifications: "",
+            flaw: "",
+            flaws: "",
+        },
+        validationSchema: validationSchema,
+        onSubmit: async (values) => {
+            if (uploadedImages.length < 10) {
+                setImageError("Please upload at least 10 images.");
+                return;
+            }
+
+            setLoading(true);
+            setImageError("");
+
+            // Upload images to Cloudinary and get their URLs
+            const uploadedUrls = [];
+            for (const image of uploadedImages) {
+                const file = dataURLtoFile(image, `image_${Date.now()}.jpg`);
+                const url = await uploadImageToCloudinary(file);
+                if (url) {
+                    uploadedUrls.push(url);
+                }
+            }
+
+            // Add the URLs to carData
+            const carData = { ...values, user: user.id, images: uploadedUrls };
+            carData.description = `~${carData.mileage}, ${carData.engine}, ${carData.exterior_color}`;
+
+            console.log(carData);
+
+            // Submit car data to the backend
+            try {
+                const res = await axios.post(
+                    "http://localhost:8080/listings/add-listing",
+                    carData,
+                    {
+                        headers: { "Content-Type": "application/json" },
+                    }
+                );
+
+                if (res.status === 200) {
+                    alert(res.data.message);
+                    navigate("/");
+                } else {
+                    console.log("Something went wrong");
+                }
+            } catch (error) {
+                console.error("Failed to add a listing!", error);
+            } finally {
+                setLoading(false);
+            }
+        },
+    });
 
     // Handle image upload
     const handleImageUpload = (event) => {
@@ -87,55 +183,12 @@ export default function AddCar() {
         return new File([u8arr], filename, { type: mime });
     };
 
-    async function carFormAction(event) {
-        event.preventDefault();
-
-        // Upload images to Cloudinary and get their URLs
-        const uploadedUrls = [];
-        for (const image of uploadedImages) {
-            const file = dataURLtoFile(image, `image_${Date.now()}.jpg`);
-            const url = await uploadImageToCloudinary(file);
-            if (url) {
-                uploadedUrls.push(url);
-            }
-        }
-
-        // Add the URLs to carData
-        const formData = new FormData(event.target);
-        const carData = Object.fromEntries(formData.entries());
-        carData.user = user.id;
-        carData.description = `~${carData.mileage}, ${carData.engine}, ${carData.exterior}`;
-        carData.images = uploadedUrls; // Add Cloudinary URLs to carData
-
-        console.log(carData);
-
-        // Submit car data to the backend
-        try {
-            const res = await axios.post(
-                "http://localhost:8080/listings/add-listing",
-                carData,
-                {
-                    headers: { "Content-Type": "application/json" },
-                }
-            );
-
-            if (res.status === 200) {
-                alert(res.data.message);
-                navigate("/");
-            } else {
-                console.log("Something went wrong");
-            }
-        } catch (error) {
-            console.error("Failed to add a listing!", error);
-        }
-    }
-
     return (
         <Container>
             <h1 className="text-center">Add a new car</h1>
             <Card className="bg-body-tertiary">
                 <Card.Body>
-                    <Form onSubmit={carFormAction}>
+                    <Form onSubmit={formik.handleSubmit}>
                         {/* Year, Make, Model */}
                         <Row className="mb-3">
                             <Col md={4}>
@@ -143,7 +196,9 @@ export default function AddCar() {
                                     <Form.Label>Year</Form.Label>
                                     <Form.Select
                                         name="year_model"
-                                        defaultValue=""
+                                        value={formik.values.year_model}
+                                        onChange={formik.handleChange}
+                                        isInvalid={!!formik.errors.year_model}
                                     >
                                         <option value="" disabled>
                                             Choose
@@ -157,18 +212,39 @@ export default function AddCar() {
                                             </option>
                                         ))}
                                     </Form.Select>
+                                    <Form.Control.Feedback type="invalid">
+                                        {formik.errors.year_model}
+                                    </Form.Control.Feedback>
                                 </Form.Group>
                             </Col>
                             <Col md={4}>
                                 <Form.Group>
                                     <Form.Label>Make</Form.Label>
-                                    <Form.Control type="text" name="make" />
+                                    <Form.Control
+                                        type="text"
+                                        name="make"
+                                        value={formik.values.make}
+                                        onChange={formik.handleChange}
+                                        isInvalid={!!formik.errors.make}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {formik.errors.make}
+                                    </Form.Control.Feedback>
                                 </Form.Group>
                             </Col>
                             <Col md={4}>
                                 <Form.Group>
                                     <Form.Label>Model</Form.Label>
-                                    <Form.Control type="text" name="model" />
+                                    <Form.Control
+                                        type="text"
+                                        name="model"
+                                        value={formik.values.model}
+                                        onChange={formik.handleChange}
+                                        isInvalid={!!formik.errors.model}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {formik.errors.model}
+                                    </Form.Control.Feedback>
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -178,13 +254,23 @@ export default function AddCar() {
                             <Col md={4}>
                                 <Form.Group>
                                     <Form.Label>Transmission</Form.Label>
-                                    <Form.Select name="transmission">
-                                        <option>Select transmission</option>
+                                    <Form.Select
+                                        name="transmission"
+                                        value={formik.values.transmission}
+                                        onChange={formik.handleChange}
+                                        isInvalid={!!formik.errors.transmission}
+                                    >
+                                        <option value="">
+                                            Select transmission
+                                        </option>
                                         <option value="Automatic">
                                             Automatic
                                         </option>
                                         <option value="Manual">Manual</option>
                                     </Form.Select>
+                                    <Form.Control.Feedback type="invalid">
+                                        {formik.errors.transmission}
+                                    </Form.Control.Feedback>
                                 </Form.Group>
                             </Col>
                             <Col md={4}>
@@ -193,13 +279,28 @@ export default function AddCar() {
                                     <Form.Control
                                         type="number"
                                         name="mileage"
+                                        value={formik.values.mileage}
+                                        onChange={formik.handleChange}
+                                        isInvalid={!!formik.errors.mileage}
                                     />
+                                    <Form.Control.Feedback type="invalid">
+                                        {formik.errors.mileage}
+                                    </Form.Control.Feedback>
                                 </Form.Group>
                             </Col>
                             <Col md={4}>
                                 <Form.Group>
                                     <Form.Label>Engine</Form.Label>
-                                    <Form.Control type="text" name="engine" />
+                                    <Form.Control
+                                        type="text"
+                                        name="engine"
+                                        value={formik.values.engine}
+                                        onChange={formik.handleChange}
+                                        isInvalid={!!formik.errors.engine}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {formik.errors.engine}
+                                    </Form.Control.Feedback>
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -209,14 +310,24 @@ export default function AddCar() {
                             <Col md={4}>
                                 <Form.Group>
                                     <Form.Label>Body Style</Form.Label>
-                                    <Form.Select name="body_style">
-                                        <option>Select Body Style</option>
+                                    <Form.Select
+                                        name="body_style"
+                                        value={formik.values.body_style}
+                                        onChange={formik.handleChange}
+                                        isInvalid={!!formik.errors.body_style}
+                                    >
+                                        <option value="">
+                                            Select Body Style
+                                        </option>
                                         {BODY_STYLES.map((style) => (
                                             <option key={style} value={style}>
                                                 {style}
                                             </option>
                                         ))}
                                     </Form.Select>
+                                    <Form.Control.Feedback type="invalid">
+                                        {formik.errors.body_style}
+                                    </Form.Control.Feedback>
                                 </Form.Group>
                             </Col>
                             <Col md={4}>
@@ -225,7 +336,15 @@ export default function AddCar() {
                                     <Form.Control
                                         type="text"
                                         name="interial_color"
+                                        value={formik.values.interial_color}
+                                        onChange={formik.handleChange}
+                                        isInvalid={
+                                            !!formik.errors.interial_color
+                                        }
                                     />
+                                    <Form.Control.Feedback type="invalid">
+                                        {formik.errors.interial_color}
+                                    </Form.Control.Feedback>
                                 </Form.Group>
                             </Col>
                             <Col md={4}>
@@ -234,7 +353,15 @@ export default function AddCar() {
                                     <Form.Control
                                         type="text"
                                         name="exterior_color"
+                                        value={formik.values.exterior_color}
+                                        onChange={formik.handleChange}
+                                        isInvalid={
+                                            !!formik.errors.exterior_color
+                                        }
                                     />
+                                    <Form.Control.Feedback type="invalid">
+                                        {formik.errors.exterior_color}
+                                    </Form.Control.Feedback>
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -247,7 +374,13 @@ export default function AddCar() {
                                     <Form.Control
                                         type="number"
                                         name="starting_bid"
+                                        value={formik.values.starting_bid}
+                                        onChange={formik.handleChange}
+                                        isInvalid={!!formik.errors.starting_bid}
                                     />
+                                    <Form.Control.Feedback type="invalid">
+                                        {formik.errors.starting_bid}
+                                    </Form.Control.Feedback>
                                 </Form.Group>
                             </Col>
                             <Col md={4}>
@@ -256,10 +389,16 @@ export default function AddCar() {
                                     <Form.Control
                                         type="datetime-local"
                                         name="start_time"
+                                        value={formik.values.start_time}
+                                        onChange={formik.handleChange}
+                                        isInvalid={!!formik.errors.start_time}
                                         min={new Date()
                                             .toISOString()
                                             .slice(0, 16)}
                                     />
+                                    <Form.Control.Feedback type="invalid">
+                                        {formik.errors.start_time}
+                                    </Form.Control.Feedback>
                                 </Form.Group>
                             </Col>
                             <Col md={4}>
@@ -268,7 +407,13 @@ export default function AddCar() {
                                     <Form.Control
                                         type="datetime-local"
                                         name="end_time"
+                                        value={formik.values.end_time}
+                                        onChange={formik.handleChange}
+                                        isInvalid={!!formik.errors.end_time}
                                     />
+                                    <Form.Control.Feedback type="invalid">
+                                        {formik.errors.end_time}
+                                    </Form.Control.Feedback>
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -284,6 +429,8 @@ export default function AddCar() {
                                     name="equipment"
                                     rows={3}
                                     placeholder='Separate each item with ",".'
+                                    value={formik.values.equipment}
+                                    onChange={formik.handleChange}
                                 />
                             </Form.Group>
                         </Row>
@@ -297,11 +444,13 @@ export default function AddCar() {
                                 <Form.Control
                                     as="select"
                                     name="modified"
-                                    onChange={(e) =>
-                                        setModified(e.target.value)
-                                    }
+                                    value={formik.values.modified}
+                                    onChange={(e) => {
+                                        formik.handleChange(e);
+                                        setModified(e.target.value);
+                                    }}
                                 >
-                                    <option>Choose</option>
+                                    <option value="">Choose</option>
                                     <option value="new">Brand New</option>
                                     <option value="modified">Modified</option>
                                 </Form.Control>
@@ -310,7 +459,7 @@ export default function AddCar() {
 
                         {modified === "modified" && (
                             <Row className="mb-3">
-                                <Form.Group controlId="modification">
+                                <Form.Group controlId="modifications">
                                     <Form.Label>
                                         List any modifications.
                                     </Form.Label>
@@ -319,6 +468,8 @@ export default function AddCar() {
                                         name="modifications"
                                         rows={3}
                                         placeholder='Separate each item with ",".'
+                                        value={formik.values.modifications}
+                                        onChange={formik.handleChange}
                                     />
                                 </Form.Group>
                             </Row>
@@ -334,9 +485,13 @@ export default function AddCar() {
                                 <Form.Control
                                     as="select"
                                     name="flaw"
-                                    onChange={(e) => setHasFlaw(e.target.value)}
+                                    value={formik.values.flaw}
+                                    onChange={(e) => {
+                                        formik.handleChange(e);
+                                        setHasFlaw(e.target.value);
+                                    }}
                                 >
-                                    <option>Choose</option>
+                                    <option value="">Choose</option>
                                     <option value="yes">Yes</option>
                                     <option value="no">No</option>
                                 </Form.Control>
@@ -354,6 +509,8 @@ export default function AddCar() {
                                         name="flaws"
                                         rows={3}
                                         placeholder='Separate each item with ";".'
+                                        value={formik.values.flaws}
+                                        onChange={formik.handleChange}
                                     />
                                 </Form.Group>
                             </Row>
@@ -389,9 +546,30 @@ export default function AddCar() {
                             ))}
                         </Row>
 
+                        {imageError && (
+                            <Alert variant="danger">{imageError}</Alert>
+                        )}
+
                         {/* Submit Button */}
-                        <Button type="submit" variant="primary">
-                            Save
+                        <Button
+                            type="submit"
+                            variant="danger"
+                            disabled={loading}
+                        >
+                            {loading ? (
+                                <>
+                                    <Spinner
+                                        as="span"
+                                        animation="grow"
+                                        size="sm"
+                                        role="status"
+                                        aria-hidden="true"
+                                    />{" "}
+                                    Saving Car...
+                                </>
+                            ) : (
+                                "Register Car"
+                            )}
                         </Button>
                     </Form>
                 </Card.Body>
