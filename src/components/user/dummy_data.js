@@ -393,3 +393,81 @@ export const DUMMY_CARS = [
         vin: null,
     },
 ];
+
+
+export const DUMMY_QA = [
+    {
+        id: 1,
+        askerName: "dhb2",
+        askerImage:
+            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+        askerScore: "+22",
+        question:
+            "Hello - What is the actual color of the car (under the wrap)? I don see it in the invoice you attached. Thanks!",
+        sellerName: "Raymondu.lu",
+        sellerImage:
+            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+        answer: "Hi great question, it is not that difficult to take off the wrap...",
+    },
+    {
+        id: 2,
+        askerName: "Cinn",
+        askerImage:
+            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+        askerScore: "+2",
+        question: "So... how difficult would it be to remove the green wrap!?",
+        sellerName: "Raymondu.lu",
+        sellerImage:
+            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+        answer: "It not that difficult to remove the wrap...",
+    },
+    {
+        id: 3,
+        askerName: "kvo",
+        askerImage:
+            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+        askerScore: "+7",
+        question:
+            "On the pictures, the color near the trunk — is it the original or the wrap?",
+        sellerName: "Raymondu.lu",
+        sellerImage:
+            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+        answer: "Yes, partially original. The trunk area was left unwrapped.",
+    },
+    {
+        id: 4,
+        askerName: "User4",
+        askerImage:
+            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+        askerScore: "+5",
+        question: "Another question example?",
+        sellerName: "Raymondu.lu",
+        sellerImage:
+            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+        answer: "Answer for Q&A 4.",
+    },
+    {
+        id: 5,
+        askerName: "User5",
+        askerImage:
+            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+        askerScore: "+3",
+        question: "What about the car's maintenance history?",
+        sellerName: "Raymondu.lu",
+        sellerImage:
+            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+        answer: "The maintenance records are available upon request.",
+    },
+    {
+        id: 6,
+        askerName: "User6",
+        askerImage:
+            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+        askerScore: "+1",
+        question: "Is there any damage reported?",
+        sellerName: "Raymondu.lu",
+        sellerImage:
+            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+        answer: "No significant damage has been reported.",
+    },
+];

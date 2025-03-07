@@ -10,13 +10,14 @@ import {
 } from "../utils/validation";
 
 export default function Register() {
-    const [emailError, setEmailError] = useState();
-    const [usernameError, setUsernameError] = useState();
-    const [passwordError, setPasswordError] = useState();
-    const [password2Error, setPassword2Error] = useState();
-    const [serverError, setServerError] = useState();
+    const [emailError, setEmailError] = useState("");
+    const [usernameError, setUsernameError] = useState("");
+    const [passwordError, setPasswordError] = useState("");
+    const [password2Error, setPassword2Error] = useState("");
+    const [serverError, setServerError] = useState("");
     const [avatar, setAvatar] = useState(null); // To store the selected avatar image
     const [avatarPreview, setAvatarPreview] = useState(null); // To display the avatar preview
+    const [loading, setLoading] = useState(false); // State to track loading status
 
     const navigate = useNavigate();
     document.title = "Registration";
@@ -57,43 +58,50 @@ export default function Register() {
 
     async function handleSubmit(e) {
         e.preventDefault();
+        setLoading(true); // Set loading to true when form is submitted
         const fd = new FormData(e.target);
         const userData = Object.fromEntries(fd.entries());
+
+        // Reset validation errors
+        setEmailError("");
+        setUsernameError("");
+        setPasswordError("");
+        setPassword2Error("");
 
         // Validate email
         if (isEmpty(userData.email) || !isEmail(userData.email)) {
             setEmailError("Please enter a valid email");
+            setLoading(false); // Set loading to false if validation fails
             return;
         }
-        setEmailError(false);
 
         // Validate username
         if (isEmpty(userData.username)) {
             setUsernameError("Username is required");
+            setLoading(false); // Set loading to false if validation fails
             return;
         }
-        setUsernameError(false);
 
         // Validate password
         if (isEmpty(userData.password)) {
             setPasswordError("Password is required");
+            setLoading(false); // Set loading to false if validation fails
             return;
         }
-        setPasswordError(false);
 
         // Validate confirm password
         if (isEmpty(userData.password2)) {
             setPassword2Error("Confirm password is required");
+            setLoading(false); // Set loading to false if validation fails
             return;
         }
-        setPassword2Error(false);
 
         // Check if passwords match
         if (!isEqualsToOtherValue(userData.password, userData.password2)) {
             setPassword2Error("Passwords must match");
+            setLoading(false); // Set loading to false if validation fails
             return;
         }
-        setPassword2Error(false);
 
         // Upload avatar to Cloudinary if selected
         if (avatar) {
@@ -102,6 +110,7 @@ export default function Register() {
                 userData.image_url = avatarUrl; // Add Cloudinary URL to userData
             } else {
                 setServerError("Failed to upload avatar.");
+                setLoading(false); // Set loading to false if avatar upload fails
                 return;
             }
         }
@@ -128,6 +137,8 @@ export default function Register() {
         } catch (error) {
             setServerError("Registration request failed.");
             console.log(error);
+        } finally {
+            setLoading(false); // Set loading to false after request is complete
         }
     }
 
@@ -142,8 +153,11 @@ export default function Register() {
                         type="email"
                         name="email"
                         placeholder="Enter your email address"
+                        className={emailError ? "is-invalid" : ""}
                     />
-                    {emailError && <Alert variant="danger">{emailError}</Alert>}
+                    {emailError && (
+                        <div className="invalid-feedback">{emailError}</div>
+                    )}
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="username">
@@ -152,9 +166,10 @@ export default function Register() {
                         type="text"
                         name="username"
                         placeholder="Enter your username"
+                        className={usernameError ? "is-invalid" : ""}
                     />
                     {usernameError && (
-                        <Alert variant="danger">{usernameError}</Alert>
+                        <div className="invalid-feedback">{usernameError}</div>
                     )}
                 </Form.Group>
 
@@ -164,9 +179,10 @@ export default function Register() {
                         type="password"
                         name="password"
                         placeholder="Password"
+                        className={passwordError ? "is-invalid" : ""}
                     />
                     {passwordError && (
-                        <Alert variant="danger">{passwordError}</Alert>
+                        <div className="invalid-feedback">{passwordError}</div>
                     )}
                 </Form.Group>
 
@@ -176,9 +192,10 @@ export default function Register() {
                         type="password"
                         name="password2"
                         placeholder="Confirm Password"
+                        className={password2Error ? "is-invalid" : ""}
                     />
                     {password2Error && (
-                        <Alert variant="danger">{password2Error}</Alert>
+                        <div className="invalid-feedback">{password2Error}</div>
                     )}
                 </Form.Group>
 
@@ -223,8 +240,9 @@ export default function Register() {
                     variant="primary"
                     type="submit"
                     className="w-100 py-2 mb-3"
+                    disabled={loading} // Disable button when loading
                 >
-                    Register
+                    {loading ? "Registering..." : "Register"}
                 </Button>
 
                 <p>

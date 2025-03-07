@@ -1,7 +1,5 @@
 import { Card, Carousel, Col, Row } from "react-bootstrap";
-import { DUMMY_COMMENTS } from "./dashboardLInks";
-
-
+import { DUMMY_COMMENTS } from "./dummy_data";
 
 export default function RandomComments() {
     return (

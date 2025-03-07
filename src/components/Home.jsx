@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Container, Form, Row, Pagination } from "react-bootstrap";
+import { Container, Form, Row, Pagination, Spinner } from "react-bootstrap";
 import CarItem from "./CarItem";
 
 export default function Home() {
@@ -41,7 +41,16 @@ export default function Home() {
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     if (loading) {
-        return <div>Loading cars...</div>;
+        return (
+            <div
+                className="d-flex justify-content-center align-items-center"
+                style={{ height: "100vh" }}
+            >
+                <Spinner animation="border" role="status">
+                    <span className="visually-hidden">Loading Listings...</span>
+                </Spinner>
+            </div>
+        );
     }
 
     return (

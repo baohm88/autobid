@@ -13,7 +13,7 @@ import {
 } from "react-bootstrap";
 import { BODY_STYLES } from "./dummy_data";
 
-export default function AddCar() {
+export default function CarForm() {
     const [modified, setModified] = useState("");
     const [hasFlaw, setHasFlaw] = useState("");
     const [uploadedImages, setUploadedImages] = useState([]);
@@ -65,9 +65,7 @@ export default function AddCar() {
                 "https://api.cloudinary.com/v1_1/dppk10edk/image/upload",
                 formData
             );
-            console.log(response);
-
-            return response.data.secure_url; // Return the secure URL of the uploaded image
+            return response.data.secure_url;
         } catch (error) {
             console.error("Error uploading image to Cloudinary:", error);
             return null;
@@ -87,10 +85,11 @@ export default function AddCar() {
         return new File([u8arr], filename, { type: mime });
     };
 
-    async function carFormAction(event) {
+    // Handle form submission
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
-        // Upload images to Cloudinary and get their URLs
+        // Upload images to Cloudinary
         const uploadedUrls = [];
         for (const image of uploadedImages) {
             const file = dataURLtoFile(image, `image_${Date.now()}.jpg`);
@@ -100,12 +99,12 @@ export default function AddCar() {
             }
         }
 
-        // Add the URLs to carData
+        // Prepare car data
         const formData = new FormData(event.target);
         const carData = Object.fromEntries(formData.entries());
         carData.user = user.id;
         carData.description = `~${carData.mileage}, ${carData.engine}, ${carData.exterior}`;
-        carData.images = uploadedUrls; // Add Cloudinary URLs to carData
+        carData.images = uploadedUrls;
 
         console.log(carData);
 
@@ -128,23 +127,20 @@ export default function AddCar() {
         } catch (error) {
             console.error("Failed to add a listing!", error);
         }
-    }
+    };
 
     return (
         <Container>
             <h1 className="text-center">Add a new car</h1>
             <Card className="bg-body-tertiary">
                 <Card.Body>
-                    <Form onSubmit={carFormAction}>
+                    <Form onSubmit={handleSubmit}>
                         {/* Year, Make, Model */}
                         <Row className="mb-3">
                             <Col md={4}>
                                 <Form.Group>
                                     <Form.Label>Year</Form.Label>
-                                    <Form.Select
-                                        name="year_model"
-                                        defaultValue=""
-                                    >
+                                    <Form.Select name="year" defaultValue="">
                                         <option value="" disabled>
                                             Choose
                                         </option>
@@ -180,10 +176,10 @@ export default function AddCar() {
                                     <Form.Label>Transmission</Form.Label>
                                     <Form.Select name="transmission">
                                         <option>Select transmission</option>
-                                        <option value="Automatic">
+                                        <option value="automatic">
                                             Automatic
                                         </option>
-                                        <option value="Manual">Manual</option>
+                                        <option value="manual">Manual</option>
                                     </Form.Select>
                                 </Form.Group>
                             </Col>
@@ -224,7 +220,7 @@ export default function AddCar() {
                                     <Form.Label>Interior Color</Form.Label>
                                     <Form.Control
                                         type="text"
-                                        name="interial_color"
+                                        name="interior_color"
                                     />
                                 </Form.Group>
                             </Col>
@@ -324,42 +320,7 @@ export default function AddCar() {
                             </Row>
                         )}
 
-                        {/* Flaws Section */}
-                        <Row className="mb-3">
-                            <Form.Group controlId="flaw">
-                                <Form.Label>
-                                    Are there any significant mechanical or
-                                    cosmetic flaws?
-                                </Form.Label>
-                                <Form.Control
-                                    as="select"
-                                    name="flaw"
-                                    onChange={(e) => setHasFlaw(e.target.value)}
-                                >
-                                    <option>Choose</option>
-                                    <option value="yes">Yes</option>
-                                    <option value="no">No</option>
-                                </Form.Control>
-                            </Form.Group>
-                        </Row>
-
-                        {hasFlaw === "yes" && (
-                            <Row className="mb-3">
-                                <Form.Group controlId="flaws">
-                                    <Form.Label>
-                                        Please give details.
-                                    </Form.Label>
-                                    <Form.Control
-                                        as="textarea"
-                                        name="flaws"
-                                        rows={3}
-                                        placeholder='Separate each item with ";".'
-                                    />
-                                </Form.Group>
-                            </Row>
-                        )}
-
-                        {/* Image upload */}
+                        {/* Image Upload Section */}
                         <Form.Group controlId="imageUpload" className="mb-3">
                             <Form.Label>Upload Images</Form.Label>
                             <Form.Control

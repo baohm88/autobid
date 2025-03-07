@@ -1,203 +1,264 @@
-const qaData = [
-    {
-        id: 1,
-        askerName: "dhb2",
-        askerImage:
-            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
-        askerScore: "+22",
-        question:
-            "Hello - What is the actual color of the car (under the wrap)? I don see it in the invoice you attached. Thanks!",
-        sellerName: "Raymondu.lu",
-        sellerImage:
-            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
-        answer: "Hi great question, it is not that difficult to take off the wrap...",
-    },
-    {
-        id: 2,
-        askerName: "Cinn",
-        askerImage:
-            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
-        askerScore: "+2",
-        question: "So... how difficult would it be to remove the green wrap!?",
-        sellerName: "Raymondu.lu",
-        sellerImage:
-            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
-        answer: "It not that difficult to remove the wrap...",
-    },
-    {
-        id: 3,
-        askerName: "kvo",
-        askerImage:
-            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
-        askerScore: "+7",
-        question:
-            "On the pictures, the color near the trunk — is it the original or the wrap?",
-        sellerName: "Raymondu.lu",
-        sellerImage:
-            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
-        answer: "Yes, partially original. The trunk area was left unwrapped.",
-    },
-    {
-        id: 4,
-        askerName: "User4",
-        askerImage:
-            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
-        askerScore: "+5",
-        question: "Another question example?",
-        sellerName: "Raymondu.lu",
-        sellerImage:
-            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
-        answer: "Answer for Q&A 4.",
-    },
-    {
-        id: 5,
-        askerName: "User5",
-        askerImage:
-            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
-        askerScore: "+3",
-        question: "What about the car's maintenance history?",
-        sellerName: "Raymondu.lu",
-        sellerImage:
-            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
-        answer: "The maintenance records are available upon request.",
-    },
-    {
-        id: 6,
-        askerName: "User6",
-        askerImage:
-            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
-        askerScore: "+1",
-        question: "Is there any damage reported?",
-        sellerName: "Raymondu.lu",
-        sellerImage:
-            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
-        answer: "No significant damage has been reported.",
-    },
-];
+import {
+    Carousel,
+    Container,
+    Row,
+    Col,
+    Button,
+    Card,
+    Modal,
+} from "react-bootstrap";
+import { useState } from "react";
+import { ChevronLeft, ChevronRight } from "react-bootstrap-icons";
+import { DUMMY_QA } from "../user/dummy_data";
+
+const image_style = {
+    width: "40px",
+    height: "40px",
+    objectFit: "cover",
+};
+
+const card_style = {
+    border: "none",
+};
 
 export default function QASection() {
     // Chia dữ liệu thành nhóm, mỗi nhóm chứa 3 Q&A
     const groupSize = 3;
     const groups = [];
-    for (let i = 0; i < qaData.length; i += groupSize) {
-        groups.push(qaData.slice(i, i + groupSize));
+    for (let i = 0; i < DUMMY_QA.length; i += groupSize) {
+        groups.push(DUMMY_QA.slice(i, i + groupSize));
     }
+
+    const [index, setIndex] = useState(0);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedQA, setSelectedQA] = useState(null);
+
+    const handleSelect = (selectedIndex) => {
+        setIndex(selectedIndex);
+    };
+
+    const handleViewAnswer = (qa) => {
+        setSelectedQA(qa);
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setSelectedQA(null);
+    };
+
     return (
-        <div className="container my-4">
+        <Container className="my-4">
             <div className="d-flex justify-content-between align-items-center mb-3 mt-4">
-                <h5 className="fw-bold mb-0">Seller Q&A ({qaData.length})</h5>
+                <h5 className="fw-bold mb-0">Seller Q&A ({DUMMY_QA.length})</h5>
                 <div>
-                    <a href="#!" className="text-decoration-none me-3">
+                    <Button
+                        variant="link"
+                        className="text-decoration-none me-3"
+                    >
                         Ask a question
-                    </a>
-                    <a href="#!" className="text-decoration-none">
-                        View all
-                    </a>
+                    </Button>
                 </div>
             </div>
 
-            {/* Carousel chứa các slide Q&A */}
-            <div
-                id="qaCarousel"
-                className="carousel slide"
-                data-bs-ride="carousel"
-            >
-                {/*    <div id="qaCarousel" className="carousel slide" >*/}
-                <div className="carousel-inner">
+            {/* Custom Carousel */}
+            <div className="position-relative">
+                <Carousel
+                    activeIndex={index}
+                    onSelect={handleSelect}
+                    indicators={false}
+                    controls={false}
+                    // interval={null}
+                >
                     {groups.map((group, groupIndex) => (
-                        <div
-                            key={groupIndex}
-                            className={`carousel-item ${
-                                groupIndex === 0 ? "active" : ""
-                            }`}
-                        >
-                            <div className="row row-cols-1 row-cols-md-3 g-3">
+                        <Carousel.Item key={groupIndex}>
+                            <Row className="row-cols-1 row-cols-md-3 g-3">
                                 {group.map((qa) => (
-                                    <div key={qa.id} className="col-5 d-flex">
-                                        <div className="bg-light p-3 rounded d-flex flex-column w-100 h-100">
-                                            {/* Phần Người hỏi */}
-                                            <div className="d-flex align-items-center mb-2">
-                                                <img
-                                                    src={qa.askerImage}
-                                                    alt={qa.askerName}
-                                                    className="rounded-circle me-2"
-                                                    style={{
-                                                        width: "32px",
-                                                        height: "32px",
-                                                        objectFit: "cover",
-                                                    }}
-                                                />
-                                                <span className="fw-bold me-2">
-                                                    {qa.askerName}
-                                                </span>
-                                                <span className="text-success fw-bold">
-                                                    {qa.askerScore}
-                                                </span>
+                                    <Col key={qa.id}>
+                                        <Card>
+                                            <div>
+                                                <Card
+                                                    className="mb-1"
+                                                    style={card_style}
+                                                >
+                                                    <Card.Body className="d-flex">
+                                                        <img
+                                                            src={qa.askerImage}
+                                                            alt={qa.askerName}
+                                                            className="rounded-circle me-3"
+                                                            style={image_style}
+                                                        />
+                                                        <div className="text-truncate-container">
+                                                            <Card.Title className="mb-1">
+                                                                {qa.askerName}{" "}
+                                                                <span className="text-success fw-bold">
+                                                                    {
+                                                                        qa.askerScore
+                                                                    }
+                                                                </span>
+                                                            </Card.Title>
+                                                            <Card.Text className="text-truncate">
+                                                                <strong>
+                                                                    Q:
+                                                                </strong>{" "}
+                                                                {qa.question}
+                                                            </Card.Text>
+                                                        </div>
+                                                    </Card.Body>
+                                                </Card>
+                                                <Card style={card_style}>
+                                                    <Card.Body className="d-flex">
+                                                        <img
+                                                            src={qa.sellerImage}
+                                                            alt={qa.sellerName}
+                                                            className="rounded-circle me-3"
+                                                            style={image_style}
+                                                        />
+                                                        <div className="text-truncate-container">
+                                                            <Card.Title className="mb-1">
+                                                                {qa.sellerName}{" "}
+                                                                <span className="badge rounded-pill text-bg-info">
+                                                                    Seller
+                                                                </span>
+                                                            </Card.Title>
+                                                            <Card.Text className="text-truncate">
+                                                                <strong>
+                                                                    A:
+                                                                </strong>{" "}
+                                                                {qa.answer}
+                                                            </Card.Text>
+                                                        </div>
+                                                    </Card.Body>
+                                                </Card>
                                             </div>
-                                            {/* Phần Câu hỏi */}
-                                            <p className="mb-2">
-                                                <strong>Q:</strong>{" "}
-                                                {qa.question}
-                                            </p>
-                                            {/* Phần Người trả lời (Seller) */}
-                                            <div className="d-flex align-items-center text-muted mb-2">
-                                                <img
-                                                    src={qa.sellerImage}
-                                                    alt={qa.sellerName}
-                                                    className="rounded-circle me-2"
-                                                    style={{
-                                                        width: "32px",
-                                                        height: "32px",
-                                                        objectFit: "cover",
-                                                    }}
-                                                />
-                                                <span>{qa.sellerName}</span>
-                                                <span className="badge bg-secondary ms-2">
-                                                    Seller
-                                                </span>
-                                            </div>
-                                            {/* Phần Câu trả lời */}
-                                            <p className="mb-2">
-                                                <strong>A:</strong> {qa.answer}
-                                            </p>
-                                        </div>
-                                    </div>
+                                            <Button
+                                                variant="link"
+                                                className="text-decoration-none p-0"
+                                                onClick={() =>
+                                                    handleViewAnswer(qa)
+                                                }
+                                            >
+                                                View Q&A
+                                            </Button>
+                                        </Card>
+                                    </Col>
                                 ))}
-                            </div>
-                        </div>
+                            </Row>
+                        </Carousel.Item>
                     ))}
-                </div>
-
-                {/* Các nút điều khiển nếu có nhiều hơn 1 slide */}
-                {groups.length > 1 && (
-                    <>
-                        <button
-                            className="carousel-control-prev"
-                            type="button"
-                            data-bs-target="#qaCarousel"
-                            data-bs-slide="prev"
-                        >
-                            <span
-                                className="carousel-control-prev-icon"
-                                aria-hidden="true"
-                            ></span>
-                            <span className="visually-hidden">Previous</span>
-                        </button>
-                        <button
-                            className="carousel-control-next"
-                            type="button"
-                            data-bs-target="#qaCarousel"
-                            data-bs-slide="next"
-                        >
-                            <span
-                                className="carousel-control-next-icon"
-                                aria-hidden="true"
-                            ></span>
-                            <span className="visually-hidden">Next</span>
-                        </button>
-                    </>
-                )}
+                </Carousel>
+                <Button
+                    variant="dark"
+                    className="carousel-control-prev"
+                    onClick={() =>
+                        handleSelect(
+                            index === 0 ? groups.length - 1 : index - 1
+                        )
+                    }
+                    style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "-40px",
+                        transform: "translateY(-50%)",
+                        zIndex: 1000,
+                        borderRadius: "50%",
+                        width: "40px",
+                        height: "40px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        backgroundColor: "rgba(0, 0, 0, 0.5)",
+                        color: "white",
+                        border: "none",
+                    }}
+                >
+                    <ChevronLeft size={20} />
+                </Button>
+                <Button
+                    variant="dark"
+                    className="carousel-control-next"
+                    onClick={() =>
+                        handleSelect(
+                            index === groups.length - 1 ? 0 : index + 1
+                        )
+                    }
+                    style={{
+                        position: "absolute",
+                        top: "50%",
+                        right: "-40px",
+                        transform: "translateY(-50%)",
+                        zIndex: 1000,
+                        borderRadius: "50%",
+                        width: "40px",
+                        height: "40px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        backgroundColor: "rgba(0, 0, 0, 0.5)",
+                        color: "white",
+                        border: "none",
+                    }}
+                >
+                    <ChevronRight size={20} />
+                </Button>
             </div>
-        </div>
+
+            {/* Modal for viewing full Q&A */}
+            <Modal show={showModal} onHide={handleCloseModal} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Question & Answer</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {selectedQA && (
+                        <>
+                            <div className=" d-flex mb-3">
+                                <img
+                                    src={selectedQA.askerImage}
+                                    alt={selectedQA.askerName}
+                                    className="rounded-circle me-3"
+                                    style={image_style}
+                                />
+                                <div>
+                                    <Card.Title className="mb-1">
+                                        {selectedQA.askerName}{" "}
+                                        <span className="text-success fw-bold">
+                                            {selectedQA.askerScore}
+                                        </span>
+                                    </Card.Title>
+                                    <Card.Text>
+                                        <strong>Q:</strong>{" "}
+                                        {selectedQA.question}
+                                    </Card.Text>
+                                </div>
+                            </div>
+                            <div className="d-flex">
+                                <img
+                                    src={selectedQA.sellerImage}
+                                    alt={selectedQA.sellerName}
+                                    className="rounded-circle me-3"
+                                    style={image_style}
+                                />
+                                <div>
+                                    <Card.Title className="mb-1">
+                                        {selectedQA.sellerName}{" "}
+                                        <span className="badge rounded-pill text-bg-info">
+                                            Seller
+                                        </span>
+                                    </Card.Title>
+                                    <Card.Text>
+                                        <strong>A:</strong> {selectedQA.answer}
+                                    </Card.Text>
+                                </div>
+                            </div>
+                        </>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseModal}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </Container>
     );
 }

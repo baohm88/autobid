@@ -1,0 +1,13 @@
+.text-truncate-container {
+    max-height: 4.5rem; /* Adjust this value to control the number of visible rows */
+    overflow: hidden;
+    position: relative;
+}
+
+.text-truncate {
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Adjust this value to control the number of visible lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

@@ -10,7 +10,7 @@ import {
     Form,
     Image,
 } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
 import { UserContext } from "../../context/user-context";
 import axios from "axios";
 
@@ -26,6 +26,8 @@ export default function SellerDashboard() {
     const [newAvatar, setNewAvatar] = useState(null); // To store the newly selected avatar
     const [newAvatarPreview, setNewAvatarPreview] = useState(null); // To display the preview of the new avatar
     const [isLoading, setIsLoading] = useState(false);
+
+    document.title = user !== null ? user.username : "Account Details";
 
     console.log(user);
 

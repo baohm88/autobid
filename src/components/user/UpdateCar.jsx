@@ -13,7 +13,7 @@ import {
     Spinner,
     Alert,
 } from "react-bootstrap";
-import { BODY_STYLES } from "./dashboardLInks";
+import { BODY_STYLES } from "./dummy_data";
 import { formatDateTimeForInput } from "../../utils/formatter";
 
 export default function UpdateCar() {
@@ -336,7 +336,9 @@ export default function UpdateCar() {
                                         min={new Date()
                                             .toISOString()
                                             .slice(0, 16)}
-                                        defaultValue={formatDateTimeForInput(car?.start_time)}
+                                        defaultValue={formatDateTimeForInput(
+                                            car?.start_time
+                                        )}
                                     />
                                 </Form.Group>
                             </Col>
@@ -349,7 +351,9 @@ export default function UpdateCar() {
                                         min={new Date()
                                             .toISOString()
                                             .slice(0, 16)}
-                                            defaultValue={formatDateTimeForInput(car?.end_time)}
+                                        defaultValue={formatDateTimeForInput(
+                                            car?.end_time
+                                        )}
                                     />
                                 </Form.Group>
                             </Col>

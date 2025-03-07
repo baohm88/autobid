@@ -1,5 +1,5 @@
 import { Card, Col, Row } from "react-bootstrap";
-import { DASHBOARD_LINKS } from "./dashboardLInks";
+import { DASHBOARD_LINKS } from "./dummy_data";
 import { NavLink } from "react-router-dom";
 
 export default function QuickAccessBoxes() {
