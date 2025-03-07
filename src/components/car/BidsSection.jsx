@@ -1,58 +1,55 @@
-import React from "react";
+import { DUMMY_BIDS } from "../user/dummy_data";
+import { formatter } from "../../utils/formatter";
+
+const imageStyle = {
+    width: "30px",
+    height: "30px",
+};
 
 export default function BidsSection() {
     return (
-        <div className="col">
-            <div className="card  border-secondary">
-                <div className="card-body">
-                    <h5 className="card-title">Comments &amp; Bids</h5>
-                    {/* Thanh điều hướng comment */}
-                    <div className="d-flex justify-content-between mb-3">
-                        <div>
-                            <button className="btn btn-sm btn-outline-light me-2">
-                                Newest
-                            </button>
-                            <button className="btn btn-sm btn-outline-light">
-                                More
-                            </button>
+        <>
+            <div className="container">
+                {/* Bids Section */}
+                <h2>Bids History</h2>
+                {DUMMY_BIDS.map((bid, index) => (
+                    <div key={index} className="row mt-3">
+                        <div className="col-auto">
+                            <img
+                                src={bid.bidderImage}
+                                alt={bid.bidderName}
+                                className="rounded-circle"
+                                style={imageStyle}
+                            />
                         </div>
-                        <div>
-                            <button className="btn btn-sm btn-outline-success">
-                                Bid History
-                            </button>
+                        <div className="col">
+                            <div className="d-flex align-items-center">
+                                <span className="fw-bold me-1">
+                                    {bid.bidderName}
+                                </span>
+                                <i className="bi bi-patch-check-fill text-success me-1"></i>
+                                <span className="text-muted me-1">
+                                    &#x2191;{bid.increase}
+                                </span>
+                                <span className="text-muted">
+                                    {bid.bidTime}
+                                </span>
+                            </div>
+                            <div className="d-flex align-items-center">
+                                <button className="btn btn-danger btn-sm me-2">
+                                    <span className="text-body">Bid</span>{" "}
+                                    {formatter.format(bid.bidAmount)}
+                                </button>
+                                <span className="me-2">
+                                    <i className="bi bi-arrow-up"></i>{" "}
+                                    {bid.totalIncrease}
+                                </span>
+                            </div>
                         </div>
                     </div>
-
-                    {/* Form thêm comment */}
-                    <div className="mb-3">
-                        <input
-                            type="text"
-                            className="form-control"
-                            placeholder="Add a Comment..."
-                        />
-                    </div>
-
-                    {/* Danh sách comment demo */}
-                    <div className="mb-3">
-                        <p className="fw-bold mb-1">
-                            SeaCAD <span className="text-muted">• 12h</span>
-                        </p>
-                        <p className="mb-0">
-                            Bid <strong>$56,789</strong>
-                        </p>
-                    </div>
-                    <hr />
-                    <div className="mb-3">
-                        <p className="fw-bold mb-1">
-                            Rae mnpinlu <span className="text-muted">• 1d</span>
-                        </p>
-                        <p className="mb-0">
-                            Great wrap. I prefer the original PNM (PWP) Matte
-                            though.
-                        </p>
-                    </div>
-                </div>
+                ))}
+                {/* End Bids Section */}
             </div>
-        </div>
+        </>
     );
 }

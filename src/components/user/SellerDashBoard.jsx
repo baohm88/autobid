@@ -288,7 +288,6 @@ export default function SellerDashboard() {
                                             <Form.Control
                                                 type="password"
                                                 name="password"
-                                                // value={user.password}
                                                 onChange={(e) =>
                                                     setUser({
                                                         ...user,

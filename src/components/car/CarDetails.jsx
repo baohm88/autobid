@@ -179,13 +179,13 @@ export default function CarDetails() {
             ) : (
                 <>
                     <Button
-                        variant="warning"
+                        variant="danger"
                         className="my-3"
                         onClick={handlePlaceBid}
                     >
-                        <i className="bi bi-coin"></i> Place Bid
+                        <i className="bi bi-currency-dollar"></i> Place Bid
                     </Button>
-                    <Button variant="info" className="my-3 ms-2">
+                    <Button variant="warning" className="my-3 ms-2">
                         <i className="bi bi-heart-fill text-danger"></i> Add to
                         Watchlist
                     </Button>
@@ -257,10 +257,10 @@ export default function CarDetails() {
                         modifications={car.modifications.split(";")}
                     />
                     <FlawsSection flaws={car.flaws.split(";")} />
-                    <VideosSection />
-                    <QASection />
-                    <CurrentBidSection />
-                    <BidsSection />
+                    <VideosSection car={car} />
+                    <QASection car={car} />
+                    <CurrentBidSection car={car} onPlaceBid={handlePlaceBid} />
+                    <BidsSection car={car} />
                 </Col>
 
                 <EndingSoonTable />

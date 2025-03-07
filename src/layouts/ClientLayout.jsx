@@ -46,7 +46,7 @@ export default function ClientLayout({ children }) {
                                     >
                                         <button
                                             type="button"
-                                            className="btn btn-success btn-sm rounded-pill"
+                                            className="btn btn-danger btn-sm rounded-pill"
                                         >
                                             Sell Car
                                         </button>

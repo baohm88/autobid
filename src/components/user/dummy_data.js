@@ -471,3 +471,61 @@ export const DUMMY_QA = [
         answer: "No significant damage has been reported.",
     },
 ];
+
+
+export const DUMMY_BIDS = [
+    {
+        id: 1,
+        bidderName: "deepseaman22",
+        bidderImage:
+            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+        bidderScore: "+22",
+        bidAmount: 4250,
+        bidTime: "1d",
+    },
+    {
+        id: 2,
+        bidderName: "donpedro1",
+        bidderImage:
+            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+        bidderScore: "+225",
+        bidAmount: 4150,
+        bidTime: "1d",
+    },
+    {
+        id: 3,
+        bidderName: "deepseaman22",
+        bidderImage:
+            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+        bidderScore: "+22",
+        bidAmount: 4250,
+        bidTime: "2d",
+    },
+    {
+        id: 4,
+        bidderName: "donpedro1",
+        bidderImage:
+            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+        bidderScore: "+225",
+        bidAmount: 4150,
+        bidTime: "3d",
+    },
+    {
+        id: 5,
+        bidderName: "deepseaman22",
+        bidderImage:
+            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+        bidderScore: "+22",
+        bidAmount: 4250,
+        bidTime: "4d",
+    },
+    {
+        id: 6,
+        bidderName: "donpedro1",
+        bidderImage:
+            "https://vntrade.edu.vn/wp-content/uploads/2025/02/avatar-natra.webp",
+        bidderScore: "+225",
+        bidAmount: 4150,
+        bidTime: "5d",
+    },
+];
