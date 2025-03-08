@@ -1,8 +1,23 @@
 import { useContext, useState } from "react";
-import { Button, Card, Col, Modal, Row } from "react-bootstrap";
-import { Form, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import {
+    Container,
+    Row,
+    Col,
+    Card,
+    Button,
+    Modal,
+    Form,
+    Image,
+    FloatingLabel,
+} from "react-bootstrap";
+// import "bootstrap/dist/css/bootstrap.min.css";
 import { UserContext } from "../../context/user-context";
 import axios from "axios";
+
+import QuickAccessBoxes from "./QuickAccessBoxes";
+import RandomComments from "./RandomComments";
+import { formatter } from "../../utils/formatter";
 
 export default function UserProfile() {
     const { user, setUser } = useContext(UserContext);
@@ -10,6 +25,9 @@ export default function UserProfile() {
     const [showModal, setShowModal] = useState(false);
     const [newAvatar, setNewAvatar] = useState(null); // To store the newly selected avatar
     const [newAvatarPreview, setNewAvatarPreview] = useState(null); // To display the preview of the new avatar
+    const [isLoading, setIsLoading] = useState(false);
+
+    document.title = user !== null ? user.username : "Account Details";
 
     console.log(user);
 
@@ -51,6 +69,7 @@ export default function UserProfile() {
 
     async function useProfileFormAction(event) {
         event.preventDefault();
+        setIsLoading(true);
         const fd = new FormData(event.target);
         const userData = Object.fromEntries(fd.entries());
         userData.id = user.id;
@@ -68,6 +87,10 @@ export default function UserProfile() {
             // Preserve the existing image_url if no avatar is selected
             userData.image_url = user.image_url;
         }
+        userData.admin = user.admin;
+        userData.balance = user.balance;
+        userData.password = user.password;
+        userData.created_at = user.created_at;
 
         console.log(userData);
 
@@ -87,7 +110,7 @@ export default function UserProfile() {
             if (res.status === 200) {
                 alert(res.data.message);
                 handleClose();
-                navigate("/account/listings");
+                navigate("/account/dashboard");
                 setUser(userData); // Update the user context
                 localStorage.setItem("user", JSON.stringify(userData)); // Update localStorage
             } else {
@@ -95,16 +118,18 @@ export default function UserProfile() {
             }
         } catch (error) {
             console.error("Failed to update profile!", error);
+        } finally {
+            setIsLoading(false);
         }
     }
 
     return (
-        <>
+        <Col sm className="p-4 min-vh-100">
+            <h3 className="mb-3">Dashboard</h3>
+
             {/* Profile Card */}
 
             <Card className="mb-3 shadow-sm">
-                {" "}
-                {/* Added shadow for depth */}
                 <Row className="g-0">
                     {/* Left Column: Profile Picture and Edit Button */}
                     <Col
@@ -114,24 +139,29 @@ export default function UserProfile() {
                     >
                         <div className="text-center">
                             <img
-                                src={newAvatarPreview || user.image_url}
-                                className="img-fluid rounded-circle mb-3" // Added margin-bottom
+                                src={
+                                    newAvatarPreview ||
+                                    user.image_url ||
+                                    "https://png.pngtree.com/png-clipart/20240705/original/pngtree-web-programmer-avatar-png-image_15495270.png"
+                                }
+                                className="img-fluid rounded-circle mb-3"
                                 alt={user.username}
                                 style={{
                                     width: "130px",
                                     height: "130px",
                                     objectFit: "cover",
-                                    border: "3px solid #fff", // Added border for emphasis
-                                    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // Added shadow for depth
+                                    border: "3px solid #fff",
+                                    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
                                 }}
                             />
                             <Button
-                                variant="primary"
+                                variant="warning"
                                 size="sm"
                                 onClick={handleShow}
-                                className="w-75" // Made the button wider
+                                className="w-75"
                             >
-                                Edit Profile
+                                <i className="bi bi-person-fill-gear "></i> Edit
+                                Profile
                             </Button>
                         </div>
                     </Col>
@@ -141,21 +171,17 @@ export default function UserProfile() {
                         <Card.Body className="h-100 d-flex flex-column justify-content-center">
                             <Card.Title className="mb-3 fs-3 fw-bold">
                                 {" "}
-                                {/* Increased font size and weight */}
                                 {user.username}
                             </Card.Title>
                             <Card.Text className="text-muted mb-4 fs-5">
                                 {" "}
-                                {/* Increased font size */}
                                 {user.bio || "No bio available."}{" "}
-                                {/* Fallback text if bio is empty */}
                             </Card.Text>
                             <Card.Text className="text-muted">
                                 <small>
                                     Member since{" "}
                                     <span className="fw-bold">
                                         {" "}
-                                        {/* Added bold for emphasis */}
                                         {new Date(
                                             user.created_at
                                         ).toDateString()}
@@ -174,9 +200,13 @@ export default function UserProfile() {
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={useProfileFormAction}>
-                        <div className="d-flex flex-column align-items-center gap-3">
+                        <div className="d-flex flex-column align-items-center gap-3 mb-3">
                             <img
-                                src={newAvatarPreview || user.image_url} // Show new avatar preview if available
+                                src={
+                                    newAvatarPreview ||
+                                    user.image_url ||
+                                    "https://png.pngtree.com/png-clipart/20240705/original/pngtree-web-programmer-avatar-png-image_15495270.png"
+                                } // Show new avatar preview if available
                                 className="img-fluid rounded-circle"
                                 alt={user.username}
                                 style={{
@@ -193,7 +223,7 @@ export default function UserProfile() {
                                 id="avatar-upload"
                             />
                             <Button
-                                variant="secondary"
+                                variant="warning"
                                 size="sm"
                                 onClick={() =>
                                     document
@@ -201,65 +231,133 @@ export default function UserProfile() {
                                         .click()
                                 }
                             >
+                                <i className="bi bi-person-bounding-box"></i>{" "}
                                 Choose a different picture
                             </Button>
                         </div>
 
-                        <Form.Group className="mb-3" controlId="email">
-                            <Form.Label>New Email:</Form.Label>
+                        <FloatingLabel
+                            controlId="email"
+                            label="New Email"
+                            className="mb-3"
+                        >
                             <Form.Control
                                 type="email"
                                 name="email"
-                                defaultValue={user.email}
+                                value={user.email}
+                                onChange={(e) =>
+                                    setUser({
+                                        ...user,
+                                        email: e.target.value,
+                                    })
+                                }
                             />
-                        </Form.Group>
+                        </FloatingLabel>
 
-                        <Form.Group className="mb-3" controlId="username">
-                            <Form.Label>Username:</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="username"
-                                defaultValue={user.username}
-                            />
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="password">
-                            <Form.Label>New Password:</Form.Label>
-                            <Form.Control
-                                type="password"
-                                name="password"
-                                defaultValue={user.password}
-                            />
-                        </Form.Group>
+                        <Row>
+                            <Col>
+                                <FloatingLabel
+                                    controlId="username"
+                                    label="Username"
+                                    className="mb-3"
+                                >
+                                    <Form.Control
+                                        type="text"
+                                        name="username"
+                                        value={user.username}
+                                        onChange={(e) =>
+                                            setUser({
+                                                ...user,
+                                                username: e.target.value,
+                                            })
+                                        }
+                                    />
+                                </FloatingLabel>
+                            </Col>
+                            <Col>
+                                <FloatingLabel
+                                    controlId="password"
+                                    label="New Password"
+                                    className="mb-3"
+                                >
+                                    <Form.Control
+                                        type="password"
+                                        name="password"
+                                        onChange={(e) =>
+                                            setUser({
+                                                ...user,
+                                                password: e.target.value,
+                                            })
+                                        }
+                                    />
+                                </FloatingLabel>
+                            </Col>
+                        </Row>
 
-                        <Form.Group className="mb-3" controlId="balance">
-                            <Form.Label>New Balance:</Form.Label>
-                            <Form.Control
-                                type="number"
-                                name="balance"
-                                defaultValue={user.balance}
-                            />
-                        </Form.Group>
+                        {/* Balance */}
+                        <Row>
+                            <Col>
+                                <span>Balance: </span>{" "}
+                                <span className="fw-bold">
+                                    {formatter.format(user.balance)}
+                                </span>
+                            </Col>
+                            <Col>
+                                <FloatingLabel
+                                    controlId="balance"
+                                    label="Deposit"
+                                    className="mb-3"
+                                >
+                                    <Form.Control
+                                        type="number"
+                                        name="balance"
+                                        onChange={(e) =>
+                                            setUser({
+                                                ...user,
+                                                balance: e.target.value,
+                                            })
+                                        }
+                                    />
+                                </FloatingLabel>
+                            </Col>
+                        </Row>
 
-                        <Form.Group className="mb-3" controlId="bio">
-                            <Form.Label>Bio:</Form.Label>
+                        <FloatingLabel
+                            controlId="bio"
+                            label="Bio"
+                            className="mb-3"
+                        >
                             <Form.Control
                                 as="textarea"
                                 name="bio"
-                                defaultValue={user.bio}
+                                value={user.bio}
+                                onChange={(e) =>
+                                    setUser({
+                                        ...user,
+                                        bio: e.target.value,
+                                    })
+                                }
                             />
-                        </Form.Group>
+                        </FloatingLabel>
 
                         <Modal.Footer>
-                            <Button variant="secondary" onClick={handleClose}>
+                            <Button variant="light" onClick={handleClose}>
                                 Close
                             </Button>
-                            <Button variant="primary" type="submit">
-                                Save
+                            <Button
+                                variant="danger"
+                                type="submit"
+                                disabled={isLoading}
+                            >
+                                {isLoading ? "Saving..." : "Save"}
                             </Button>
                         </Modal.Footer>
                     </Form>
                 </Modal.Body>
             </Modal>
-        </>
+
+            <QuickAccessBoxes />
+            <RandomComments />
+        </Col>
     );
 }

@@ -1,29 +1,13 @@
-import { Route, Routes } from "react-router-dom";
-// import "./App.css";
-import { routes } from "./components/router";
+import { RouterProvider } from "react-router-dom";
 import { UserProvider } from "./context/user-context";
+import { AppRouter } from "./components/router";
+
 
 function App() {
     return (
-        <>
-            <UserProvider>
-                <Routes>
-                    {routes.map(
-                        ({ path, component: Component, layout: Layout }) => (
-                            <Route
-                                key={path}
-                                path={path}
-                                element={
-                                    <Layout>
-                                        <Component />
-                                    </Layout>
-                                }
-                            />
-                        )
-                    )}
-                </Routes>
-            </UserProvider>
-        </>
+        <UserProvider>
+            <RouterProvider router={AppRouter} />
+        </UserProvider>
     );
 }
 

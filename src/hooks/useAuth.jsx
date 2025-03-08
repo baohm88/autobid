@@ -1,9 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 
 export default function useAuth() {
     const [isLoggingOut, setIsLoggingOut] = useState(false);
-    const navigate = useNavigate();
 
     const [user, setUser] = useState(() => {
         const savedUser = localStorage.getItem("user");
@@ -36,7 +35,7 @@ export default function useAuth() {
             setIsLoggingOut(true); // Set logging out state
 
             // Navigate to home page first
-            navigate("/");
+            redirect("/");
 
             // Delay clearing the user state and localStorage
             setTimeout(() => {

@@ -9,6 +9,7 @@ import {
     Modal,
     Form,
     Image,
+    FloatingLabel,
 } from "react-bootstrap";
 // import "bootstrap/dist/css/bootstrap.min.css";
 import { UserContext } from "../../context/user-context";
@@ -110,7 +111,7 @@ export default function SellerDashboard() {
             if (res.status === 200) {
                 alert(res.data.message);
                 handleClose();
-                navigate("/account/listings");
+                navigate("/account/dashboard");
                 setUser(userData); // Update the user context
                 localStorage.setItem("user", JSON.stringify(userData)); // Update localStorage
             } else {
@@ -127,7 +128,7 @@ export default function SellerDashboard() {
         <Container>
             <Row>
                 {/* Sidebar */}
-                <DashboardSidebar />
+                {/* <DashboardSidebar /> */}
 
                 {/* Main Content */}
                 <Col sm className="p-4 min-vh-100">
@@ -162,11 +163,12 @@ export default function SellerDashboard() {
                                         }}
                                     />
                                     <Button
-                                        variant="primary"
+                                        variant="warning"
                                         size="sm"
                                         onClick={handleShow}
-                                        className="w-75" //
+                                        className="w-75"
                                     >
+                                        <i className="bi bi-person-fill-gear "></i>{" "}
                                         Edit Profile
                                     </Button>
                                 </div>
@@ -206,7 +208,7 @@ export default function SellerDashboard() {
                         </Modal.Header>
                         <Modal.Body>
                             <Form onSubmit={useProfileFormAction}>
-                                <div className="d-flex flex-column align-items-center gap-3">
+                                <div className="d-flex flex-column align-items-center gap-3 mb-3">
                                     <img
                                         src={
                                             newAvatarPreview ||
@@ -229,7 +231,7 @@ export default function SellerDashboard() {
                                         id="avatar-upload"
                                     />
                                     <Button
-                                        variant="secondary"
+                                        variant="warning"
                                         size="sm"
                                         onClick={() =>
                                             document
@@ -237,12 +239,16 @@ export default function SellerDashboard() {
                                                 .click()
                                         }
                                     >
+                                        <i className="bi bi-person-bounding-box"></i>{" "}
                                         Choose a different picture
                                     </Button>
                                 </div>
 
-                                <Form.Group className="mb-3" controlId="email">
-                                    <Form.Label>New Email:</Form.Label>
+                                <FloatingLabel
+                                    controlId="email"
+                                    label="New Email"
+                                    className="mb-3"
+                                >
                                     <Form.Control
                                         type="email"
                                         name="email"
@@ -254,15 +260,15 @@ export default function SellerDashboard() {
                                             })
                                         }
                                     />
-                                </Form.Group>
+                                </FloatingLabel>
 
                                 <Row>
                                     <Col>
-                                        <Form.Group
-                                            className="mb-3"
+                                        <FloatingLabel
                                             controlId="username"
+                                            label="Username"
+                                            className="mb-3"
                                         >
-                                            <Form.Label>Username:</Form.Label>
                                             <Form.Control
                                                 type="text"
                                                 name="username"
@@ -275,16 +281,14 @@ export default function SellerDashboard() {
                                                     })
                                                 }
                                             />
-                                        </Form.Group>
+                                        </FloatingLabel>
                                     </Col>
                                     <Col>
-                                        <Form.Group
-                                            className="mb-3"
+                                        <FloatingLabel
                                             controlId="password"
+                                            label="New Password"
+                                            className="mb-3"
                                         >
-                                            <Form.Label>
-                                                New Password:
-                                            </Form.Label>
                                             <Form.Control
                                                 type="password"
                                                 name="password"
@@ -296,7 +300,7 @@ export default function SellerDashboard() {
                                                     })
                                                 }
                                             />
-                                        </Form.Group>
+                                        </FloatingLabel>
                                     </Col>
                                 </Row>
 
@@ -309,11 +313,11 @@ export default function SellerDashboard() {
                                         </span>
                                     </Col>
                                     <Col>
-                                        <Form.Group
-                                            className="mb-3"
+                                        <FloatingLabel
                                             controlId="balance"
+                                            label="Deposit"
+                                            className="mb-3"
                                         >
-                                            <Form.Label>Deposit:</Form.Label>
                                             <Form.Control
                                                 type="number"
                                                 name="balance"
@@ -324,12 +328,15 @@ export default function SellerDashboard() {
                                                     })
                                                 }
                                             />
-                                        </Form.Group>
+                                        </FloatingLabel>
                                     </Col>
                                 </Row>
 
-                                <Form.Group className="mb-3" controlId="bio">
-                                    <Form.Label>Bio:</Form.Label>
+                                <FloatingLabel
+                                    controlId="bio"
+                                    label="Bio"
+                                    className="mb-3"
+                                >
                                     <Form.Control
                                         as="textarea"
                                         name="bio"
@@ -341,17 +348,17 @@ export default function SellerDashboard() {
                                             })
                                         }
                                     />
-                                </Form.Group>
+                                </FloatingLabel>
 
                                 <Modal.Footer>
                                     <Button
-                                        variant="secondary"
+                                        variant="light"
                                         onClick={handleClose}
                                     >
                                         Close
                                     </Button>
                                     <Button
-                                        variant="primary"
+                                        variant="danger"
                                         type="submit"
                                         disabled={isLoading}
                                     >

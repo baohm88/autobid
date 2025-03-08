@@ -1,5 +1,7 @@
+import { createBrowserRouter } from "react-router-dom";
 import AdminLayout from "../layouts/AdminLayout";
 import ClientLayout from "../layouts/ClientLayout";
+import DashboardLayout from "../layouts/DashboardLayout";
 import Auctions from "./admin/Auctions";
 
 import Home from "./Home";
@@ -19,125 +21,135 @@ import Homes from "./admin/Homes";
 import CarDetails from "./car/CarDetails";
 import AddCar from "./user/AddCar";
 import UpdateCar from "./user/UpdateCar";
+import InProgressListings from "./user/sidebar/InProgressListings";
+import LiveListings from "./user/sidebar/LiveListings";
+import ListingsComments from "./user/sidebar/ListingsComments";
+import PastListings from "./user/sidebar/PastListings";
+import UserProfile from "./user/UserProfile";
 
-const routes = [
-    { path: "/", component: Home, layout: ClientLayout },
-    { path: "/register", component: Register, layout: ClientLayout },
-    { path: "/login", component: Login, layout: ClientLayout },
+export const AppRouter = createBrowserRouter([
     {
-        path: "/user-products",
-        component: (props) => (
-            <ProtectedRoute>
-                <UserProducts {...props} />
-            </ProtectedRoute>
-        ),
-        layout: ClientLayout,
-    },
-    {
-        path: "/user-bids",
-        component: (props) => (
-            <ProtectedRoute>
-                <UserBids {...props} />
-            </ProtectedRoute>
-        ),
-        layout: ClientLayout,
-    },
-    {
-        path: "/user-orders",
-        component: (props) => (
-            <ProtectedRoute>
-                <UserOrders {...props} />
-            </ProtectedRoute>
-        ),
-        layout: ClientLayout,
-    },
-
-    {
-        path: "/add-car",
-        component: (props) => (
-            <ProtectedRoute>
-                <AddCar {...props} />
-            </ProtectedRoute>
-        ),
-        layout: ClientLayout,
-    },
-    {
-        path: "/watch-list",
-        component: (props) => (
-            <ProtectedRoute>
-                <UserWatchList {...props} />
-            </ProtectedRoute>
-        ),
-        layout: ClientLayout,
-    },
-    {
-        path: "/user-wallet",
-        component: (props) => (
-            <ProtectedRoute>
-                <UserWallet {...props} />
-            </ProtectedRoute>
-        ),
-        layout: ClientLayout,
-    },
-    {
-        path: "/listings/:id",
-        component: CarDetails,
-        layout: ClientLayout,
-    },
-    {
-        path: "/listings/:id/edit",
-        component: (props) => (
-            <ProtectedRoute>
-                <UpdateCar {...props} />
-            </ProtectedRoute>
-        ),
-        layout: ClientLayout,
-    },
-    {
-        path: "/account/listings",
-        component: (props) => (
-            <ProtectedRoute>
-                <SellerDashBoard {...props} />
-            </ProtectedRoute>
-        ),
-        layout: ClientLayout,
+        path: "/",
+        element: <ClientLayout />,
+        children: [
+            { path: "/", element: <Home /> },
+            { path: "/register", element: <Register /> },
+            { path: "/login", element: <Login /> },
+            {
+                path: "/user-products",
+                element: (
+                    <ProtectedRoute>
+                        <UserProducts />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: "/user-bids",
+                element: (
+                    <ProtectedRoute>
+                        <UserBids />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: "/user-orders",
+                element: (
+                    <ProtectedRoute>
+                        <UserOrders />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: "/add-car",
+                element: (
+                    <ProtectedRoute>
+                        <AddCar />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: "/watch-list",
+                element: (
+                    <ProtectedRoute>
+                        <UserWatchList />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: "/user-wallet",
+                element: (
+                    <ProtectedRoute>
+                        <UserWallet />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: "/listings/:id",
+                element: <CarDetails />,
+            },
+            {
+                path: "/listings/:id/edit",
+                element: (
+                    <ProtectedRoute>
+                        <UpdateCar />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: "/account",
+                element: (
+                    <ProtectedRoute>
+                        <DashboardLayout />
+                    </ProtectedRoute>
+                ),
+                children: [
+                    { path: "dashboard", element: <UserProfile /> },
+                    { path: "in-progress", element: <InProgressListings /> },
+                    { path: "live-auctions", element: <LiveListings /> },
+                    { path: "comments", element: <ListingsComments /> },
+                    { path: "past-listings", element: <PastListings /> },
+                ],
+            },
+        ],
     },
     {
         path: "/auctions",
-        component: (props) => (
+        element: (
             <ProtectedRoute>
-                <Auctions {...props} />
+                <AdminLayout>
+                    <Auctions />
+                </AdminLayout>
             </ProtectedRoute>
         ),
-        layout: AdminLayout,
     },
     {
         path: "/orders",
-        component: (props) => (
+        element: (
             <ProtectedRoute>
-                <Orders {...props} />
+                <AdminLayout>
+                    <Orders />
+                </AdminLayout>
             </ProtectedRoute>
         ),
-        layout: AdminLayout,
     },
     {
         path: "/users",
-        component: (props) => (
+        element: (
             <ProtectedRoute>
-                <Users {...props} />
+                <AdminLayout>
+                    <Users />
+                </AdminLayout>
             </ProtectedRoute>
         ),
-        layout: AdminLayout,
     },
     {
         path: "/homes",
-        component: (props) => (
+        element: (
             <ProtectedRoute>
-                <Homes {...props} />
+                <AdminLayout>
+                    <Homes />
+                </AdminLayout>
             </ProtectedRoute>
         ),
-        layout: AdminLayout,
     },
-];
-
-export { routes };
+]);
