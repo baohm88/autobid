@@ -2,22 +2,18 @@ import { createBrowserRouter } from "react-router-dom";
 import AdminLayout from "../layouts/AdminLayout";
 import ClientLayout from "../layouts/ClientLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
-import Auctions from "./admin/Auctions";
 
 import Home from "./Home";
 import Login from "./Login";
 import Register from "./Register";
-import CarForm from "./user/UpdateCar";
-import SellerDashBoard from "./user/SellerDashBoard";
+
+// User components
 import UserBids from "./user/UserBids";
 import UserOrders from "./user/UserOrders";
 import UserProducts from "./user/UserProducts";
 import UserWallet from "./user/UserWallet";
 import UserWatchList from "./user/UserWatchList";
 import ProtectedRoute from "./ProtectedRoute";
-import Orders from "./admin/Orders";
-import Users from "./admin/Users";
-import Homes from "./admin/Homes";
 import CarDetails from "./car/CarDetails";
 import AddCar from "./user/AddCar";
 import UpdateCar from "./user/UpdateCar";
@@ -26,6 +22,12 @@ import LiveListings from "./user/sidebar/LiveListings";
 import ListingsComments from "./user/sidebar/ListingsComments";
 import PastListings from "./user/sidebar/PastListings";
 import UserProfile from "./user/UserProfile";
+
+// Admin components
+import AdminAuctions from "./admin/AdminAuctions";
+import AdminUsers from "./admin/AdminUsers";
+import AdminHome from "./admin/AdminHome";
+import AdminOrders from "./admin/AdminOrders";
 
 export const AppRouter = createBrowserRouter([
     {
@@ -113,43 +115,17 @@ export const AppRouter = createBrowserRouter([
         ],
     },
     {
-        path: "/auctions",
+        path: "/admin",
         element: (
             <ProtectedRoute>
-                <AdminLayout>
-                    <Auctions />
-                </AdminLayout>
+                <AdminLayout />
             </ProtectedRoute>
         ),
-    },
-    {
-        path: "/orders",
-        element: (
-            <ProtectedRoute>
-                <AdminLayout>
-                    <Orders />
-                </AdminLayout>
-            </ProtectedRoute>
-        ),
-    },
-    {
-        path: "/users",
-        element: (
-            <ProtectedRoute>
-                <AdminLayout>
-                    <Users />
-                </AdminLayout>
-            </ProtectedRoute>
-        ),
-    },
-    {
-        path: "/homes",
-        element: (
-            <ProtectedRoute>
-                <AdminLayout>
-                    <Homes />
-                </AdminLayout>
-            </ProtectedRoute>
-        ),
+        children: [
+            { path: "", element: <AdminHome /> }, // Default admin landing
+            { path: "auctions", element: <AdminAuctions /> },
+            { path: "orders", element: <AdminOrders /> },
+            { path: "users", element: <AdminUsers /> },
+        ],
     },
 ]);

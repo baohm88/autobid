@@ -231,7 +231,7 @@ export default function ClientLayout({ children }) {
                                     </div>
                                 </>
                             ) : (
-                                <button className="btn btn-success btn-sm">
+                                <button className="btn btn-success btn-sm mt-2">
                                     <NavLink className="nav-link" to={"/login"}>
                                         <i className="bi bi-box-arrow-left"></i>{" "}
                                         Login

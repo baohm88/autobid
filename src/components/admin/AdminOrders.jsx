@@ -22,7 +22,7 @@ import {
 } from "react-icons/fa";
 import * as XLSX from "xlsx";
 
-export default function Orders() {
+export default function AdminOrders() {
     // State tìm kiếm, phân trang và sắp xếp
     const [searchValue, setSearchValue] = useState("");
     const [currentPage, setCurrentPage] = useState(1);

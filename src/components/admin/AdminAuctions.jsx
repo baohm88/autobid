@@ -22,7 +22,7 @@ import {
 } from "react-icons/fa";
 import * as XLSX from "xlsx";
 
-export default function Auctions() {
+export default function AdminAuctions() {
     // Dữ liệu mẫu auctions
     const [auctions, setAuctions] = useState([
         {

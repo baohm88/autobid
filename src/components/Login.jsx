@@ -68,7 +68,7 @@ export default function Login() {
 
                 // Navigate to different routes based on user role
                 if (user.admin === true) {
-                    navigate("/auctions");
+                    navigate("/admin");
                 } else {
                     navigate("/");
                 }
