@@ -2,7 +2,7 @@ import React from "react";
 
 export default function PastListings() {
     return (
-        <div className="container">
+        <div>
             <h1>List of Past Listings</h1>
         </div>
     );

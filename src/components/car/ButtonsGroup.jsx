@@ -44,10 +44,10 @@ export default function ButtonsGroup({ car }) {
 
     return (
         <>
-            <Row className="d-flex justify-content-between align-items-center bg-dark rounded-2 py-2 my-3 mx-1">
+            <Row className="d-flex justify-content-between align-items-center bg-danger rounded-2 py-2 my-3 mx-1">
                 <Col>
                     <span>
-                        <span className="text-secondary">
+                        <span className="text-body">
                             <BiTime style={iconStyle} /> Time Left
                         </span>{" "}
                         <span className="text-light">{remainingTime}</span>
@@ -55,7 +55,7 @@ export default function ButtonsGroup({ car }) {
                 </Col>
                 <Col>
                     <span>
-                        <span className="text-secondary">
+                        <span className="text-body">
                             <BiUpArrowAlt style={iconStyle} /> Current Bid
                         </span>{" "}
                         <span className="text-light">
@@ -65,7 +65,7 @@ export default function ButtonsGroup({ car }) {
                 </Col>
                 <Col className="d-none d-md-block">
                     <span>
-                        <span className="text-secondary">
+                        <span className="text-body">
                             <BiHash style={iconStyle} /> Bids
                         </span>{" "}
                         <span className="text-light">14</span>
@@ -73,7 +73,7 @@ export default function ButtonsGroup({ car }) {
                 </Col>
                 <Col className="d-none d-lg-block">
                     <span>
-                        <span className="text-secondary">
+                        <span className="text-body">
                             <BiChat style={iconStyle} /> Comments
                         </span>{" "}
                         <span className="text-light">41</span>

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"; // import Link
 
 export default function Home() {
     return (
-        <Container className="py-4">
+        <Container fluid className="py-3">
             <h1 className="mb-4">Home</h1>
             <Row className="g-4">
                 {/* Users Section */}
@@ -21,7 +21,9 @@ export default function Home() {
                             {/* Link to /users */}
                             <div className="d-flex align-items-center mb-3 justify-content-center">
                                 <Link to="/users">
-                                    <Button className="mt-4" variant="primary">Go to Users</Button>
+                                    <Button className="mt-4" variant="primary">
+                                        Go to Users
+                                    </Button>
                                 </Link>
                             </div>
                         </Card.Body>
@@ -42,7 +44,9 @@ export default function Home() {
                             {/* Link to /orders */}
                             <Link to="/orders">
                                 <div className="d-flex align-items-center mb-3 justify-content-center">
-                                    <Button className="mt-4" variant="primary">Go to Orders</Button>
+                                    <Button className="mt-4" variant="primary">
+                                        Go to Orders
+                                    </Button>
                                 </div>
                             </Link>
                         </Card.Body>
@@ -55,7 +59,9 @@ export default function Home() {
                         <Card.Body>
                             <div className="d-flex align-items-center mb-3">
                                 <FaGavel size={28} className="me-2" />
-                                <Card.Title className="mb-0">Auctions</Card.Title>
+                                <Card.Title className="mb-0">
+                                    Auctions
+                                </Card.Title>
                             </div>
                             <Card.Text>
                                 Manage auctions, product information, timing...
@@ -63,7 +69,9 @@ export default function Home() {
                             {/* Link to /auctions */}
                             <div className="d-flex align-items-center mb-3 justify-content-center">
                                 <Link to="/auctions">
-                                    <Button className="mt-4" variant="primary">Go to Auctions</Button>
+                                    <Button className="mt-4" variant="primary">
+                                        Go to Auctions
+                                    </Button>
                                 </Link>
                             </div>
                         </Card.Body>

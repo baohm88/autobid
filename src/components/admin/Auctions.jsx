@@ -27,8 +27,7 @@ export default function Auctions() {
     const [auctions, setAuctions] = useState([
         {
             id: 1,
-            image:
-                "https://cdnphoto.dantri.com.vn/EYNfOXzgHa-HRiIB7-yRdA8G_J0=/thumb_w/1020/2022/10/05/2024-bugatti-mistral-1664958499760.jpg",
+            image: "https://cdnphoto.dantri.com.vn/EYNfOXzgHa-HRiIB7-yRdA8G_J0=/thumb_w/1020/2022/10/05/2024-bugatti-mistral-1664958499760.jpg",
             starting_bid: 100,
             status: "Pending",
             user_id: 101,
@@ -42,8 +41,7 @@ export default function Auctions() {
         },
         {
             id: 2,
-            image:
-                "https://cdnphoto.dantri.com.vn/EYNfOXzgHa-HRiIB7-yRdA8G_J0=/thumb_w/1020/2022/10/05/2024-bugatti-mistral-1664958499760.jpg",
+            image: "https://cdnphoto.dantri.com.vn/EYNfOXzgHa-HRiIB7-yRdA8G_J0=/thumb_w/1020/2022/10/05/2024-bugatti-mistral-1664958499760.jpg",
             starting_bid: 150,
             status: "Live",
             user_id: 102,
@@ -57,8 +55,7 @@ export default function Auctions() {
         },
         {
             id: 3,
-            image:
-                "https://cdnphoto.dantri.com.vn/EYNfOXzgHa-HRiIB7-yRdA8G_J0=/thumb_w/1020/2022/10/05/2024-bugatti-mistral-1664958499760.jpg",
+            image: "https://cdnphoto.dantri.com.vn/EYNfOXzgHa-HRiIB7-yRdA8G_J0=/thumb_w/1020/2022/10/05/2024-bugatti-mistral-1664958499760.jpg",
             starting_bid: 200,
             status: "Pass",
             user_id: 103,
@@ -72,8 +69,7 @@ export default function Auctions() {
         },
         {
             id: 4,
-            image:
-                "https://cdnphoto.dantri.com.vn/EYNfOXzgHa-HRiIB7-yRdA8G_J0=/thumb_w/1020/2022/10/05/2024-bugatti-mistral-1664958499760.jpg",
+            image: "https://cdnphoto.dantri.com.vn/EYNfOXzgHa-HRiIB7-yRdA8G_J0=/thumb_w/1020/2022/10/05/2024-bugatti-mistral-1664958499760.jpg",
             starting_bid: 120,
             status: "Pending",
             user_id: 104,
@@ -87,8 +83,7 @@ export default function Auctions() {
         },
         {
             id: 5,
-            image:
-                "https://cdnphoto.dantri.com.vn/EYNfOXzgHa-HRiIB7-yRdA8G_J0=/thumb_w/1020/2022/10/05/2024-bugatti-mistral-1664958499760.jpg",
+            image: "https://cdnphoto.dantri.com.vn/EYNfOXzgHa-HRiIB7-yRdA8G_J0=/thumb_w/1020/2022/10/05/2024-bugatti-mistral-1664958499760.jpg",
             starting_bid: 180,
             status: "Live",
             user_id: 105,
@@ -102,8 +97,7 @@ export default function Auctions() {
         },
         {
             id: 6,
-            image:
-                "https://cdnphoto.dantri.com.vn/EYNfOXzgHa-HRiIB7-yRdA8G_J0=/thumb_w/1020/2022/10/05/2024-bugatti-mistral-1664958499760.jpg",
+            image: "https://cdnphoto.dantri.com.vn/EYNfOXzgHa-HRiIB7-yRdA8G_J0=/thumb_w/1020/2022/10/05/2024-bugatti-mistral-1664958499760.jpg",
             starting_bid: 250,
             status: "Pass",
             user_id: 106,
@@ -117,8 +111,7 @@ export default function Auctions() {
         },
         {
             id: 7,
-            image:
-                "https://cdnphoto.dantri.com.vn/EYNfOXzgHa-HRiIB7-yRdA8G_J0=/thumb_w/1020/2022/10/05/2024-bugatti-mistral-1664958499760.jpg",
+            image: "https://cdnphoto.dantri.com.vn/EYNfOXzgHa-HRiIB7-yRdA8G_J0=/thumb_w/1020/2022/10/05/2024-bugatti-mistral-1664958499760.jpg",
             starting_bid: 300,
             status: "Pending",
             user_id: 107,
@@ -132,8 +125,7 @@ export default function Auctions() {
         },
         {
             id: 8,
-            image:
-                "https://cdnphoto.dantri.com.vn/EYNfOXzgHa-HRiIB7-yRdA8G_J0=/thumb_w/1020/2022/10/05/2024-bugatti-mistral-1664958499760.jpg",
+            image: "https://cdnphoto.dantri.com.vn/EYNfOXzgHa-HRiIB7-yRdA8G_J0=/thumb_w/1020/2022/10/05/2024-bugatti-mistral-1664958499760.jpg",
             starting_bid: 220,
             status: "Live",
             user_id: 108,
@@ -147,8 +139,7 @@ export default function Auctions() {
         },
         {
             id: 9,
-            image:
-                "https://cdnphoto.dantri.com.vn/EYNfOXzgHa-HRiIB7-yRdA8G_J0=/thumb_w/1020/2022/10/05/2024-bugatti-mistral-1664958499760.jpg",
+            image: "https://cdnphoto.dantri.com.vn/EYNfOXzgHa-HRiIB7-yRdA8G_J0=/thumb_w/1020/2022/10/05/2024-bugatti-mistral-1664958499760.jpg",
             starting_bid: 140,
             status: "Pass",
             user_id: 109,
@@ -162,8 +153,7 @@ export default function Auctions() {
         },
         {
             id: 10,
-            image:
-                "https://cdnphoto.dantri.com.vn/EYNfOXzgHa-HRiIB7-yRdA8G_J0=/thumb_w/1020/2022/10/05/2024-bugatti-mistral-1664958499760.jpg",
+            image: "https://cdnphoto.dantri.com.vn/EYNfOXzgHa-HRiIB7-yRdA8G_J0=/thumb_w/1020/2022/10/05/2024-bugatti-mistral-1664958499760.jpg",
             starting_bid: 190,
             status: "Pending",
             user_id: 110,
@@ -174,10 +164,10 @@ export default function Auctions() {
             make: "Kia",
             model: "Optima",
             description: "Description 10",
-        },{
+        },
+        {
             id: 11,
-            image:
-                "https://cdnphoto.dantri.com.vn/EYNfOXzgHa-HRiIB7-yRdA8G_J0=/thumb_w/1020/2022/10/05/2024-bugatti-mistral-1664958499760.jpg",
+            image: "https://cdnphoto.dantri.com.vn/EYNfOXzgHa-HRiIB7-yRdA8G_J0=/thumb_w/1020/2022/10/05/2024-bugatti-mistral-1664958499760.jpg",
             starting_bid: 190,
             status: "Pending",
             user_id: 110,
@@ -191,8 +181,7 @@ export default function Auctions() {
         },
         {
             id: 12,
-            image:
-                "https://cdnphoto.dantri.com.vn/EYNfOXzgHa-HRiIB7-yRdA8G_J0=/thumb_w/1020/2022/10/05/2024-bugatti-mistral-1664958499760.jpg",
+            image: "https://cdnphoto.dantri.com.vn/EYNfOXzgHa-HRiIB7-yRdA8G_J0=/thumb_w/1020/2022/10/05/2024-bugatti-mistral-1664958499760.jpg",
             starting_bid: 190,
             status: "Pending",
             user_id: 110,
@@ -248,7 +237,10 @@ export default function Auctions() {
     const handleCreate = () => {
         setEditingMode(false);
         setNewAuction({
-            id: auctions.length > 0 ? Math.max(...auctions.map((a) => a.id)) + 1 : 1,
+            id:
+                auctions.length > 0
+                    ? Math.max(...auctions.map((a) => a.id)) + 1
+                    : 1,
             image: "",
             starting_bid: "",
             status: "Pending",
@@ -370,12 +362,15 @@ export default function Auctions() {
     };
 
     return (
-        <Container fluid className="py-4">
+        <Container fluid className="py-3">
             {/* Toolbar Tìm kiếm & Nút thao tác */}
             <Row className="mb-3">
                 <Col>
                     <div className="d-flex flex-wrap gap-2">
-                        <InputGroup className="mb-2 mb-md-0" style={{ width: "300px" }}>
+                        <InputGroup
+                            className="mb-2 mb-md-0"
+                            style={{ width: "300px" }}
+                        >
                             <Form.Control
                                 placeholder="Search by Auction ID..."
                                 value={searchValue}
@@ -416,15 +411,21 @@ export default function Auctions() {
                             <Dropdown.Item eventKey="All">All</Dropdown.Item>
                             <Dropdown.Item eventKey="Live">Live</Dropdown.Item>
                             <Dropdown.Item eventKey="Pass">Pass</Dropdown.Item>
-                            <Dropdown.Item eventKey="Pending">Pending</Dropdown.Item>
+                            <Dropdown.Item eventKey="Pending">
+                                Pending
+                            </Dropdown.Item>
                         </DropdownButton>
                         <DropdownButton
                             id="dropdown-sort"
                             title={`Sort by: ${sortBy}`}
                             onSelect={(eventKey) => setSortBy(eventKey)}
                         >
-                            <Dropdown.Item eventKey="default">Default</Dropdown.Item>
-                            <Dropdown.Item eventKey="Ending Soon">Ending Soon</Dropdown.Item>
+                            <Dropdown.Item eventKey="default">
+                                Default
+                            </Dropdown.Item>
+                            <Dropdown.Item eventKey="Ending Soon">
+                                Ending Soon
+                            </Dropdown.Item>
                             <Dropdown.Item eventKey="Newly Listed">
                                 Newly Listed
                             </Dropdown.Item>
@@ -436,80 +437,96 @@ export default function Auctions() {
             {/* Data Table */}
             <Row>
                 <Col>
-                    <Table bordered hover responsive style={{ tableLayout: "auto" }}>
+                    <Table
+                        bordered
+                        hover
+                        responsive
+                        style={{ tableLayout: "auto" }}
+                    >
                         <thead className="table-light">
-                        <tr>
-                            <th style={{ width: "4%" }}>Image</th>
-                            <th style={{ width: "3%" }}>Id</th>
-                            <th style={{ width: "5%" }}>Status</th>
-                            <th style={{ width: "6%" }}>Starting Bid</th>
-                            <th style={{ width: "6%" }}>User Id</th>
-                            <th style={{ width: "6%" }}>Year Model</th>
-                            <th style={{ width: "6%" }}>Created At</th>
-                            <th style={{ width: "6%" }}>End Time</th>
-                            <th style={{ width: "6%" }}>Start Time</th>
-                            <th style={{ width: "8%" }}>Make</th>
-                            <th style={{ width: "8%" }}>Model</th>
-                            <th>Description</th>
-                            <th style={{ width: "120px" }}>Action</th>
-                        </tr>
+                            <tr>
+                                <th style={{ width: "4%" }}>Image</th>
+                                <th style={{ width: "3%" }}>Id</th>
+                                <th style={{ width: "5%" }}>Status</th>
+                                <th style={{ width: "6%" }}>Starting Bid</th>
+                                <th style={{ width: "6%" }}>User Id</th>
+                                <th style={{ width: "6%" }}>Year Model</th>
+                                <th style={{ width: "6%" }}>Created At</th>
+                                <th style={{ width: "6%" }}>End Time</th>
+                                <th style={{ width: "6%" }}>Start Time</th>
+                                <th style={{ width: "8%" }}>Make</th>
+                                <th style={{ width: "8%" }}>Model</th>
+                                <th>Description</th>
+                                <th style={{ width: "120px" }}>Action</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        {currentAuctions.map((auction) => (
-                            <tr key={auction.id}>
-                                <td>
-                                    <img
-                                        src={auction.image}
-                                        alt={`Auction ${auction.id}`}
-                                        style={{ width: "50px", height: "50px" }}
-                                    />
-                                </td>
-                                <td>{auction.id}</td>
-                                <td>
-                    <span style={getStatusStyle(auction.status)}>
-                      {auction.status}
-                    </span>
-                                </td>
-                                <td>{auction.starting_bid}</td>
-                                <td>{auction.user_id}</td>
-                                <td>{auction.year_model}</td>
-                                <td>{auction.created_at}</td>
-                                <td>{auction.end_time}</td>
-                                <td>{auction.start_time}</td>
-                                <td>{auction.make}</td>
-                                <td>{auction.model}</td>
-                                <td>{auction.description}</td>
-                                <td>
-                                    <div className="d-flex">
-                                        <div className="flex-fill text-center">
-                                            <Button
-                                                variant="warning"
-                                                size="sm"
-                                                onClick={() => handleEdit(auction)}
-                                            >
-                                                <FaEdit size={16} />
-                                            </Button>
+                            {currentAuctions.map((auction) => (
+                                <tr key={auction.id}>
+                                    <td>
+                                        <img
+                                            src={auction.image}
+                                            alt={`Auction ${auction.id}`}
+                                            style={{
+                                                width: "50px",
+                                                height: "50px",
+                                            }}
+                                        />
+                                    </td>
+                                    <td>{auction.id}</td>
+                                    <td>
+                                        <span
+                                            style={getStatusStyle(
+                                                auction.status
+                                            )}
+                                        >
+                                            {auction.status}
+                                        </span>
+                                    </td>
+                                    <td>{auction.starting_bid}</td>
+                                    <td>{auction.user_id}</td>
+                                    <td>{auction.year_model}</td>
+                                    <td>{auction.created_at}</td>
+                                    <td>{auction.end_time}</td>
+                                    <td>{auction.start_time}</td>
+                                    <td>{auction.make}</td>
+                                    <td>{auction.model}</td>
+                                    <td>{auction.description}</td>
+                                    <td>
+                                        <div className="d-flex">
+                                            <div className="flex-fill text-center">
+                                                <Button
+                                                    variant="warning"
+                                                    size="sm"
+                                                    onClick={() =>
+                                                        handleEdit(auction)
+                                                    }
+                                                >
+                                                    <FaEdit size={16} />
+                                                </Button>
+                                            </div>
+                                            <div className="flex-fill text-center">
+                                                <Button
+                                                    variant="danger"
+                                                    size="sm"
+                                                    onClick={() =>
+                                                        handleDelete(auction.id)
+                                                    }
+                                                >
+                                                    <FaTrash size={16} />
+                                                </Button>
+                                            </div>
                                         </div>
-                                        <div className="flex-fill text-center">
-                                            <Button
-                                                variant="danger"
-                                                size="sm"
-                                                onClick={() => handleDelete(auction.id)}
-                                            >
-                                                <FaTrash size={16} />
-                                            </Button>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                        {currentAuctions.length === 0 && (
-                            <tr>
-                                <td colSpan={13} className="text-center">
-                                    Không có dữ liệu phù hợp.
-                                </td>
-                            </tr>
-                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                            {currentAuctions.length === 0 && (
+                                <tr>
+                                    <td colSpan={13} className="text-center">
+                                        Không có dữ liệu phù hợp.
+                                    </td>
+                                </tr>
+                            )}
                         </tbody>
                     </Table>
                 </Col>
@@ -522,7 +539,8 @@ export default function Auctions() {
                         <Pagination>
                             <Pagination.Prev
                                 onClick={() =>
-                                    currentPage > 1 && handlePageChange(currentPage - 1)
+                                    currentPage > 1 &&
+                                    handlePageChange(currentPage - 1)
                                 }
                                 disabled={currentPage === 1}
                             />
@@ -562,7 +580,10 @@ export default function Auctions() {
                                 type="text"
                                 value={newAuction.image}
                                 onChange={(e) =>
-                                    setNewAuction({ ...newAuction, image: e.target.value })
+                                    setNewAuction({
+                                        ...newAuction,
+                                        image: e.target.value,
+                                    })
                                 }
                             />
                         </Form.Group>
@@ -584,7 +605,10 @@ export default function Auctions() {
                             <Form.Select
                                 value={newAuction.status}
                                 onChange={(e) =>
-                                    setNewAuction({ ...newAuction, status: e.target.value })
+                                    setNewAuction({
+                                        ...newAuction,
+                                        status: e.target.value,
+                                    })
                                 }
                             >
                                 <option value="Live">Live</option>
@@ -624,7 +648,10 @@ export default function Auctions() {
                                 type="date"
                                 value={newAuction.created_at}
                                 onChange={(e) =>
-                                    setNewAuction({ ...newAuction, created_at: e.target.value })
+                                    setNewAuction({
+                                        ...newAuction,
+                                        created_at: e.target.value,
+                                    })
                                 }
                             />
                         </Form.Group>
@@ -634,7 +661,10 @@ export default function Auctions() {
                                 type="date"
                                 value={newAuction.end_time}
                                 onChange={(e) =>
-                                    setNewAuction({ ...newAuction, end_time: e.target.value })
+                                    setNewAuction({
+                                        ...newAuction,
+                                        end_time: e.target.value,
+                                    })
                                 }
                             />
                         </Form.Group>
@@ -644,7 +674,10 @@ export default function Auctions() {
                                 type="date"
                                 value={newAuction.start_time}
                                 onChange={(e) =>
-                                    setNewAuction({ ...newAuction, start_time: e.target.value })
+                                    setNewAuction({
+                                        ...newAuction,
+                                        start_time: e.target.value,
+                                    })
                                 }
                             />
                         </Form.Group>
@@ -654,7 +687,10 @@ export default function Auctions() {
                                 type="text"
                                 value={newAuction.make}
                                 onChange={(e) =>
-                                    setNewAuction({ ...newAuction, make: e.target.value })
+                                    setNewAuction({
+                                        ...newAuction,
+                                        make: e.target.value,
+                                    })
                                 }
                             />
                         </Form.Group>
@@ -664,7 +700,10 @@ export default function Auctions() {
                                 type="text"
                                 value={newAuction.model}
                                 onChange={(e) =>
-                                    setNewAuction({ ...newAuction, model: e.target.value })
+                                    setNewAuction({
+                                        ...newAuction,
+                                        model: e.target.value,
+                                    })
                                 }
                             />
                         </Form.Group>
@@ -675,14 +714,20 @@ export default function Auctions() {
                                 rows={3}
                                 value={newAuction.description}
                                 onChange={(e) =>
-                                    setNewAuction({ ...newAuction, description: e.target.value })
+                                    setNewAuction({
+                                        ...newAuction,
+                                        description: e.target.value,
+                                    })
                                 }
                             />
                         </Form.Group>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowModal(false)}>
+                    <Button
+                        variant="secondary"
+                        onClick={() => setShowModal(false)}
+                    >
                         Cancel
                     </Button>
                     <Button variant="primary" onClick={handleSaveNewAuction}>

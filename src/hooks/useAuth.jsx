@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { redirect, useNavigate } from "react-router-dom";
+import { redirect } from "react-router-dom";
 
 export default function useAuth() {
     const [isLoggingOut, setIsLoggingOut] = useState(false);

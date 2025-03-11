@@ -210,7 +210,7 @@ export default function AddCar() {
                                                 Choose
                                             </option>
                                             {Array.from(
-                                                { length: 2025 - 1960 },
+                                                { length: 2025 - 2000 },
                                                 (_, index) => 2025 - index
                                             ).map((year) => (
                                                 <option key={year} value={year}>

@@ -1,44 +1,39 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { Container, Form, Row, Pagination, Spinner } from "react-bootstrap";
+import { Container, Row, Pagination, Spinner } from "react-bootstrap";
 import CarItem from "./CarItem";
+import { Form, useOutletContext } from "react-router-dom";
+import useCarFilter from "../hooks/useCarFilter";
+import { BODY_STYLES } from "./user/dummy_data";
+import { useState } from "react";
 
 export default function Home() {
-    const [listings, setListings] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [currentPage, setCurrentPage] = useState(1);
+    const { searchTerm } = useOutletContext();
     const itemsPerPage = 2;
 
-    useEffect(() => {
-        axios
-            .get("http://localhost:8080/listings")
-            .then((res) => {
-                const data = res.data.data;
-                setListings(data);
-                console.log(data);
-            })
-            .catch((err) => {
-                console.error("Failed to fetch listings:", err);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
-    }, []);
+    // State variables for filters and sorting
+    const [sortBy, setSortBy] = useState("end_soon");
+    const [transmission, setTransmission] = useState("All");
+    const [bodyStyle, setBodyStyle] = useState("All");
+    const [yearFrom, setYearFrom] = useState(2000);
+    const [yearTo, setYearTo] = useState(2025);
+
+    // Handle filter and sort by changes
+    const handleTransmissionChange = (e) => setTransmission(e.target.value);
+    const handleBodyStyleChange = (e) => setBodyStyle(e.target.value);
+    const handleYearFromChange = (e) => setYearFrom(parseInt(e.target.value));
+    const handleYearToChange = (e) => setYearTo(parseInt(e.target.value));
+    const handleSortByChange = (e) => setSortBy(e.target.value);
+
+    const { loading, currentCars, filteredCars, currentPage, paginate } =
+        useCarFilter({
+            searchTerm,
+            yearFrom,
+            yearTo,
+            transmission,
+            bodyStyle,
+            sortBy,
+        });
 
     document.title = "AutoBid: Car Auctions";
-
-    const filteredCars = listings.filter((car) =>
-        `${car.year_model ?? ""} ${car.make} ${car.model}`
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase())
-    );
-
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentCars = filteredCars.slice(indexOfFirstItem, indexOfLastItem);
-
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     if (loading) {
         return (
@@ -53,24 +48,120 @@ export default function Home() {
         );
     }
 
-    return (
-        <Container>
-            <h1 className="my-4">All Listings</h1>
+    console.log("FILTERED CARS", filteredCars);
+    console.log("CURRENT CARS", currentCars);
 
-            {/* Search Bar */}
-            <Form.Control
-                type="text"
-                placeholder="Search for cars..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="mb-4"
-            />
+    return (
+        <Container expand="lg">
+            <h1>Live Auctions</h1>
+            {/* filter group */}
+
+            <div className="d-flex justify-content-between my-3">
+                <div className="d-flex">
+                    <Form className="d-flex">
+                        {/* year */}
+                        <div className="dropdown">
+                            <button
+                                className="btn btn-outline-light dropdown-toggle text-black border-secondary-subtle"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                            >
+                                {`${yearFrom} - ${yearTo}`}
+                            </button>
+
+                            <ul className="dropdown-menu wide-dropdown-menu">
+                                <li className="d-flex justify-content-between ">
+                                    <select
+                                        className="form-select mx-1"
+                                        aria-label="From Year"
+                                        value={yearFrom}
+                                        onChange={handleYearFromChange}
+                                    >
+                                        {Array.from(
+                                            { length: 26 },
+                                            (_, i) => 2000 + i
+                                        ).map((year) => (
+                                            <option key={year} value={year}>
+                                                {year}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <p className="text-muted">To</p>
+                                    <select
+                                        className="form-select mx-1"
+                                        aria-label="To Year"
+                                        value={yearTo}
+                                        onChange={handleYearToChange}
+                                    >
+                                        {Array.from(
+                                            { length: 26 },
+                                            (_, i) => 2025 - i
+                                        ).map((year) => (
+                                            <option key={year} value={year}>
+                                                {year}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </li>
+                            </ul>
+                        </div>
+
+                        {/* transmission */}
+                        <select
+                            className="form-select mx-1"
+                            aria-label="Transmission"
+                            value={transmission}
+                            onChange={handleTransmissionChange}
+                        >
+                            <option value="All">All Transmissions</option>
+                            <option value="Automatic">Automatic</option>
+                            <option value="Manual">Manual</option>
+                        </select>
+
+                        {/* body style */}
+                        <select
+                            className="form-select mx-1"
+                            aria-label="Body Style"
+                            value={bodyStyle}
+                            onChange={handleBodyStyleChange}
+                        >
+                            <option value="All">All Body Styles</option>
+                            {BODY_STYLES.map((style) => (
+                                <option key={style} value={style}>
+                                    {style}
+                                </option>
+                            ))}
+                        </select>
+                    </Form>
+                </div>
+
+                {/* sort by group */}
+                <div>
+                    <select
+                        className="form-select"
+                        aria-label="Sort By"
+                        value={sortBy}
+                        onChange={handleSortByChange}
+                    >
+                        <option value="end_soon" selected>
+                            Ending Soon
+                        </option>
+                        <option value="newly_listed">Newly listed</option>
+                        <option value="lowest_mileage">Lowest Mileage</option>
+                    </select>
+                </div>
+            </div>
 
             {/* Car Listings */}
             <Row>
-                {currentCars.map((car) => (
-                    <CarItem key={car.id} car={car} />
-                ))}
+                {filteredCars.length === 0 ? (
+                    <p className="text-center text-muted fs-5 my-5">
+                        Found no listings that match your filter criteria.
+                    </p>
+                ) : (
+                    currentCars.map((car) => <CarItem key={car.id} car={car} />)
+                )}
             </Row>
 
             {/* Pagination */}

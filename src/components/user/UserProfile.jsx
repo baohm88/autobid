@@ -124,7 +124,7 @@ export default function UserProfile() {
     }
 
     return (
-        <Col sm className="p-4 min-vh-100">
+        <Col sm className="min-vh-100">
             <h3 className="mb-3">Dashboard</h3>
 
             {/* Profile Card */}
@@ -341,11 +341,16 @@ export default function UserProfile() {
                         </FloatingLabel>
 
                         <Modal.Footer>
-                            <Button variant="light" onClick={handleClose}>
+                            <Button
+                                variant="light"
+                                size="sm"
+                                onClick={handleClose}
+                            >
                                 Close
                             </Button>
                             <Button
                                 variant="danger"
+                                size="sm"
                                 type="submit"
                                 disabled={isLoading}
                             >

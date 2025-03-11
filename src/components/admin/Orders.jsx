@@ -88,7 +88,10 @@ export default function Orders() {
     const totalPages = Math.ceil(sortedOrders.length / itemsPerPage);
     const indexOfLastOrder = currentPage * itemsPerPage;
     const indexOfFirstOrder = indexOfLastOrder - itemsPerPage;
-    const currentOrders = sortedOrders.slice(indexOfFirstOrder, indexOfLastOrder);
+    const currentOrders = sortedOrders.slice(
+        indexOfFirstOrder,
+        indexOfLastOrder
+    );
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -137,7 +140,9 @@ export default function Orders() {
     const handleSaveEdit = () => {
         if (isNewOrder) {
             const newId =
-                orders.length > 0 ? Math.max(...orders.map((o) => o.id)) + 1 : 1;
+                orders.length > 0
+                    ? Math.max(...orders.map((o) => o.id)) + 1
+                    : 1;
             setOrders((prev) => [...prev, { ...orderToEdit, id: newId }]);
         } else {
             setOrders((prev) =>
@@ -152,12 +157,15 @@ export default function Orders() {
     };
 
     return (
-        <Container fluid className="py-4">
+        <Container fluid className="py-3">
             {/* Toolbar */}
             <Row className="mb-3">
                 <Col>
                     <div className="d-flex flex-wrap gap-2">
-                        <InputGroup className="mb-2 mb-md-0" style={{ width: "300px" }}>
+                        <InputGroup
+                            className="mb-2 mb-md-0"
+                            style={{ width: "300px" }}
+                        >
                             <Form.Control
                                 placeholder="Search by Auction ID..."
                                 value={searchValue}
@@ -181,7 +189,6 @@ export default function Orders() {
                             <FaSync className="me-1" />
                             Sync
                         </Button>
-
                     </div>
                 </Col>
             </Row>
@@ -190,12 +197,18 @@ export default function Orders() {
                     <div className="d-flex flex-wrap gap-2">
                         <DropdownButton
                             id="dropdown-sort"
-                            title={`Sort by: ${sortOrder === "newest" ? "Newest" : "Oldest"}`}
-                            variant="primary"  // sử dụng variant success của bootstrap (màu xanh lá)
+                            title={`Sort by: ${
+                                sortOrder === "newest" ? "Newest" : "Oldest"
+                            }`}
+                            variant="primary" // sử dụng variant success của bootstrap (màu xanh lá)
                             onSelect={(eventKey) => setSortOrder(eventKey)}
                         >
-                            <Dropdown.Item eventKey="newest">Newest</Dropdown.Item>
-                            <Dropdown.Item eventKey="oldest">Oldest</Dropdown.Item>
+                            <Dropdown.Item eventKey="newest">
+                                Newest
+                            </Dropdown.Item>
+                            <Dropdown.Item eventKey="oldest">
+                                Oldest
+                            </Dropdown.Item>
                         </DropdownButton>
                     </div>
                 </Col>
@@ -205,75 +218,84 @@ export default function Orders() {
                 <Col>
                     <Table bordered hover responsive>
                         <thead className="table-light">
-                        <tr>
-                            <th style={{ width: "4%" }}>Picture</th>
-                            <th style={{ width: "5%" }}>Auction ID</th>
-                            <th style={{ width: "3%" }}>Order ID</th>
-                            <th style={{ width: "10%" }}>Total Amount</th>
-                            <th>User ID</th>
-                            <th>Order Date</th>
-                            <th style={{ width: "6%" }}>Actions</th>
-                        </tr>
+                            <tr>
+                                <th style={{ width: "4%" }}>Picture</th>
+                                <th style={{ width: "5%" }}>Auction ID</th>
+                                <th style={{ width: "3%" }}>Order ID</th>
+                                <th style={{ width: "10%" }}>Total Amount</th>
+                                <th>User ID</th>
+                                <th>Order Date</th>
+                                <th style={{ width: "6%" }}>Actions</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        {currentOrders.map((order, index) => (
-                            <tr
-                                key={order.id}
-                                style={{
-                                    backgroundColor: index % 2 === 0 ? "#ffffff" : "#f8f9fa",
-                                }}
-                            >
-                                <td>
-                                    {order.picture ? (
-                                        <img
-                                            src={order.picture}
-                                            alt="Picture"
-                                            style={{
-                                                width: "50px",
-                                                height: "50px",
-                                                borderRadius: "50%",
-                                            }}
-                                        />
-                                    ) : (
-                                        <span>No Picture</span>
-                                    )}
-                                </td>
-                                <td>{order.auction_id}</td>
-                                <td>{order.id}</td>
-                                <td>{order.total_amount.toLocaleString()} đ</td>
-                                <td>{order.user_id}</td>
-                                <td>{order.order_date}</td>
-                                <td>
-                                    <div className="d-flex">
-                                        <div className="flex-fill text-center">
-                                            <Button
-                                                variant="warning"
-                                                size="sm"
-                                                onClick={() => handleEdit(order)}
-                                            >
-                                                <FaEdit size={16} />
-                                            </Button>
+                            {currentOrders.map((order, index) => (
+                                <tr
+                                    key={order.id}
+                                    style={{
+                                        backgroundColor:
+                                            index % 2 === 0
+                                                ? "#ffffff"
+                                                : "#f8f9fa",
+                                    }}
+                                >
+                                    <td>
+                                        {order.picture ? (
+                                            <img
+                                                src={order.picture}
+                                                alt="Picture"
+                                                style={{
+                                                    width: "50px",
+                                                    height: "50px",
+                                                    borderRadius: "50%",
+                                                }}
+                                            />
+                                        ) : (
+                                            <span>No Picture</span>
+                                        )}
+                                    </td>
+                                    <td>{order.auction_id}</td>
+                                    <td>{order.id}</td>
+                                    <td>
+                                        {order.total_amount.toLocaleString()} đ
+                                    </td>
+                                    <td>{order.user_id}</td>
+                                    <td>{order.order_date}</td>
+                                    <td>
+                                        <div className="d-flex">
+                                            <div className="flex-fill text-center">
+                                                <Button
+                                                    variant="warning"
+                                                    size="sm"
+                                                    onClick={() =>
+                                                        handleEdit(order)
+                                                    }
+                                                >
+                                                    <FaEdit size={16} />
+                                                </Button>
+                                            </div>
+                                            <div className="flex-fill text-center">
+                                                <Button
+                                                    variant="danger"
+                                                    size="sm"
+                                                    onClick={() =>
+                                                        handleDelete(order.id)
+                                                    }
+                                                >
+                                                    <FaTrash size={16} />
+                                                </Button>
+                                            </div>
                                         </div>
-                                        <div className="flex-fill text-center">
-                                            <Button
-                                                variant="danger"
-                                                size="sm"
-                                                onClick={() => handleDelete(order.id)}
-                                            >
-                                                <FaTrash size={16} />
-                                            </Button>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                        {filteredOrders.length === 0 && (
-                            <tr>
-                                <td colSpan={7} className="text-center">
-                                    No orders found.
-                                </td>
-                            </tr>
-                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                            {filteredOrders.length === 0 && (
+                                <tr>
+                                    <td colSpan={7} className="text-center">
+                                        No orders found.
+                                    </td>
+                                </tr>
+                            )}
                         </tbody>
                     </Table>
                 </Col>
@@ -286,7 +308,8 @@ export default function Orders() {
                         <Pagination>
                             <Pagination.Prev
                                 onClick={() =>
-                                    currentPage > 1 && handlePageChange(currentPage - 1)
+                                    currentPage > 1 &&
+                                    handlePageChange(currentPage - 1)
                                 }
                                 disabled={currentPage === 1}
                             />
@@ -301,7 +324,8 @@ export default function Orders() {
                             ))}
                             <Pagination.Next
                                 onClick={() =>
-                                    currentPage < totalPages && handlePageChange(currentPage + 1)
+                                    currentPage < totalPages &&
+                                    handlePageChange(currentPage + 1)
                                 }
                                 disabled={currentPage === totalPages}
                             />
@@ -341,7 +365,9 @@ export default function Orders() {
                                     onChange={(e) =>
                                         setOrderToEdit({
                                             ...orderToEdit,
-                                            total_amount: Number(e.target.value),
+                                            total_amount: Number(
+                                                e.target.value
+                                            ),
                                         })
                                     }
                                 />

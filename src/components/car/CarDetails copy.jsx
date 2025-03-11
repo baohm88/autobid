@@ -1,8 +1,17 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { Container, Row, Col, Button, Spinner } from "react-bootstrap";
-
+import {
+    Container,
+    Row,
+    Col,
+    Button,
+    Image,
+    Modal,
+    Spinner,
+    Form,
+} from "react-bootstrap";
+import { ChevronLeft, ChevronRight, X } from "react-bootstrap-icons"; // Import icons for navigation
 import CarDetailsTable from "./CarDetailsTable";
 import EndingSoonTable from "./EndingSoonTable";
 import QASection from "./QASection";
@@ -17,28 +26,21 @@ import { UserContext } from "../../context/user-context";
 import { formatter } from "../../utils/formatter";
 import CarImagesSection from "./CarImagesSection";
 import { AlertBox } from "../../UI/AlertBox";
+import IconButton from "../../UI/IconButton";
 import { useCarDetails } from "../../hooks/useCarDetails";
-import ImageViewerModal from "../../UI/ImageViewerModal";
-import BidModal from "../../UI/BidModal";
-import DepositModal from "../../UI/DepositModal";
-import MessageModal from "../../UI/MessageModal";
+
 
 export default function CarDetails() {
     const { id } = useParams();
     const { user, setUser } = useContext(UserContext);
-    const { car, loading: fetching, error } = useCarDetails(id);
-    const [loading, setLoading] = useState(true);
+    const { car, loading, error } = useCarDetails(id);
     const [showModal, setShowModal] = useState(false); // State to control image modal visibility
     const [showBidModal, setShowBidModal] = useState(false); // State to control bid modal visibility
     const [showDepositModal, setShowDepositModal] = useState(false); // State to control deposit modal visibility
-    const [showMessageModal, setShowMessageModal] = useState(false); // State to control message modal visibility
     const [selectedImageIndex, setSelectedImageIndex] = useState(0); // State to track the selected image index
     const [bidAmount, setBidAmount] = useState(""); // State to track the bid amount
     const [depositAmount, setDepositAmount] = useState(""); // State to track the deposit amount
-    const [bidAlert, setBidAlert] = useState("");
-    const [depositAlert, setDepositAlert] = useState("");
-    const [messageModalTitle, setMessageModalTitle] = useState("");
-    const [messageModalMessage, setMessageModalMessage] = useState("");
+    const [alertMessage, setAlertMessage] = useState(""); // State to track alert message
     const navigate = useNavigate();
 
     const isOwner = user && car && user.id === car.user;
@@ -74,7 +76,7 @@ export default function CarDetails() {
     const visibleThumbnails = car?.images?.slice(0, 8) || [];
     const hiddenCount = car?.images?.length > 8 ? car.images.length - 8 : 0;
 
-    if (fetching) {
+    if (loading) {
         return (
             <Container className="text-center mt-5">
                 <Spinner animation="border" role="status">
@@ -120,17 +122,10 @@ export default function CarDetails() {
     };
 
     const handleSaveBid = async () => {
-        if (!bidAmount || isNaN(bidAmount)) {
-            setBidAlert("Please enter a valid bid amount.");
-            return;
-        }
-
-        const bidValue = Number(bidAmount);
-
-        if (bidValue <= car.starting_bid) {
-            setBidAlert(`Bid must be greater than ${car.starting_bid}`);
+        if (parseFloat(bidAmount) <= car.starting_bid) {
+            setAlertMessage(`Bid must be greater than ${car.starting_bid}`);
         } else if (user.balance < parseFloat(bidAmount)) {
-            setBidAlert(
+            setAlertMessage(
                 `Insufficient balance. Your balance must be at least $100 greater than your bid amount.`
             );
         } else {
@@ -158,15 +153,6 @@ export default function CarDetails() {
                 localStorage.setItem("user", JSON.stringify(updatedUser));
 
                 setShowBidModal(false);
-                setMessageModalTitle("Bid Successful");
-                setMessageModalMessage(
-                    "Your bid has been successfully placed."
-                );
-                setShowMessageModal(true);
-
-                setTimeout(() => {
-                    setShowMessageModal(false);
-                }, 3000);
             } catch (error) {
                 setError(error.message);
             } finally {
@@ -176,8 +162,7 @@ export default function CarDetails() {
     };
 
     const handleDeposit = async () => {
-        const depositValue = Number(depositAmount);
-        const newBalance = user.balance + depositValue;
+        const newBalance = user.balance + parseFloat(depositAmount);
         const updatedUser = { ...user, balance: newBalance };
 
         try {
@@ -197,33 +182,20 @@ export default function CarDetails() {
 
             console.log(res.data);
             if (res.data.success === false) {
-                setDepositAlert(res.data.message);
+                setAlertMessage(res.data.message);
                 return;
             }
 
             setUser(updatedUser);
             localStorage.setItem("user", JSON.stringify(updatedUser));
-            setDepositAlert(
-                `Deposit successful! New balance: ${formatter.format(
-                    newBalance
-                )}`
-            );
-            setDepositAmount(""); // Clear the input
-
-            // Ask if user wants to place a bid now
+            setAlertMessage("Deposit successful!");
+            // Keep the deposit modal open and clear the input field
+            setDepositAmount("");
             if (newBalance >= car.starting_bid + 100) {
-                const wantsToBid = window.confirm(
-                    `Deposit successful! New balance: ${formatter.format(
-                        newBalance
-                    )}. Would you like to place a bid now?`
-                );
-                if (wantsToBid) {
-                    setShowDepositModal(false);
-                    setShowBidModal(true);
-                }
+                setShowBidModal(true);
             }
         } catch (error) {
-            setDepositAlert(error.message);
+            setError(error.message);
         } finally {
             setLoading(false);
         }
@@ -242,8 +214,7 @@ export default function CarDetails() {
             </p>
 
             {/* Edit Button (only visible to the owner) */}
-
-            {isOwner && (
+            {isOwner ? (
                 <Button
                     className="mb-3"
                     variant="primary"
@@ -251,18 +222,16 @@ export default function CarDetails() {
                 >
                     Edit Car Info
                 </Button>
-            )}
-
-            {user && (
+            ) : (
                 <>
                     <Button
                         variant="danger"
-                        className="mb-3"
+                        className="my-3"
                         onClick={handlePlaceBid}
                     >
                         <i className="bi bi-currency-dollar"></i> Place Bid
                     </Button>
-                    <Button variant="warning" className="mb-3 ms-2">
+                    <Button variant="warning" className="my-3 ms-2">
                         <i className="bi bi-heart-fill text-danger"></i> Add to
                         Watchlist
                     </Button>
@@ -295,48 +264,155 @@ export default function CarDetails() {
             </Row>
 
             {/* Fullscreen Image Modal */}
-            <ImageViewerModal
+            <Modal
                 show={showModal}
-                imageSrc={car?.images[selectedImageIndex]}
-                onClose={() => setShowModal(false)}
-                onPrev={showPreviousImage}
-                onNext={showNextImage}
-            />
+                onHide={() => setShowModal(false)}
+                centered
+                size="lg"
+                fullscreen
+                contentClassName="bg-dark"
+            >
+                <Modal.Body className="p-0 d-flex align-items-center justify-content-center position-relative">
+                    {/* Close Button (X icon) */}
+                    <IconButton
+                        icon={<X size={20} />}
+                        onClick={() => setShowModal(false)}
+                        style={{
+                            position: "absolute",
+                            right: "20px",
+                            top: "20px",
+                            zIndex: 1000,
+                        }}
+                    />
+
+                    {/* Previous Button */}
+                    <IconButton
+                        icon={<ChevronLeft size={20} />}
+                        onClick={showPreviousImage}
+                        style={{
+                            position: "absolute",
+                            left: "10px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            zIndex: 1000,
+                        }}
+                    />
+
+                    {/* Image */}
+                    <Image
+                        src={car?.images[selectedImageIndex]}
+                        alt={`Fullscreen Image ${selectedImageIndex + 1}`}
+                        fluid
+                        style={{ maxHeight: "90vh", objectFit: "contain" }}
+                    />
+
+                    {/* Next Button */}
+                    <IconButton
+                        icon={<ChevronRight size={20} />}
+                        onClick={showNextImage}
+                        style={{
+                            position: "absolute",
+                            right: "10px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            zIndex: 1000,
+                        }}
+                    />
+                </Modal.Body>
+            </Modal>
 
             {/* Place Bid Modal */}
-            <BidModal
+            <Modal
                 show={showBidModal}
-                onClose={() => setShowBidModal(false)}
-                car={car}
-                user={user}
-                bidAmount={bidAmount}
-                setBidAmount={setBidAmount}
-                onSubmit={handleSaveBid}
-                loading={loading}
-                alertMessage={bidAlert}
-                clearAlert={() => setBidAlert("")}
-            />
+                onHide={() => setShowBidModal(false)}
+                centered
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Place Bid</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Current bid: {formatter.format(car?.starting_bid)}</p>
+                    <p>Current Balance: {formatter.format(user?.balance)}</p>
+                    <AlertBox
+                        variant="danger"
+                        message={alertMessage}
+                        onClose={() => setAlertMessage("")}
+                    />
+                    <Form>
+                        <Form.Group controlId="bidAmount">
+                            <Form.Label>Bid Amount</Form.Label>
+                            <Form.Control
+                                type="number"
+                                value={bidAmount}
+                                onChange={(e) => setBidAmount(e.target.value)}
+                                placeholder="Enter your bid"
+                            />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        variant="light"
+                        onClick={() => setShowBidModal(false)}
+                    >
+                        Close
+                    </Button>
+                    <Button variant="danger" onClick={handleSaveBid}>
+                        {loading ? "Placing Bid..." : "Place Bid"}
+                    </Button>
+                </Modal.Footer>
+            </Modal>
 
             {/* Deposit Modal */}
-            <DepositModal
+            <Modal
                 show={showDepositModal}
-                onClose={() => setShowDepositModal(false)}
-                car={car}
-                user={user}
-                depositAmount={depositAmount}
-                setDepositAmount={setDepositAmount}
-                onSubmit={handleDeposit}
-                alertMessage={depositAlert}
-                clearAlert={() => setDepositAlert("")}
-            />
-
-            {/* Message Modal */}
-            <MessageModal
-                show={showMessageModal}
-                onClose={() => setShowMessageModal(false)}
-                title={messageModalTitle}
-                message={messageModalMessage}
-            />
+                onHide={() => setShowDepositModal(false)}
+                centered
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Insufficient funds!</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <h4> Please deposit to continue.</h4>
+                    <hr />
+                    <p>Current Balance: {formatter.format(user?.balance)}</p>
+                    <p>
+                        Required Amount:{" "}
+                        {formatter.format(
+                            car?.starting_bid + 100 - user?.balance
+                        )}{" "}
+                    </p>
+                    <AlertBox
+                        variant="success"
+                        message={alertMessage}
+                        onClose={() => setAlertMessage("")}
+                    />
+                    <Form>
+                        <Form.Group controlId="depositAmount">
+                            <Form.Label>Deposit Amount</Form.Label>
+                            <Form.Control
+                                type="number"
+                                value={depositAmount}
+                                onChange={(e) =>
+                                    setDepositAmount(e.target.value)
+                                }
+                                placeholder="Enter amount to deposit"
+                            />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        variant="light"
+                        onClick={() => setShowDepositModal(false)}
+                    >
+                        Close
+                    </Button>
+                    <Button variant="danger" onClick={handleDeposit}>
+                        Deposit
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </Container>
     );
 }
