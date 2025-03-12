@@ -1,0 +1,97 @@
+/* CarImagesSection.css */
+.car-image-section {
+    max-height: 500px; /* Prevent tall stretching on XL screens */
+    height: 100%;
+}
+
+.main-image-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.main-image-container {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 10px;
+    background-color: #f8f9fa;
+    cursor: pointer;
+}
+
+.main-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Thumbnail column styling */
+.thumbnail-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+/* Thumbnails now rectangular (landscape) */
+.thumbnail-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: #f1f1f1;
+}
+
+.thumbnail-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* +X overlay button */
+.overlay-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.85;
+    background-color: rgba(0, 0, 0, 0.6) !important;
+    color: #fff !important;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mobile-thumbnail-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    padding-bottom: 5px;
+}
+
+.mobile-thumbnail-container {
+    flex: 0 0 auto;
+    width: 120px;
+    aspect-ratio: 16 / 9;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    background-color: #f1f1f1;
+}
+
+.mobile-thumbnail-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}

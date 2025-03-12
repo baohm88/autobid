@@ -1,8 +1,6 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Container, Row, Col, Button, Spinner } from "react-bootstrap";
-
-import { UserContext } from "../../context/user-context";
 
 // Car components
 import CarDetailsTable from "./CarDetailsTable";
@@ -31,11 +29,12 @@ import { useCountdown } from "../../hooks/useCountDown";
 // utils
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
+import { useAuth } from "../../context/AuthContext";
 dayjs.extend(duration);
 
 export default function CarDetails() {
     const { id } = useParams();
-    const { user, setUser } = useContext(UserContext);
+    const { user, setUser } = useAuth();
     const { car, loading: fetching, error } = useCarDetails(id);
 
     const {
@@ -48,10 +47,6 @@ export default function CarDetails() {
         showDepositModal,
         setShowDepositModal,
         loading,
-        bidAlert,
-        depositAlert,
-        setBidAlert,
-        setDepositAlert,
         handleSaveBid,
         handleDeposit,
     } = useBidHandler({ car, user, setUser });
@@ -222,8 +217,6 @@ export default function CarDetails() {
                 setBidAmount={setBidAmount}
                 onSubmit={handleSaveBid}
                 loading={loading}
-                alertMessage={bidAlert}
-                clearAlert={() => setBidAlert("")}
             />
 
             {/* Deposit Modal */}
@@ -235,8 +228,6 @@ export default function CarDetails() {
                 depositAmount={depositAmount}
                 setDepositAmount={setDepositAmount}
                 onSubmit={handleDeposit}
-                alertMessage={depositAlert}
-                clearAlert={() => setDepositAlert("")}
             />
         </Container>
     );

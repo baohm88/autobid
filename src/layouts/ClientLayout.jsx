@@ -1,11 +1,13 @@
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
-import { useContext, useState } from "react";
-import { UserContext } from "../context/user-context";
+import { useAuth } from "../context/AuthContext";
+import { useState } from "react";
+import useLogOut from "../hooks/useLogOut";
 
 export default function ClientLayout({ children }) {
-    const { user, logOut } = useContext(UserContext);
-    const isLoggedIn = !!user;
+    const { user, isAuthenticated } = useAuth();
+    const logOut = useLogOut();
+
     const [searchTerm, setSearchTerm] = useState("");
     const navigate = useNavigate();
 
@@ -18,8 +20,6 @@ export default function ClientLayout({ children }) {
             navigate("/");
         }
     };
-
-    console.log(isLoggedIn);
 
     return (
         <div>
@@ -96,7 +96,7 @@ export default function ClientLayout({ children }) {
                                 />
                             </form>
 
-                            {isLoggedIn ? (
+                            {isAuthenticated ? (
                                 <>
                                     <div className="d-flex align-items-center">
                                         <i className="bi bi-bell-fill me-1"></i>

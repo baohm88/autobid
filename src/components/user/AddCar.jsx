@@ -1,6 +1,5 @@
 import axios from "axios";
-import { useContext, useState } from "react";
-import { UserContext } from "../../context/user-context";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
     Container,
@@ -17,6 +16,7 @@ import {
 import { BODY_STYLES } from "./dummy_data";
 import * as yup from "yup";
 import { useFormik } from "formik";
+import { useAuth } from "../../context/AuthContext";
 
 const validationSchema = yup.object().shape({
     year_model: yup.string().required("Year is required"),
@@ -45,7 +45,8 @@ export default function AddCar() {
     const [imageUrls, setImageUrls] = useState([]);
     const [loading, setLoading] = useState(false);
     const [imageError, setImageError] = useState("");
-    const { user } = useContext(UserContext);
+    const { user } = useAuth();
+
     const navigate = useNavigate();
 
     document.title = "Add new car";

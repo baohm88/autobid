@@ -2,14 +2,15 @@ import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import useUpdateUser from "../hooks/useUpdateUser";
+import confetti from "canvas-confetti";
+import { playSound } from "../utils/helpers";
+
 export function useBidHandler({ car, user, setUser }) {
     const [bidAmount, setBidAmount] = useState("");
     const [depositAmount, setDepositAmount] = useState("");
     const [showBidModal, setShowBidModal] = useState(false);
     const [showDepositModal, setShowDepositModal] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [bidAlert, setBidAlert] = useState("");
-    const [depositAlert, setDepositAlert] = useState("");
 
     const updateUser = useUpdateUser(setUser);
 
@@ -17,13 +18,10 @@ export function useBidHandler({ car, user, setUser }) {
         if (!user || !car) return;
 
         const amount = parseFloat(bidAmount);
+        const minBid = Math.max(car.current_bid || 0, car.starting_bid);
 
-        if (isNaN(amount) || amount <= car.current_bid) {
-            setBidAlert("Your bid must be higher than the current bid.");
-            return;
-        }
-        if (isNaN(amount) || amount <= car.starting_bid) {
-            setBidAlert("Your bid must be higher than the starting bid.");
+        if (isNaN(amount) || amount <= minBid) {
+            toast.error(`Your bid must be higher than ${minBid}.`);
             return;
         }
 
@@ -31,17 +29,26 @@ export function useBidHandler({ car, user, setUser }) {
         try {
             const res = await axios.post(
                 `http://localhost:8080/listings/add-bid/${car.id}`,
-                { user_id: user.id, bid_amount: bidAmount }
+                { user_id: user.id, bid_amount: amount }
             );
 
             updateUser(res.data);
-            toast.success("Bid placed successfully!");
+            toast.success("🎉 Bid placed successfully!");
             setShowBidModal(false);
+            playSound("/sounds/bid-success.mp3");
+
+            // 💥 Fire confetti!
+            confetti({
+                particleCount: 150,
+                spread: 90,
+                origin: { y: 0.6 },
+            });
+            setShowBidModal(false);
+            setBidAmount("");
         } catch (err) {
             console.error(err);
             const errorMsg =
                 err.response?.data?.message || "Failed to place bid.";
-            setBidAlert(errorMsg);
             toast.error(errorMsg);
         } finally {
             setLoading(false);
@@ -52,28 +59,45 @@ export function useBidHandler({ car, user, setUser }) {
     const handleDeposit = async () => {
         if (!user || !car) return;
 
-        const amount = parseFloat(depositAmount);
-        if (isNaN(amount) || amount < car.starting_bid) {
-            setDepositAlert(`You must deposit at least $${car.starting_bid}`);
+        const requiredDeposit = Math.max(
+            car.starting_bid + 100 - user.balance,
+            0
+        );
+
+        if (depositAmount < requiredDeposit) {
+            toast.error(`You must deposit at least $${requiredDeposit}`);
             return;
         }
+
+        console.log(depositAmount);
 
         setLoading(true);
         try {
             const res = await axios.post(`http://localhost:8080/deposit`, {
                 userId: user.id,
-                amount,
+                amount: depositAmount,
             });
 
+            console.log(res.data);
+
             updateUser(res.data);
-            toast.success("Deposit successful!");
+            toast.success("Deposit added successfully!");
+            setShowBidModal(false);
+            playSound("/sounds/deposit-success.mp3");
+
+            // 💥 Fire confetti!
+            confetti({
+                particleCount: 150,
+                spread: 90,
+                origin: { y: 0.6 },
+            });
             setShowDepositModal(false);
+            setDepositAmount("");
         } catch (err) {
             console.error(err);
             const errorMsg =
                 err.response?.data?.message || "Failed to place bid.";
             toast.error(errorMsg);
-            setDepositAlert(errorMsg);
         } finally {
             setLoading(false);
         }
@@ -89,10 +113,6 @@ export function useBidHandler({ car, user, setUser }) {
         showDepositModal,
         setShowDepositModal,
         loading,
-        bidAlert,
-        depositAlert,
-        setBidAlert,
-        setDepositAlert,
         handleSaveBid,
         handleDeposit,
     };

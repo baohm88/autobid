@@ -1,7 +1,7 @@
 import axios from "axios";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { UserContext } from "../context/user-context";
+import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 
 export default function Login() {
@@ -11,7 +11,7 @@ export default function Login() {
     const [passwordError, setPasswordError] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const { setUser } = useContext(UserContext);
+    const { setUser } = useAuth();
     const navigate = useNavigate();
     document.title = "Account Login";
 
@@ -33,43 +33,27 @@ export default function Login() {
             valid = false;
         }
 
-        if (!valid) {
-            return;
-        }
+        if (!valid) return;
 
-        setLoading(true); // Set loading to true when form is submitted
+        setLoading(true);
 
-        const userData = { username, password };
         try {
-            const res = await axios.post(
-                "http://localhost:8080/login",
-                userData,
-                {
-                    headers: {
-                        "Content-Type": "application/json", // Sending data as JSON
-                    },
-                }
-            );
+            const res = await axios.post("http://localhost:8080/login", {
+                username,
+                password,
+            });
 
-            console.log(res);
+            const resData = res.data;
 
-            const resData = await res.data;
-
-            if (resData.success === true) {
+            if (resData.success) {
                 const user = resData.data[0];
+                setUser(user); // ✅ This will update context and localStorage via AuthContext
+                toast.success("Welcome, " + user.username);
 
-                toast.success("Welcome, " + resData.data[0].username);
-
-                setUser(user);
-
-                localStorage.setItem("user", JSON.stringify(user));
-
-                // Navigate to different routes based on user role
-                if (user.admin === true) {
-                    navigate("/admin");
-                } else {
-                    navigate("/");
-                }
+                // ✅ Slight delay to ensure context updates before navigation
+                setTimeout(() => {
+                    navigate(user.admin ? "/admin" : "/");
+                }, 100);
             } else {
                 toast.error(resData.message);
             }

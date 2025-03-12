@@ -31,3 +31,10 @@ export function getRedirectPathByRole(user) {
         return "/";
     }
 }
+
+
+export const playSound = (soundPath) => {
+    const audio = new Audio(soundPath);
+    audio.play().catch((err) => console.warn("Audio play failed:", err));
+};
+

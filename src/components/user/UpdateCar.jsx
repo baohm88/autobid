@@ -1,6 +1,5 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../context/user-context";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
     Container,
@@ -15,13 +14,15 @@ import {
 } from "react-bootstrap";
 import { BODY_STYLES } from "./dummy_data";
 import { formatDateTimeForInput } from "../../utils/formatter";
+import { useAuth } from "../../context/AuthContext";
 
 export default function UpdateCar() {
     const { id } = useParams();
     const [modified, setModified] = useState("");
     const [hasFlaw, setHasFlaw] = useState("");
     const [uploadedImages, setUploadedImages] = useState([]);
-    const { user } = useContext(UserContext);
+    const { user } = useAuth();
+
     const [car, setCar] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);

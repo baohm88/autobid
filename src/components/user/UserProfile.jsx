@@ -1,26 +1,23 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-    Container,
     Row,
     Col,
     Card,
     Button,
     Modal,
     Form,
-    Image,
     FloatingLabel,
 } from "react-bootstrap";
-// import "bootstrap/dist/css/bootstrap.min.css";
-import { UserContext } from "../../context/user-context";
 import axios from "axios";
 
 import QuickAccessBoxes from "./QuickAccessBoxes";
 import RandomComments from "./RandomComments";
 import { formatter } from "../../utils/formatter";
+import { useAuth } from "../../context/AuthContext";
 
 export default function UserProfile() {
-    const { user, setUser } = useContext(UserContext);
+    const { user, setUser } = useAuth();
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
     const [newAvatar, setNewAvatar] = useState(null); // To store the newly selected avatar
