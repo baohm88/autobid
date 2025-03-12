@@ -1,50 +1,70 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
 import { Container, Row, Col, Button, Spinner } from "react-bootstrap";
 
+import { UserContext } from "../../context/user-context";
+
+// Car components
 import CarDetailsTable from "./CarDetailsTable";
+import VideosSection from "./VideosSection";
 import EndingSoonTable from "./EndingSoonTable";
 import QASection from "./QASection";
-import BidsSection from "./BidsSection";
 import CurrentBidSection from "./CurrentBidSection";
-import EquipmentSection from "./EquipmentSection";
-import ModificationsSection from "./ModificationsSection";
-import FlawsSection from "./FlawsSection";
-import VideosSection from "./VideosSection";
-import ButtonsGroup from "./ButtonsGroup";
-import { UserContext } from "../../context/user-context";
-import { formatter } from "../../utils/formatter";
 import CarImagesSection from "./CarImagesSection";
-import { AlertBox } from "../../UI/AlertBox";
-import { useCarDetails } from "../../hooks/useCarDetails";
-import ImageViewerModal from "../../UI/ImageViewerModal";
+import ButtonsGroup from "./ButtonsGroup";
+import EquipmentSection from "./EquipmentSection";
+import FlawsSection from "./FlawsSection";
+import ModificationsSection from "./ModificationsSection";
+import BidsSection from "./BidsSection";
+
+// UI components
 import BidModal from "../../UI/BidModal";
 import DepositModal from "../../UI/DepositModal";
-import MessageModal from "../../UI/MessageModal";
+import { AlertBox } from "../../UI/AlertBox";
+import ImageViewerModal from "../../UI/ImageViewerModal";
+
+// hooks
+import { useCarDetails } from "../../hooks/useCarDetails";
+import { useBidHandler } from "../../hooks/useBidHandler";
+import { useCountdown } from "../../hooks/useCountDown";
+
+// utils
+import dayjs from "dayjs";
+import duration from "dayjs/plugin/duration";
+dayjs.extend(duration);
 
 export default function CarDetails() {
     const { id } = useParams();
     const { user, setUser } = useContext(UserContext);
     const { car, loading: fetching, error } = useCarDetails(id);
-    const [loading, setLoading] = useState(true);
-    const [showModal, setShowModal] = useState(false); // State to control image modal visibility
-    const [showBidModal, setShowBidModal] = useState(false); // State to control bid modal visibility
-    const [showDepositModal, setShowDepositModal] = useState(false); // State to control deposit modal visibility
-    const [showMessageModal, setShowMessageModal] = useState(false); // State to control message modal visibility
-    const [selectedImageIndex, setSelectedImageIndex] = useState(0); // State to track the selected image index
-    const [bidAmount, setBidAmount] = useState(""); // State to track the bid amount
-    const [depositAmount, setDepositAmount] = useState(""); // State to track the deposit amount
-    const [bidAlert, setBidAlert] = useState("");
-    const [depositAlert, setDepositAlert] = useState("");
-    const [messageModalTitle, setMessageModalTitle] = useState("");
-    const [messageModalMessage, setMessageModalMessage] = useState("");
-    const navigate = useNavigate();
 
+    const {
+        bidAmount,
+        setBidAmount,
+        depositAmount,
+        setDepositAmount,
+        showBidModal,
+        setShowBidModal,
+        showDepositModal,
+        setShowDepositModal,
+        loading,
+        bidAlert,
+        depositAlert,
+        setBidAlert,
+        setDepositAlert,
+        handleSaveBid,
+        handleDeposit,
+    } = useBidHandler({ car, user, setUser });
+
+    const [showModal, setShowModal] = useState(false);
+    const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
+    const { countdown, isExpired } = useCountdown(car?.end_time);
+
+    const navigate = useNavigate();
     const isOwner = user && car && user.id === car.user;
 
     // Handle keyboard navigation
-
     useEffect(() => {
         const handleKeyDown = (event) => {
             if (showModal) {
@@ -62,6 +82,7 @@ export default function CarDetails() {
         };
     }, [showModal, selectedImageIndex]);
 
+    // Set page title
     useEffect(() => {
         if (car) {
             document.title = `${car.year_model} ${car.make} ${car.model}`;
@@ -70,29 +91,6 @@ export default function CarDetails() {
             document.title = "Listing Details"; // cleanup (optional)
         };
     }, [car]);
-
-    const visibleThumbnails = car?.images?.slice(0, 8) || [];
-    const hiddenCount = car?.images?.length > 8 ? car.images.length - 8 : 0;
-
-    if (fetching) {
-        return (
-            <Container className="text-center mt-5">
-                <Spinner animation="border" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                </Spinner>
-            </Container>
-        );
-    }
-
-    if (error) {
-        return (
-            <AlertBox
-                variant="danger"
-                message={error}
-                onClose={() => setError(null)}
-            />
-        );
-    }
 
     const openModal = (index) => {
         setSelectedImageIndex(index);
@@ -119,115 +117,22 @@ export default function CarDetails() {
         }
     };
 
-    const handleSaveBid = async () => {
-        if (!bidAmount || isNaN(bidAmount)) {
-            setBidAlert("Please enter a valid bid amount.");
-            return;
-        }
+    if (fetching) {
+        return (
+            <Container className="text-center mt-5">
+                <Spinner animation="border" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </Spinner>
+            </Container>
+        );
+    }
 
-        const bidValue = Number(bidAmount);
+    if (error) {
+        return <AlertBox variant="danger" message={error} onClose={() => {}} />;
+    }
 
-        if (bidValue <= car.starting_bid) {
-            setBidAlert(`Bid must be greater than ${car.starting_bid}`);
-        } else if (user.balance < parseFloat(bidAmount)) {
-            setBidAlert(
-                `Insufficient balance. Your balance must be at least $100 greater than your bid amount.`
-            );
-        } else {
-            // Logic to handle placing a bid
-            try {
-                setLoading(true);
-                const res = await axios.post(
-                    "http://localhost:8080/listings/add-bid/" + car.id,
-                    {
-                        user_id: user.id,
-                        bid_amount: bidAmount,
-                    },
-                    {
-                        headers: {
-                            "Content-Type": "application/json", // Sending data as JSON
-                        },
-                    }
-                );
-
-                console.log(res.data);
-                // Update user balance after placing the bid
-                const newBalance = user.balance - parseFloat(bidAmount);
-                const updatedUser = { ...user, balance: newBalance };
-                setUser(updatedUser);
-                localStorage.setItem("user", JSON.stringify(updatedUser));
-
-                setShowBidModal(false);
-                setMessageModalTitle("Bid Successful");
-                setMessageModalMessage(
-                    "Your bid has been successfully placed."
-                );
-                setShowMessageModal(true);
-
-                setTimeout(() => {
-                    setShowMessageModal(false);
-                }, 3000);
-            } catch (error) {
-                setError(error.message);
-            } finally {
-                setLoading(false);
-            }
-        }
-    };
-
-    const handleDeposit = async () => {
-        const depositValue = Number(depositAmount);
-        const newBalance = user.balance + depositValue;
-        const updatedUser = { ...user, balance: newBalance };
-
-        try {
-            setLoading(true);
-            const res = await axios.post(
-                "http://localhost:8080/deposit",
-                {
-                    userId: user.id,
-                    amount: depositAmount,
-                },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-
-            console.log(res.data);
-            if (res.data.success === false) {
-                setDepositAlert(res.data.message);
-                return;
-            }
-
-            setUser(updatedUser);
-            localStorage.setItem("user", JSON.stringify(updatedUser));
-            setDepositAlert(
-                `Deposit successful! New balance: ${formatter.format(
-                    newBalance
-                )}`
-            );
-            setDepositAmount(""); // Clear the input
-
-            // Ask if user wants to place a bid now
-            if (newBalance >= car.starting_bid + 100) {
-                const wantsToBid = window.confirm(
-                    `Deposit successful! New balance: ${formatter.format(
-                        newBalance
-                    )}. Would you like to place a bid now?`
-                );
-                if (wantsToBid) {
-                    setShowDepositModal(false);
-                    setShowBidModal(true);
-                }
-            }
-        } catch (error) {
-            setDepositAlert(error.message);
-        } finally {
-            setLoading(false);
-        }
-    };
+    const visibleThumbnails = car?.images?.slice(0, 8) || [];
+    const hiddenCount = car?.images?.length > 8 ? car.images.length - 8 : 0;
 
     return (
         <Container className="py-4">
@@ -237,9 +142,11 @@ export default function CarDetails() {
                 </h1>
             )}
             <p className="text-muted">
-                ~{car.mileage} Miles, {car.transmission} {car.engine} engine,{" "}
+                ~{car.mileage} miles, {car.transmission} {car.engine} engine,{" "}
                 {car.exterior_color} exterior
             </p>
+
+            <p className="text-danger fw-semibold">⏳ {countdown}</p>
 
             {/* Edit Button (only visible to the owner) */}
 
@@ -253,15 +160,17 @@ export default function CarDetails() {
                 </Button>
             )}
 
-            {user && (
+            {user && !isOwner && (
                 <>
-                    <Button
-                        variant="danger"
-                        className="mb-3"
-                        onClick={handlePlaceBid}
-                    >
-                        <i className="bi bi-currency-dollar"></i> Place Bid
-                    </Button>
+                    {!isExpired && (
+                        <Button
+                            variant="danger"
+                            className="mb-3"
+                            onClick={handlePlaceBid}
+                        >
+                            <i className="bi bi-currency-dollar"></i> Place Bid
+                        </Button>
+                    )}
                     <Button variant="warning" className="mb-3 ms-2">
                         <i className="bi bi-heart-fill text-danger"></i> Add to
                         Watchlist
@@ -328,14 +237,6 @@ export default function CarDetails() {
                 onSubmit={handleDeposit}
                 alertMessage={depositAlert}
                 clearAlert={() => setDepositAlert("")}
-            />
-
-            {/* Message Modal */}
-            <MessageModal
-                show={showMessageModal}
-                onClose={() => setShowMessageModal(false)}
-                title={messageModalTitle}
-                message={messageModalMessage}
             />
         </Container>
     );

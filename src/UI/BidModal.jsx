@@ -1,4 +1,4 @@
-import { Modal, Button, Form } from "react-bootstrap";
+import { Modal, Button, Form, Spinner } from "react-bootstrap";
 
 import { AlertBox } from "./AlertBox";
 import { formatter } from "../utils/formatter";
@@ -22,7 +22,12 @@ export default function BidModal({
             </Modal.Header>
             <Modal.Body>
                 <p>Current bid: {formatter.format(car?.starting_bid)}</p>
-                <p>Current Balance: {formatter.format(user?.balance)}</p>
+                <p>
+                    Current Balance:{" "}
+                    {user?.balance != null
+                        ? formatter.format(Number(user.balance))
+                        : "N/A"}
+                </p>
                 <AlertBox
                     variant="danger"
                     message={alertMessage}
@@ -45,7 +50,11 @@ export default function BidModal({
                     Close
                 </Button>
                 <Button variant="danger" onClick={onSubmit} disabled={loading}>
-                    {loading ? "Placing Bid..." : "Place Bid"}
+                    {loading ? (
+                        <Spinner size="sm" animation="border" />
+                    ) : (
+                        "Place Bid"
+                    )}
                 </Button>
             </Modal.Footer>
         </Modal>

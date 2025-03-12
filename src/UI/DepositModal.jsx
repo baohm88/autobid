@@ -13,7 +13,11 @@ export default function DepositModal({
     alertMessage,
     clearAlert,
 }) {
-    const requiredAmount = car?.starting_bid + 100 - user?.balance;
+    // 🛡️ Safely calculate required amount
+    const requiredAmount =
+        car && user
+            ? Math.max(car.starting_bid + 100 - user.balance, 0)
+            : 0;
 
     return (
         <Modal show={show} onHide={onClose} centered>
@@ -23,8 +27,18 @@ export default function DepositModal({
             <Modal.Body>
                 <h4>Please deposit to continue.</h4>
                 <hr />
-                <p>Current Balance: {formatter.format(user?.balance)}</p>
-                <p>Required Amount: {formatter.format(requiredAmount)}</p>
+                <p>
+                    Current Balance:{" "}
+                    {user?.balance != null
+                        ? formatter.format(user.balance)
+                        : "N/A"}
+                </p>
+                <p>
+                    Required Amount:{" "}
+                    {car && user
+                        ? formatter.format(requiredAmount)
+                        : "N/A"}
+                </p>
                 <AlertBox
                     variant="success"
                     message={alertMessage}
@@ -36,7 +50,9 @@ export default function DepositModal({
                         <Form.Control
                             type="number"
                             value={depositAmount}
-                            onChange={(e) => setDepositAmount(e.target.value)}
+                            onChange={(e) =>
+                                setDepositAmount(Number(e.target.value))
+                            }
                             placeholder="Enter amount to deposit"
                         />
                     </Form.Group>
@@ -50,7 +66,10 @@ export default function DepositModal({
                     variant="danger"
                     onClick={onSubmit}
                     disabled={
-                        depositAmount <= 0 || depositAmount < requiredAmount
+                        !user ||
+                        !car ||
+                        depositAmount <= 0 ||
+                        depositAmount < requiredAmount
                     }
                 >
                     Deposit

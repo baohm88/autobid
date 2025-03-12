@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Card, Badge } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
+import { useCountdown } from "../hooks/useCountDown";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import { formatter } from "../utils/formatter";
@@ -20,37 +21,7 @@ const maxLength = 50;
 
 export default function CarItem({ car }) {
     const [showFullText, setShowFullText] = useState(false);
-    const [countdown, setCountdown] = useState("");
-
-    useEffect(() => {
-        const updateCountdown = () => {
-            const now = dayjs();
-            const end = dayjs(car.end_time);
-            const diff = end.diff(now);
-
-            if (diff <= 0) {
-                setCountdown("Auction ended");
-                return;
-            }
-
-            const duration = dayjs.duration(diff);
-            const days = duration.days();
-            const hours = duration.hours();
-            const minutes = duration.minutes();
-            const seconds = duration.seconds();
-
-            if (diff < 60 * 60 * 1000) {
-                // less than 1 hour
-                setCountdown(`${minutes}m ${seconds}s left`);
-            } else {
-                setCountdown(`${days}d ${hours}h ${minutes}m ${seconds}s left`);
-            }
-        };
-
-        updateCountdown();
-        const interval = setInterval(updateCountdown, 1000);
-        return () => clearInterval(interval);
-    }, [car.end_time]);
+    const { countdown, isExpired } = useCountdown(car.end_time);
 
     const truncateText = (text) => {
         return text.length <= maxLength
@@ -62,21 +33,6 @@ export default function CarItem({ car }) {
     const displayText = showFullText ? text : truncateText(text);
 
     const badgeText = getBadge(car);
-
-    function getCountdown(endTime) {
-        const now = dayjs();
-        const end = dayjs(endTime);
-        const diff = end.diff(now);
-
-        if (diff <= 0) return "Auction ended";
-
-        const duration = dayjs.duration(diff);
-        const days = duration.days();
-        const hours = duration.hours();
-        const minutes = duration.minutes();
-
-        return `${days}d ${hours}h ${minutes}m left`;
-    }
 
     return (
         <Card className="h-100">
@@ -102,34 +58,6 @@ export default function CarItem({ car }) {
                 </NavLink>
             </div>
 
-            {/* <Card.Body>
-                <Card.Title>
-                    {car.year_model} {car.make} {car.model}
-                </Card.Title>
-                <Card.Text title={text}>
-                    {displayText}
-                    {text.length > maxLength && (
-                        <span
-                            style={{ color: "blue", cursor: "pointer" }}
-                            onClick={() => setShowFullText(!showFullText)}
-                        >
-                            {showFullText ? " Show less" : " Show more"}
-                        </span>
-                    )}
-                </Card.Text>
-
-                <Card.Text className="text-muted">
-                    <strong>⏳ {getCountdown(car.end_time)}</strong>
-                </Card.Text>
-                <Card.Text>
-                    <strong>
-                        Starting Bid: ${car.starting_bid.toLocaleString()}
-                    </strong>
-                </Card.Text>
-                <NavLink to={`listings/${car.id}`}>
-                    <button className="btn btn-primary w-100">Place Bid</button>
-                </NavLink>
-            </Card.Body> */}
             <Card.Body>
                 <Card.Title>
                     {car.year_model} {car.make} {car.model}
@@ -164,8 +92,12 @@ export default function CarItem({ car }) {
             </Card.Body>
             <Card.Footer>
                 <NavLink to={`listings/${car.id}`}>
-                    {" "}
-                    <button className="btn btn-danger w-100">Place Bid</button>
+                    <button
+                        className="btn btn-danger w-100"
+                        disabled={isExpired}
+                    >
+                        {isExpired ? "Auction Ended" : "Place Bid"}
+                    </button>
                 </NavLink>
             </Card.Footer>
         </Card>
