@@ -1,27 +1,20 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
-import {
-    Form,
-    Button,
-    Container,
-    Alert,
-    Image,
-    FloatingLabel,
-} from "react-bootstrap";
+import { Form, Button, Container, Image, FloatingLabel } from "react-bootstrap";
 import {
     hasMinLength,
     isEmail,
     isEmpty,
     isEqualsToOtherValue,
 } from "../utils/validation";
+import { toast } from "react-toastify";
 
 export default function Register() {
     const [emailError, setEmailError] = useState("");
     const [usernameError, setUsernameError] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [password2Error, setPassword2Error] = useState("");
-    const [serverError, setServerError] = useState("");
     const [avatar, setAvatar] = useState(null); // To store the selected avatar image
     const [avatarPreview, setAvatarPreview] = useState(null); // To display the avatar preview
     const [loading, setLoading] = useState(false); // State to track loading status
@@ -78,35 +71,35 @@ export default function Register() {
         // Validate email
         if (isEmpty(userData.email) || !isEmail(userData.email)) {
             setEmailError("Please enter a valid email");
-            setLoading(false); // Set loading to false if validation fails
+            setLoading(false);
             return;
         }
 
         // Validate username
         if (isEmpty(userData.username)) {
             setUsernameError("Username is required");
-            setLoading(false); // Set loading to false if validation fails
+            setLoading(false);
             return;
         }
 
         // Validate password
         if (isEmpty(userData.password)) {
             setPasswordError("Password is required");
-            setLoading(false); // Set loading to false if validation fails
+            setLoading(false);
             return;
         }
 
         // Validate confirm password
         if (isEmpty(userData.password2)) {
             setPassword2Error("Confirm password is required");
-            setLoading(false); // Set loading to false if validation fails
+            setLoading(false);
             return;
         }
 
         // Check if passwords match
         if (!isEqualsToOtherValue(userData.password, userData.password2)) {
             setPassword2Error("Passwords must match");
-            setLoading(false); // Set loading to false if validation fails
+            setLoading(false);
             return;
         }
 
@@ -116,8 +109,8 @@ export default function Register() {
             if (avatarUrl) {
                 userData.image_url = avatarUrl; // Add Cloudinary URL to userData
             } else {
-                setServerError("Failed to upload avatar.");
-                setLoading(false); // Set loading to false if avatar upload fails
+                toast.error("Failed to upload avatar.");
+                setLoading(false);
                 return;
             }
         }
@@ -138,13 +131,14 @@ export default function Register() {
             console.log(response);
 
             if (response.data.success) {
-                alert(response.data.message);
+                toast.success(response.data.message);
+
                 navigate("/login");
             } else {
-                setServerError(response.data.message);
+                toast.error(response.data.message);
             }
         } catch (error) {
-            setServerError("Registration request failed.");
+            toast.error("Registration request failed.");
             console.log(error);
         } finally {
             setLoading(false); // Set loading to false after request is complete
@@ -154,17 +148,12 @@ export default function Register() {
     return (
         <Container className="mt-4">
             <h2 className="text-center">Register a new account</h2>
-            {serverError && <Alert variant="danger">{serverError}</Alert>}
+            {/* {serverError && <Alert variant="danger">{serverError}</Alert>} */}
             <Form onSubmit={handleSubmit} className="col-md-6 col-lg-4 mx-auto">
-                <FloatingLabel
-                    controlId="email"
-                    label="Email address"
-                    className="mb-3"
-                >
+                <FloatingLabel controlId="email" label="Email" className="mb-3">
                     <Form.Control
                         type="email"
                         name="email"
-                        placeholder="Enter your email address"
                         className={emailError ? "is-invalid" : ""}
                     />
                     {emailError && (
@@ -180,7 +169,6 @@ export default function Register() {
                     <Form.Control
                         type="text"
                         name="username"
-                        placeholder="Enter your username"
                         className={usernameError ? "is-invalid" : ""}
                     />
                     {usernameError && (
@@ -196,7 +184,6 @@ export default function Register() {
                     <Form.Control
                         type="password"
                         name="password"
-                        placeholder="Password"
                         className={passwordError ? "is-invalid" : ""}
                     />
                     {passwordError && (
@@ -212,18 +199,12 @@ export default function Register() {
                     <Form.Control
                         type="password"
                         name="password2"
-                        placeholder="Confirm Password"
                         className={password2Error ? "is-invalid" : ""}
                     />
                     {password2Error && (
                         <div className="invalid-feedback">{password2Error}</div>
                     )}
                 </FloatingLabel>
-
-                <Form.Group className="mb-3" controlId="balance">
-                    <Form.Label>Balance:</Form.Label>
-                    <Form.Control type="number" name="balance" />
-                </Form.Group>
 
                 <Form.Group className="mb-3" controlId="avatar">
                     <Form.Label>Avatar:</Form.Label>

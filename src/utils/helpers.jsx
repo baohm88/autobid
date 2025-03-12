@@ -22,22 +22,12 @@ export function getLiveCountdown(endTime) {
     }
 }
 
+export function getRedirectPathByRole(user) {
+    if (!user || !user.admin) return "/";
 
-export function updateUserFromResponse(data, setUser) {
-    const rawUser = data?.data?.[0];
-
-    if (!rawUser) {
-        console.warn("No data found in response.");
-        return;
-    }
-
-    // Check if user is nested under `f_user_id` (bid case)
-    const updatedUser = rawUser.f_user_id ? rawUser.f_user_id : rawUser;
-
-    if (updatedUser) {
-        localStorage.setItem("user", JSON.stringify(updatedUser));
-        setUser(updatedUser);
+    if (user.admin === true) {
+        return "/admin";
     } else {
-        console.warn("Could not find a valid user object in response.");
+        return "/";
     }
 }

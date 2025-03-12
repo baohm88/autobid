@@ -2,12 +2,11 @@ import axios from "axios";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/user-context";
-import { Alert } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 export default function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState(null);
     const [usernameError, setUsernameError] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [loading, setLoading] = useState(false);
@@ -59,11 +58,10 @@ export default function Login() {
             if (resData.success === true) {
                 const user = resData.data[0];
 
-                setError(null); // Clear any previous error
-                alert("Welcome, " + resData.data[0].username);
+                toast.success("Welcome, " + resData.data[0].username);
 
                 setUser(user);
-                // Save the user object to localStorage as a JSON string
+
                 localStorage.setItem("user", JSON.stringify(user));
 
                 // Navigate to different routes based on user role
@@ -73,13 +71,13 @@ export default function Login() {
                     navigate("/");
                 }
             } else {
-                setError(resData.message); // Set error message
+                toast.error(resData.message);
             }
         } catch (error) {
             console.error("Login request failed:", error);
-            setError("Login failed. Please try again."); // Set generic error message
+            toast.error("Login failed. Please try again.");
         } finally {
-            setLoading(false); // Set loading to false after request is complete
+            setLoading(false);
         }
     }
 
@@ -87,25 +85,12 @@ export default function Login() {
         <div className="container mt-4">
             <h2 className="text-center">Login</h2>
 
-            {/* Dismissible Alert for Error Messages */}
-            {error && (
-                <Alert
-                    variant="danger"
-                    onClose={() => setError(null)}
-                    dismissible
-                    className="col-md-6 col-lg-4 mx-auto"
-                >
-                    {error}
-                </Alert>
-            )}
-
             <form className="col-md-6 col-lg-4 mx-auto" onSubmit={handleSubmit}>
                 <div className="form-floating mb-3">
                     <input
                         className={`form-control ${
                             usernameError ? "is-invalid" : ""
                         }`}
-                        placeholder="Username"
                         type="text"
                         id="username"
                         name="username"
@@ -123,14 +108,13 @@ export default function Login() {
                         className={`form-control ${
                             passwordError ? "is-invalid" : ""
                         }`}
-                        placeholder="Password"
                         type="password"
                         id="password"
                         name="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="password">Password:</label>
                     {passwordError && (
                         <div className="invalid-feedback">{passwordError}</div>
                     )}
@@ -138,7 +122,7 @@ export default function Login() {
 
                 <button
                     className="btn btn-danger w-100 py-2 mb-3"
-                    disabled={loading} 
+                    disabled={loading}
                 >
                     {loading ? "Signing in..." : "Sign in"}
                 </button>

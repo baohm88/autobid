@@ -29,23 +29,23 @@ export default function useAuth() {
     }, [user]);
 
     const logOut = () => {
-        if (isLoggingOut) return; // Prevent multiple logout requests
+        if (isLoggingOut) return;
 
         if (window.confirm("Are you sure you want to log out?")) {
-            setIsLoggingOut(true); // Set logging out state
+            setIsLoggingOut(true);
 
             // Navigate to home page first
             redirect("/");
 
             // Delay clearing the user state and localStorage
             setTimeout(() => {
-                setUser(null); // Clear user state
-                localStorage.removeItem("user"); // Clear user from localStorage
+                setUser(null);
+                localStorage.removeItem("user");
 
                 if (isMounted.current) {
-                    setIsLoggingOut(false); // Reset logging out state
+                    setIsLoggingOut(false);
                 }
-            }, 100); // Adjust the delay as needed
+            }, 200); // Adjust the delay as needed
         }
     };
 

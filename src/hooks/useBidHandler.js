@@ -1,9 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { updateUserFromResponse } from "../utils/helpers";
 import useUpdateUser from "../hooks/useUpdateUser";
-
 export function useBidHandler({ car, user, setUser }) {
     const [bidAmount, setBidAmount] = useState("");
     const [depositAmount, setDepositAmount] = useState("");
