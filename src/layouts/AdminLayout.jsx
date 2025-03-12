@@ -1,7 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom";
 import { useState } from "react";
 import AdminSidebar from "../components/admin/AdminSidebar";
-import { Button } from "react-bootstrap";
 
 export default function AdminLayout() {
     const location = useLocation();
@@ -16,7 +15,10 @@ export default function AdminLayout() {
     return (
         <div className="d-flex min-vh-100">
             {showSidebar && (
-                <AdminSidebar collapsed={collapsed} toggleSidebar={toggleSidebar} />
+                <AdminSidebar
+                    collapsed={collapsed}
+                    toggleSidebar={toggleSidebar}
+                />
             )}
             <div className="flex-grow-1 p-3">
                 <Outlet />

@@ -25,7 +25,7 @@ export default function ClientLayout({ children }) {
         <div>
             <header>
                 <nav className="navbar navbar-expand-md bg-body-tertiary">
-                    <div className="container-xxl">
+                    <div className="container">
                         <NavLink className="navbar-brand" to={"/"}>
                             <img
                                 src="/logo-autobid.svg"

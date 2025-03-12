@@ -7,7 +7,6 @@ import { useState } from "react";
 
 export default function Home() {
     const { searchTerm } = useOutletContext();
-    const itemsPerPage = 2;
 
     // State variables for filters and sorting
     const [sortBy, setSortBy] = useState("end_soon");
@@ -23,15 +22,21 @@ export default function Home() {
     const handleYearToChange = (e) => setYearTo(parseInt(e.target.value));
     const handleSortByChange = (e) => setSortBy(e.target.value);
 
-    const { loading, currentCars, filteredCars, currentPage, paginate } =
-        useCarFilter({
-            searchTerm,
-            yearFrom,
-            yearTo,
-            transmission,
-            bodyStyle,
-            sortBy,
-        });
+    const {
+        loading,
+        currentCars,
+        filteredCars,
+        currentPage,
+        paginate,
+        totalPages,
+    } = useCarFilter({
+        searchTerm,
+        yearFrom,
+        yearTo,
+        transmission,
+        bodyStyle,
+        sortBy,
+    });
 
     document.title = "AutoBid: Car Auctions";
 
@@ -47,9 +52,6 @@ export default function Home() {
             </div>
         );
     }
-
-    console.log("FILTERED CARS", filteredCars);
-    console.log("CURRENT CARS", currentCars);
 
     return (
         <Container expand="lg">
@@ -71,7 +73,7 @@ export default function Home() {
                             </button>
 
                             <ul className="dropdown-menu wide-dropdown-menu">
-                                <li className="d-flex justify-content-between ">
+                                <li className="d-flex justify-content-between align-items-center">
                                     <select
                                         className="form-select mx-1"
                                         aria-label="From Year"
@@ -87,6 +89,7 @@ export default function Home() {
                                             </option>
                                         ))}
                                     </select>
+
                                     <p className="text-muted">To</p>
                                     <select
                                         className="form-select mx-1"
@@ -154,21 +157,31 @@ export default function Home() {
             </div>
 
             {/* Car Listings */}
-            <Row>
+            <div className="car-listings">
                 {filteredCars.length === 0 ? (
                     <p className="text-center text-muted fs-5 my-5">
                         Found no listings that match your filter criteria.
                     </p>
                 ) : (
-                    currentCars.map((car) => <CarItem key={car.id} car={car} />)
+                    currentCars.map((car) => (
+                        <div className="car-card" key={car.id}>
+                            <CarItem car={car} />
+                        </div>
+                    ))
                 )}
-            </Row>
+            </div>
 
             {/* Pagination */}
-            <Pagination className="justify-content-center">
-                {Array.from(
-                    { length: Math.ceil(filteredCars.length / itemsPerPage) },
-                    (_, index) => (
+            {totalPages > 1 && (
+                <Pagination className="justify-content-center">
+                    {/* Previous button */}
+                    <Pagination.Prev
+                        onClick={() => paginate(currentPage - 1)}
+                        disabled={currentPage === 1}
+                    />
+
+                    {/* Page numbers */}
+                    {Array.from({ length: totalPages }, (_, index) => (
                         <Pagination.Item
                             key={index + 1}
                             active={currentPage === index + 1}
@@ -176,9 +189,15 @@ export default function Home() {
                         >
                             {index + 1}
                         </Pagination.Item>
-                    )
-                )}
-            </Pagination>
+                    ))}
+
+                    {/* Next button */}
+                    <Pagination.Next
+                        onClick={() => paginate(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                    />
+                </Pagination>
+            )}
         </Container>
     );
 }

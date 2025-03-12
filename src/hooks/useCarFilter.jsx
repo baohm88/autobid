@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -13,7 +12,7 @@ export default function useCarFilter({
     const [listings, setListings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 2;
+    const itemsPerPage = 6;
 
     useEffect(() => {
         axios
@@ -73,8 +72,12 @@ export default function useCarFilter({
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentCars = filtered.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(filtered.length / itemsPerPage);
 
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+    const paginate = (pageNumber) => {
+        setCurrentPage(pageNumber);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
 
     return {
         listings,
@@ -83,5 +86,6 @@ export default function useCarFilter({
         filteredCars: filtered,
         currentPage,
         paginate,
+        totalPages,
     };
 }
