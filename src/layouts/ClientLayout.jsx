@@ -99,7 +99,7 @@ export default function ClientLayout({ children }) {
                             {isAuthenticated ? (
                                 <>
                                     <div className="d-flex align-items-center">
-                                        <i className="bi bi-bell-fill me-1"></i>
+                                        <i className="bi bi-bell-fill me-1 me-2"></i>
                                         <div className="dropdown mx-3">
                                             <div
                                                 className="dropdown-toggle"
@@ -135,7 +135,7 @@ export default function ClientLayout({ children }) {
                                                                 "/user-products"
                                                             }
                                                         >
-                                                            <i className="bi bi-ev-front-fill"></i>{" "}
+                                                            <i className="bi bi-ev-front-fill me-2"></i>{" "}
                                                             My Products
                                                         </NavLink>
                                                     </li>
@@ -150,7 +150,7 @@ export default function ClientLayout({ children }) {
                                                             }
                                                             to={"/user-bids"}
                                                         >
-                                                            <i className="bi bi-envelope-arrow-up-fill"></i>{" "}
+                                                            <i className="bi bi-envelope-arrow-up-fill me-2"></i>{" "}
                                                             My Bids
                                                         </NavLink>
                                                     </li>
@@ -165,7 +165,7 @@ export default function ClientLayout({ children }) {
                                                             }
                                                             to={"/user-orders"}
                                                         >
-                                                            <i className="bi bi-briefcase-fill"></i>{" "}
+                                                            <i className="bi bi-briefcase-fill me-2"></i>{" "}
                                                             My Orders
                                                         </NavLink>
                                                     </li>
@@ -180,7 +180,7 @@ export default function ClientLayout({ children }) {
                                                             }
                                                             to={"/user-wallet"}
                                                         >
-                                                            <i className="bi bi-wallet-fill"></i>{" "}
+                                                            <i className="bi bi-wallet-fill me-2"></i>{" "}
                                                             My Wallet
                                                         </NavLink>
                                                     </li>
@@ -197,7 +197,7 @@ export default function ClientLayout({ children }) {
                                                                 "/account/dashboard"
                                                             }
                                                         >
-                                                            <i className="bi bi-clipboard-data-fill"></i>{" "}
+                                                            <i className="bi bi-clipboard-data-fill me-2"></i>{" "}
                                                             Dashboard
                                                         </NavLink>
                                                     </li>
@@ -212,7 +212,7 @@ export default function ClientLayout({ children }) {
                                                             }
                                                             to={"/watch-list"}
                                                         >
-                                                            <i className="bi bi-heart-fill text-danger"></i>{" "}
+                                                            <i className="bi bi-heart-fill text-danger me-2"></i>{" "}
                                                             Favorites
                                                         </NavLink>
                                                     </li>
@@ -221,7 +221,7 @@ export default function ClientLayout({ children }) {
                                                             className="nav-link btn btn-link text-start w-100"
                                                             onClick={logOut}
                                                         >
-                                                            <i className="bi bi-box-arrow-right"></i>{" "}
+                                                            <i className="bi bi-box-arrow-right me-2"></i>{" "}
                                                             Logout
                                                         </button>
                                                     </li>
@@ -233,7 +233,7 @@ export default function ClientLayout({ children }) {
                             ) : (
                                 <button className="btn btn-success btn-sm mt-2">
                                     <NavLink className="nav-link" to={"/login"}>
-                                        <i className="bi bi-box-arrow-left"></i>{" "}
+                                        <i className="bi bi-box-arrow-left me-2"></i>{" "}
                                         Login
                                     </NavLink>
                                 </button>

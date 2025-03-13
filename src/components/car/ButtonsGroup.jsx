@@ -1,85 +1,90 @@
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, OverlayTrigger, Tooltip, Badge } from "react-bootstrap";
 import { BiTime, BiUpArrowAlt, BiHash, BiChat } from "react-icons/bi";
-import { useEffect, useState } from "react";
 import { formatter } from "../../utils/formatter";
+import { useCountdown } from "../../hooks/useCountDown";
 
 export default function ButtonsGroup({ car }) {
-    const iconStyle = { fontSize: "1.5rem" };
-    const [remainingTime, setRemainingTime] = useState("");
+    const iconStyle = {
+        marginRight: "6px",
+        verticalAlign: "middle",
+    };
 
-    useEffect(() => {
-        const calculateRemainingTime = () => {
-            const endTime = new Date(car.end_time);
-            const currentTime = new Date();
-            const timeDifference = endTime - currentTime;
+    const { countdown } = useCountdown(car?.end_time);
+    const bidsCount = car.bids_count || 11;
 
-            if (timeDifference > 0) {
-                const daysDifference = Math.floor(
-                    timeDifference / (1000 * 60 * 60 * 24)
-                );
-                if (daysDifference >= 1) {
-                    setRemainingTime(`${daysDifference} Days`);
-                } else {
-                    const hours = String(
-                        Math.floor((timeDifference / (1000 * 60 * 60)) % 24)
-                    ).padStart(2, "0");
-                    const minutes = String(
-                        Math.floor((timeDifference / (1000 * 60)) % 60)
-                    ).padStart(2, "0");
-                    const seconds = String(
-                        Math.floor((timeDifference / 1000) % 60)
-                    ).padStart(2, "0");
-                    setRemainingTime(`${hours}:${minutes}:${seconds}`);
-                }
-            } else {
-                setRemainingTime("Auction Ended");
-            }
-        };
+    const iconSizeClass = "fs-5 fs-md-4 fs-lg-3"; // Scales with screen size
+    const textSizeClass = "fw-bold fs-6 fs-md-5";
 
-        calculateRemainingTime();
-        const intervalId = setInterval(calculateRemainingTime, 1000);
-
-        return () => clearInterval(intervalId);
-    }, [car.end_time]);
+    const renderTooltip = (text) => (
+        <Tooltip>
+            <span>{text}</span>
+        </Tooltip>
+    );
 
     return (
-        <>
-            <Row className="d-flex justify-content-between align-items-center bg-danger rounded-2 py-2 my-3 mx-1">
-                <Col>
-                    <span>
-                        <span className="text-body">
-                            <BiTime style={iconStyle} /> Time Left
-                        </span>{" "}
-                        <span className="text-light">{remainingTime}</span>
-                    </span>
-                </Col>
-                <Col>
-                    <span>
-                        <span className="text-body">
-                            <BiUpArrowAlt style={iconStyle} /> Current Bid
-                        </span>{" "}
-                        <span className="text-light">
-                            {formatter.format(car.starting_bid)}
+        <div className="bg-danger rounded-3 py-2 px-2 my-3 ">
+            <div className="d-flex flex-wrap justify-content-between align-items-center text-light gap-3">
+                {/* Time Left */}
+                <div className="d-flex align-items-center">
+                    <OverlayTrigger
+                        placement="bottom"
+                        overlay={renderTooltip("Time Left")}
+                    >
+                        <span className={`text-body ${iconSizeClass}`}>
+                            <BiTime style={iconStyle} />
                         </span>
+                    </OverlayTrigger>
+                    <span className={`${textSizeClass}`}>{countdown}</span>
+                </div>
+
+                {/* Current Bid */}
+                <div className="d-flex align-items-center">
+                    <OverlayTrigger
+                        placement="bottom"
+                        overlay={renderTooltip("Current Bid")}
+                    >
+                        <span className={`text-body ${iconSizeClass}`}>
+                            <BiUpArrowAlt style={iconStyle} />
+                        </span>
+                    </OverlayTrigger>
+                    <span className={`${textSizeClass}`}>
+                        {formatter.format(car.current_bid || car.starting_bid)}
                     </span>
-                </Col>
-                <Col className="d-none d-md-block">
-                    <span>
-                        <span className="text-body">
-                            <BiHash style={iconStyle} /> Bids
-                        </span>{" "}
-                        <span className="text-light">14</span>
+                </div>
+
+                {/* Bids */}
+                <div className="d-flex align-items-center">
+                    <OverlayTrigger
+                        placement="bottom"
+                        overlay={renderTooltip("Bids")}
+                    >
+                        <span className={`text-body ${iconSizeClass}`}>
+                            <BiHash style={iconStyle} />
+                        </span>
+                    </OverlayTrigger>
+                    <span className={`${textSizeClass} me-2`}>{bidsCount}</span>
+                    {bidsCount > 10 && (
+                        <Badge bg="warning" text="dark" className="ms-1">
+                            🔥 HOT
+                        </Badge>
+                    )}
+                </div>
+
+                {/* Comments */}
+                <div className="d-flex align-items-center">
+                    <OverlayTrigger
+                        placement="bottom"
+                        overlay={renderTooltip("Comments")}
+                    >
+                        <span className={`text-body ${iconSizeClass}`}>
+                            <BiChat style={iconStyle} />
+                        </span>
+                    </OverlayTrigger>
+                    <span className={`${textSizeClass}`}>
+                        {car.comments_count || 41}
                     </span>
-                </Col>
-                <Col className="d-none d-lg-block">
-                    <span>
-                        <span className="text-body">
-                            <BiChat style={iconStyle} /> Comments
-                        </span>{" "}
-                        <span className="text-light">41</span>
-                    </span>
-                </Col>
-            </Row>
-        </>
+                </div>
+            </div>
+        </div>
     );
 }

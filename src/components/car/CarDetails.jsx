@@ -151,7 +151,7 @@ export default function CarDetails() {
                     variant="primary"
                     onClick={() => navigate(`/listings/${car.id}/edit`)}
                 >
-                    Edit Car Info
+                    <i className="bi bi-pencil-square me-1"></i> Edit Car Info
                 </Button>
             )}
 
@@ -160,15 +160,15 @@ export default function CarDetails() {
                     {!isExpired && (
                         <Button
                             variant="danger"
-                            className="mb-3"
+                            className="mb-3 me-2"
                             onClick={handlePlaceBid}
                         >
                             <i className="bi bi-currency-dollar"></i> Place Bid
                         </Button>
                     )}
-                    <Button variant="warning" className="mb-3 ms-2">
-                        <i className="bi bi-heart-fill text-danger"></i> Add to
-                        Watchlist
+                    <Button variant="warning" className="mb-3">
+                        <i className="bi bi-heart-fill text-danger me-1"></i>{" "}
+                        Add to Watchlist
                     </Button>
                 </>
             )}
