@@ -1,45 +1,38 @@
-import {
-    Carousel,
-    Container,
-    Row,
-    Col,
-    Button,
-    Card,
-    Modal,
-} from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "react-bootstrap-icons";
 import { DUMMY_QA } from "../user/dummy_data";
-
-const image_style = {
-    width: "40px",
-    height: "40px",
-    objectFit: "cover",
-};
-
-const card_style = {
-    border: "none",
-};
+import QAModal from "../../UI/QAModal";
+import useQACarousel from "../../hooks/useQACarousel";
+import QAItemCard from "./QAItemCard";
 
 export default function QASection() {
-    // Chia dữ liệu thành nhóm, mỗi nhóm chứa 3 Q&A
-    const groupSize = 3;
-    const groups = [];
-    for (let i = 0; i < DUMMY_QA.length; i += groupSize) {
-        groups.push(DUMMY_QA.slice(i, i + groupSize));
-    }
-
-    const [index, setIndex] = useState(0);
+    const [qas, setQAs] = useState(DUMMY_QA);
     const [showModal, setShowModal] = useState(false);
     const [selectedQA, setSelectedQA] = useState(null);
+    const [questionInput, setQuestionInput] = useState("");
 
-    const handleSelect = (selectedIndex) => {
-        setIndex(selectedIndex);
-    };
+    const {
+        scrollRef,
+        scrollByCards,
+        currentPage,
+        maxPages,
+        canScrollLeft,
+        canScrollRight,
+        updatePagination,
+    } = useQACarousel(qas);
 
     const handleViewAnswer = (qa) => {
         setSelectedQA(qa);
         setShowModal(true);
+    };
+
+    const handleUpvote = (qaId) => {
+        setQAs((prev) =>
+            prev.map((qa) =>
+                qa.id === qaId ? { ...qa, upvotes: (qa.upvotes || 0) + 1 } : qa
+            )
+        );
     };
 
     const handleCloseModal = () => {
@@ -47,218 +40,128 @@ export default function QASection() {
         setSelectedQA(null);
     };
 
+    const handleSubmitQuestion = (e) => {
+        e.preventDefault();
+        if (!questionInput.trim()) return;
+
+        const newQuestion = {
+            id: Date.now(),
+            askerName: "You",
+            askerImage: "/images/default-user.png",
+            askerScore: 5,
+            question: questionInput,
+            answer: "_Pending response from seller..._",
+            sellerName: "Seller",
+            sellerImage: "/images/default-seller.png",
+            upvotes: 0,
+        };
+
+        setQAs([newQuestion, ...qas]);
+        setQuestionInput("");
+    };
+
     return (
-        <Container className="my-4">
+        <div>
+            <hr />
             <div className="d-flex justify-content-between align-items-center mb-3 mt-4">
-                <h5 className="fw-bold mb-0">Seller Q&A ({DUMMY_QA.length})</h5>
-                <div>
-                    <Button
-                        variant="link"
-                        className="text-decoration-none me-3"
-                    >
-                        Ask a question
+                <h5 className="fw-bold mb-0">Seller Q&A ({qas.length})</h5>
+            </div>
+
+            {/* Ask Form */}
+            <Form onSubmit={handleSubmitQuestion} className="mb-4">
+                <Form.Group controlId="questionInput">
+                    <Form.Control
+                        as="textarea"
+                        rows={2}
+                        placeholder="Ask the seller a question..."
+                        value={questionInput}
+                        onChange={(e) => setQuestionInput(e.target.value)}
+                        required
+                    />
+                </Form.Group>
+                <div className="text-end mt-2">
+                    <Button type="submit" variant="primary">
+                        Submit Question
                     </Button>
                 </div>
-            </div>
+            </Form>
 
-            {/* Custom Carousel */}
+            {/* Carousel */}
             <div className="position-relative">
-                <Carousel
-                    activeIndex={index}
-                    onSelect={handleSelect}
-                    indicators={false}
-                    controls={false}
-                    // interval={null}
+                <div
+                    ref={scrollRef}
+                    onScroll={updatePagination}
+                    className="d-flex overflow-auto px-1"
+                    style={{ scrollSnapType: "x mandatory", gap: "1rem" }}
                 >
-                    {groups.map((group, groupIndex) => (
-                        <Carousel.Item key={groupIndex}>
-                            <Row className="row-cols-1 row-cols-md-3 g-3">
-                                {group.map((qa) => (
-                                    <Col key={qa.id}>
-                                        <Card>
-                                            <div>
-                                                <Card
-                                                    className="mb-1"
-                                                    style={card_style}
-                                                >
-                                                    <Card.Body className="d-flex">
-                                                        <img
-                                                            src={qa.askerImage}
-                                                            alt={qa.askerName}
-                                                            className="rounded-circle me-3"
-                                                            style={image_style}
-                                                        />
-                                                        <div className="text-truncate-container">
-                                                            <Card.Title className="mb-1">
-                                                                {qa.askerName}{" "}
-                                                                <span className="text-success fw-bold">
-                                                                    {
-                                                                        qa.askerScore
-                                                                    }
-                                                                </span>
-                                                            </Card.Title>
-                                                            <Card.Text className="text-truncate">
-                                                                <strong>
-                                                                    Q:
-                                                                </strong>{" "}
-                                                                {qa.question}
-                                                            </Card.Text>
-                                                        </div>
-                                                    </Card.Body>
-                                                </Card>
-                                                <Card style={card_style}>
-                                                    <Card.Body className="d-flex">
-                                                        <img
-                                                            src={qa.sellerImage}
-                                                            alt={qa.sellerName}
-                                                            className="rounded-circle me-3"
-                                                            style={image_style}
-                                                        />
-                                                        <div className="text-truncate-container">
-                                                            <Card.Title className="mb-1">
-                                                                {qa.sellerName}{" "}
-                                                                <span className="badge rounded-pill text-bg-info">
-                                                                    Seller
-                                                                </span>
-                                                            </Card.Title>
-                                                            <Card.Text className="text-truncate">
-                                                                <strong>
-                                                                    A:
-                                                                </strong>{" "}
-                                                                {qa.answer}
-                                                            </Card.Text>
-                                                        </div>
-                                                    </Card.Body>
-                                                </Card>
-                                            </div>
-                                            <Button
-                                                variant="link"
-                                                className="text-decoration-none p-0"
-                                                onClick={() =>
-                                                    handleViewAnswer(qa)
-                                                }
-                                            >
-                                                View Q&A
-                                            </Button>
-                                        </Card>
-                                    </Col>
-                                ))}
-                            </Row>
-                        </Carousel.Item>
+                    {qas.map((qa) => (
+                        <QAItemCard
+                            key={qa.id}
+                            qa={qa}
+                            onViewAnswer={handleViewAnswer}
+                        />
                     ))}
-                </Carousel>
+                </div>
+
+                {/* Scroll Buttons */}
                 <Button
                     variant="dark"
-                    className="carousel-control-prev"
-                    onClick={() =>
-                        handleSelect(
-                            index === 0 ? groups.length - 1 : index - 1
-                        )
-                    }
+                    disabled={!canScrollLeft}
+                    className="position-absolute top-50 start-0 translate-middle-y"
                     style={{
-                        position: "absolute",
-                        top: "50%",
-                        left: "-40px",
-                        transform: "translateY(-50%)",
-                        zIndex: 1000,
-                        borderRadius: "50%",
+                        zIndex: 1,
                         width: "40px",
                         height: "40px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        backgroundColor: "rgba(0, 0, 0, 0.5)",
-                        color: "white",
-                        border: "none",
+                        borderRadius: "50%",
+                        opacity: canScrollLeft ? 0.8 : 0.3,
                     }}
+                    onClick={() => scrollByCards(-2)}
                 >
-                    <ChevronLeft size={20} />
+                    <ChevronLeft />
                 </Button>
+
                 <Button
                     variant="dark"
-                    className="carousel-control-next"
-                    onClick={() =>
-                        handleSelect(
-                            index === groups.length - 1 ? 0 : index + 1
-                        )
-                    }
+                    disabled={!canScrollRight}
+                    className="position-absolute top-50 end-0 translate-middle-y"
                     style={{
-                        position: "absolute",
-                        top: "50%",
-                        right: "-40px",
-                        transform: "translateY(-50%)",
-                        zIndex: 1000,
-                        borderRadius: "50%",
+                        zIndex: 1,
                         width: "40px",
                         height: "40px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        backgroundColor: "rgba(0, 0, 0, 0.5)",
-                        color: "white",
-                        border: "none",
+                        borderRadius: "50%",
+                        opacity: canScrollRight ? 0.8 : 0.3,
                     }}
+                    onClick={() => scrollByCards(2)}
                 >
-                    <ChevronRight size={20} />
+                    <ChevronRight />
                 </Button>
             </div>
 
-            {/* Modal for viewing full Q&A */}
-            <Modal show={showModal} onHide={handleCloseModal} centered>
-                <Modal.Header closeButton>
-                    <Modal.Title>Question & Answer</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {selectedQA && (
-                        <>
-                            <div className=" d-flex mb-3">
-                                <img
-                                    src={selectedQA.askerImage}
-                                    alt={selectedQA.askerName}
-                                    className="rounded-circle me-3"
-                                    style={image_style}
-                                />
-                                <div>
-                                    <Card.Title className="mb-1">
-                                        {selectedQA.askerName}{" "}
-                                        <span className="text-success fw-bold">
-                                            {selectedQA.askerScore}
-                                        </span>
-                                    </Card.Title>
-                                    <Card.Text>
-                                        <strong>Q:</strong>{" "}
-                                        {selectedQA.question}
-                                    </Card.Text>
-                                </div>
-                            </div>
-                            <div className="d-flex">
-                                <img
-                                    src={selectedQA.sellerImage}
-                                    alt={selectedQA.sellerName}
-                                    className="rounded-circle me-3"
-                                    style={image_style}
-                                />
-                                <div>
-                                    <Card.Title className="mb-1">
-                                        {selectedQA.sellerName}{" "}
-                                        <span className="badge rounded-pill text-bg-info">
-                                            Seller
-                                        </span>
-                                    </Card.Title>
-                                    <Card.Text>
-                                        <strong>A:</strong> {selectedQA.answer}
-                                    </Card.Text>
-                                </div>
-                            </div>
-                        </>
-                    )}
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseModal}>
-                        Close
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-        </Container>
+            {/* Pagination Dots */}
+            <div className="d-flex justify-content-center mt-3 gap-2">
+                {Array.from({ length: maxPages }, (_, i) => (
+                    <span
+                        key={i}
+                        className={`rounded-circle ${
+                            i === currentPage ? "bg-dark" : "bg-secondary"
+                        }`}
+                        style={{
+                            width: "10px",
+                            height: "10px",
+                            display: "inline-block",
+                            opacity: i === currentPage ? 1 : 0.4,
+                        }}
+                    />
+                ))}
+            </div>
+
+            {/* Modal */}
+            <QAModal
+                show={showModal}
+                onClose={handleCloseModal}
+                qa={selectedQA}
+                onUpvote={handleUpvote}
+            />
+        </div>
     );
 }

@@ -194,3 +194,38 @@
     object-fit: cover;
     border-radius: 10px;
 }
+
+/* SCROLL BUTTON */
+
+/* Animation for scroll-to-top button */
+.scroll-top-btn {
+    transform: translateY(100px); /* hidden position */
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.scroll-top-btn.visible {
+    opacity: 1;
+    transform: translateY(0); /* slide up into view */
+}
+
+/* QA SECTION */
+.qa-card {
+    width: calc(100% / 2.5);
+    min-width: calc(100% / 2.5);
+    scroll-snap-align: start;
+}
+
+@media (max-width: 991px) {
+    .qa-card {
+        width: calc(100% / 1.5);
+        min-width: calc(100% / 1.5);
+    }
+}
+
+@media (max-width: 767px) {
+    .qa-card {
+        width: calc(100% / 1.25);
+        min-width: calc(100% / 1.25);
+    }
+}
