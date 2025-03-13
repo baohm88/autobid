@@ -47,7 +47,7 @@ export default function CarItem({ car }) {
                     </Badge>
                 )}
 
-                <NavLink to={`listings/${car.id}`}>
+                <NavLink to={`/listings/${car.id}`}>
                     <Card.Img
                         variant="top"
                         src={car.images[0]}
@@ -91,7 +91,7 @@ export default function CarItem({ car }) {
                 </Card.Text>
             </Card.Body>
             <Card.Footer>
-                <NavLink to={`listings/${car.id}`}>
+                <NavLink to={`/listings/${car.id}`}>
                     <button
                         className="btn btn-danger w-100"
                         disabled={isExpired}

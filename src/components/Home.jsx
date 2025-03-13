@@ -1,4 +1,4 @@
-import { Container, Row, Pagination, Spinner } from "react-bootstrap";
+import { Container, Pagination, Spinner } from "react-bootstrap";
 import CarItem from "./CarItem";
 import { Form, useOutletContext } from "react-router-dom";
 import useCarFilter from "../hooks/useCarFilter";

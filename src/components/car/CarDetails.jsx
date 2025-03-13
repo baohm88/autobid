@@ -30,12 +30,15 @@ import { useCountdown } from "../../hooks/useCountDown";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import { useAuth } from "../../context/AuthContext";
+import { useCarContext } from "../../context/CarContex";
 dayjs.extend(duration);
 
 export default function CarDetails() {
     const { id } = useParams();
     const { user, setUser } = useAuth();
     const { car, loading: fetching, error } = useCarDetails(id);
+    const { getEndingSoonCars } = useCarContext();
+    const endingSoonCars = getEndingSoonCars(car?.id);
 
     const {
         bidAmount,
@@ -194,8 +197,9 @@ export default function CarDetails() {
                     <CurrentBidSection car={car} onPlaceBid={handlePlaceBid} />
                     <BidsSection car={car} />
                 </Col>
-
-                <EndingSoonTable />
+                <Col lg={4}>
+                    <EndingSoonTable cars={endingSoonCars} />
+                </Col>
             </Row>
 
             {/* Fullscreen Image Modal */}

@@ -16,6 +16,7 @@
     "canvas-confetti": "^1.9.3",
     "dayjs": "^1.11.13",
     "formik": "^2.4.6",
+    "framer-motion": "^12.5.0",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.9",
     "react-bootstrap-icons": "^1.11.5",

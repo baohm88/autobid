@@ -6,11 +6,14 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "./index.css";
 import { AuthProvider } from "./context/AuthContext.jsx";
+import { CarProvider } from "./context/CarContex.jsx";
 
 createRoot(document.getElementById("root")).render(
     <StrictMode>
         <AuthProvider>
-            <App />
+            <CarProvider>
+                <App />
+            </CarProvider>
         </AuthProvider>
     </StrictMode>
 );
