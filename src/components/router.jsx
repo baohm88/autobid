@@ -10,7 +10,7 @@ import Register from "./Register";
 // User components
 import UserBids from "./user/UserBids";
 import UserOrders from "./user/UserOrders";
-import UserProducts from "./user/UserProducts";
+import UserProducts from "./user/UserListings";
 import UserWallet from "./user/UserWallet";
 import UserWatchList from "./user/UserWatchList";
 import ProtectedRoute from "./ProtectedRoute";
@@ -28,6 +28,7 @@ import AdminAuctions from "./admin/AdminAuctions";
 import AdminUsers from "./admin/AdminUsers";
 import AdminHome from "./admin/AdminHome";
 import AdminOrders from "./admin/AdminOrders";
+import UserListings from "./user/UserListings";
 
 export const AppRouter = createBrowserRouter([
     {
@@ -110,6 +111,7 @@ export const AppRouter = createBrowserRouter([
                     { path: "live-auctions", element: <LiveListings /> },
                     { path: "comments", element: <ListingsComments /> },
                     { path: "past-listings", element: <PastListings /> },
+                    { path: "listings", element: <UserListings /> },
                 ],
             },
         ],

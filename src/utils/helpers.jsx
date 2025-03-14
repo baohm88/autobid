@@ -38,3 +38,12 @@ export const playSound = (soundPath) => {
     audio.play().catch((err) => console.warn("Audio play failed:", err));
 };
 
+export function isActive(car) {
+    if (!car.end_time) return false;
+    return new Date(car.end_time) > new Date();
+}
+
+export function isEnded(car) {
+    if (!car.end_time) return false;
+    return new Date(car.end_time) <= new Date();
+}

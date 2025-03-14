@@ -117,13 +117,6 @@ export default function ClientLayout() {
                                             >
                                                 <NavDropdown.Item
                                                     as={NavLink}
-                                                    to="/user-products"
-                                                >
-                                                    <i className="bi bi-ev-front-fill me-2"></i>{" "}
-                                                    My Products
-                                                </NavDropdown.Item>
-                                                <NavDropdown.Item
-                                                    as={NavLink}
                                                     to="/user-bids"
                                                 >
                                                     <i className="bi bi-envelope-arrow-up-fill me-2"></i>{" "}

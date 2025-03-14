@@ -14,6 +14,11 @@ const links = [
         icon: "bi-speedometer2",
         text: "Dashboard",
     },
+    {
+        to: "/account/listings",
+        icon: "bi-ev-front",
+        text: "All Listings",
+    },
     { to: "/account/in-progress", icon: "bi-clock", text: "In Progress" },
     {
         to: "/account/live-auctions",
@@ -27,6 +32,8 @@ const links = [
         text: "Past Listings",
     },
 ];
+
+
 
 export default function DashboardSidebar({ collapsed, toggleSidebar }) {
     return (

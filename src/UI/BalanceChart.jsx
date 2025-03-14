@@ -11,10 +11,16 @@ import {
 export default function BalanceChart({ transactions }) {
     const chartData = transactions.reduce((acc, txn) => {
         const prevBalance = acc.length ? acc[acc.length - 1].balance : 0;
+        const newBalance =
+            txn.flow === "out"
+                ? prevBalance - txn.amount
+                : prevBalance + txn.amount;
+
         acc.push({
             date: new Date(txn.id).toLocaleDateString(),
-            balance: prevBalance + txn.amount,
+            balance: newBalance,
         });
+
         return acc;
     }, []);
 

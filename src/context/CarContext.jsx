@@ -18,7 +18,7 @@ export const CarProvider = ({ children }) => {
     useEffect(() => {
         const fetchCars = async () => {
             try {
-                const res = await axios.get("http://localhost:8080/listings"); // adjust API route if needed
+                const res = await axios.get("http://localhost:8080/listings"); 
                 setCars(res.data.data);
             } catch (err) {
                 setError("Failed to fetch cars.");
@@ -32,7 +32,7 @@ export const CarProvider = ({ children }) => {
 
     const getEndingSoonCars = (currentCarId) => {
         const now = new Date();
-        const in24Hours = new Date(now.getTime() + 24 * 60 * 60 * 1000); // 48 hours from now
+        const in24Hours = new Date(now.getTime() + 24 * 60 * 60 * 1000); // 24 hours from now
 
         return cars
             .filter((car) => {

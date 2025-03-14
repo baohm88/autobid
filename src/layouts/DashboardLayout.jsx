@@ -4,6 +4,7 @@ import DashboardTopNav from "../components/user/DashboardTopNav"; // New compone
 import { useState } from "react";
 
 export default function DashboardLayout() {
+    const [searchTerm, setSearchTerm] = useState("");
     const [collapsed, setCollapsed] = useState(() => {
         return localStorage.getItem("dashboardSidebar") === "true";
     });
@@ -31,7 +32,7 @@ export default function DashboardLayout() {
             </div>
 
             <main className="flex-grow-1 p-2">
-                <Outlet />
+                <Outlet context={{ searchTerm }} />
             </main>
         </div>
     );
