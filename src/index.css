@@ -229,3 +229,12 @@
         min-width: calc(100% / 1.25);
     }
 }
+
+/* Optional styling for sidebar collapse */
+.sidebar-collapsed {
+    overflow-x: hidden;
+}
+
+.nav-link.active {
+    font-weight: bold;
+}

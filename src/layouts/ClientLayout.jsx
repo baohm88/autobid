@@ -1,23 +1,30 @@
 import { Outlet, NavLink, useNavigate, useLocation } from "react-router-dom";
-import Footer from "../components/Footer";
-import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
+import {
+    Navbar,
+    Nav,
+    Container,
+    Button,
+    Form,
+    FormControl,
+    NavDropdown,
+    Image,
+} from "react-bootstrap";
+import { useAuth } from "../context/AuthContext";
 import useLogOut from "../hooks/useLogOut";
 import ScrollToTop from "../utils/ScrollToTop";
-import { AnimatePresence, motion } from "framer-motion";
 import ScrollTopButton from "../UI/ScrollTopButton";
+import Footer from "../components/Footer";
+import { AnimatePresence, motion } from "framer-motion";
 
-export default function ClientLayout({ children }) {
+export default function ClientLayout() {
     const { user, isAuthenticated } = useAuth();
     const logOut = useLogOut();
     const location = useLocation();
-
     const [searchTerm, setSearchTerm] = useState("");
     const navigate = useNavigate();
 
-    const handleSearchChange = (e) => {
-        setSearchTerm(e.target.value);
-    };
+    const handleSearchChange = (e) => setSearchTerm(e.target.value);
 
     const handleKeyPress = (e) => {
         if (e.key === "Enter" && searchTerm.trim() !== "") {
@@ -37,241 +44,147 @@ export default function ClientLayout({ children }) {
                     transition={{ duration: 0.3 }}
                 >
                     <header>
-                        <nav className="navbar navbar-expand-md bg-body-tertiary">
-                            <div className="container">
-                                <NavLink className="navbar-brand" to={"/"}>
+                        <Navbar expand="md" bg="light" className="shadow-sm">
+                            <Container>
+                                <Navbar.Brand as={NavLink} to="/">
                                     <img
                                         src="/logo-autobid.svg"
                                         alt="auto bid"
                                         height={50}
                                     />
-                                </NavLink>
-                                <button
-                                    className="navbar-toggler custom-toggler"
-                                    type="button"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#navbarTogglerDemo02"
-                                    aria-controls="navbarTogglerDemo02"
-                                    aria-expanded="false"
-                                    aria-label="Toggle navigation"
+                                </Navbar.Brand>
+                                <Navbar.Toggle aria-controls="main-navbar" />
+                                <Navbar.Collapse
+                                    id="main-navbar"
+                                    className="justify-content-between"
                                 >
-                                    <span className="navbar-toggler-icon"></span>
-                                </button>
-                                <div
-                                    className="collapse navbar-collapse justify-content-center"
-                                    id="navbarTogglerDemo02"
-                                >
-                                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                                        <li className="nav-item">
-                                            <NavLink
-                                                className={({ isActive }) =>
-                                                    isActive
-                                                        ? "nav-link active"
-                                                        : "nav-link"
-                                                }
-                                                to={"/add-car"}
+                                    <Nav className="me-auto">
+                                        <Nav.Link as={NavLink} to="/add-car">
+                                            <Button
+                                                variant="danger"
+                                                size="sm"
+                                                className="rounded-pill"
                                             >
-                                                <button
-                                                    type="button"
-                                                    className="btn btn-danger btn-sm rounded-pill"
-                                                >
-                                                    Sell Car
-                                                </button>
-                                            </NavLink>
-                                        </li>
-                                    </ul>
-                                    <form
-                                        className="d-flex mx-auto search-form w-100 d-md-none"
-                                        role="search"
-                                        onKeyPress={handleKeyPress}
-                                    >
-                                        <input
-                                            className="form-control me-2"
-                                            type="search"
-                                            placeholder="Search for cars (ex. BMW, Audi, Ford)"
-                                            aria-label="Search"
-                                            value={searchTerm}
-                                            onChange={handleSearchChange}
-                                        />
-                                    </form>
-                                    <form
-                                        className="d-flex mx-auto search-form d-none d-md-flex"
-                                        role="search"
-                                        onKeyPress={handleKeyPress}
-                                    >
-                                        <input
-                                            className="form-control me-2"
-                                            type="search"
-                                            placeholder="Search for cars (ex. BMW, Audi, Ford)"
-                                            aria-label="Search"
-                                            value={searchTerm}
-                                            onChange={handleSearchChange}
-                                        />
-                                    </form>
+                                                Sell Car
+                                            </Button>
+                                        </Nav.Link>
+                                    </Nav>
 
+                                    {/* Search form */}
+                                    <Form
+                                        className="d-flex mx-auto w-100 d-md-none mb-2"
+                                        onKeyPress={handleKeyPress}
+                                    >
+                                        <FormControl
+                                            type="search"
+                                            placeholder="Search for cars (ex. BMW, Audi, Ford)"
+                                            className="me-2"
+                                            value={searchTerm}
+                                            onChange={handleSearchChange}
+                                        />
+                                    </Form>
+                                    <Form
+                                        className="d-flex mx-auto w-50 d-none d-md-flex"
+                                        onKeyPress={handleKeyPress}
+                                    >
+                                        <FormControl
+                                            type="search"
+                                            placeholder="Search for cars (ex. BMW, Audi, Ford)"
+                                            className="me-2"
+                                            value={searchTerm}
+                                            onChange={handleSearchChange}
+                                        />
+                                    </Form>
+
+                                    {/* User area */}
                                     {isAuthenticated ? (
-                                        <>
-                                            <div className="d-flex align-items-center">
-                                                <i className="bi bi-bell-fill me-1 me-2"></i>
-                                                <div className="dropdown mx-3">
-                                                    <div
-                                                        className="dropdown-toggle"
-                                                        type="button"
-                                                        data-bs-toggle="dropdown"
-                                                        aria-expanded="false"
-                                                    >
-                                                        <img
-                                                            src={
-                                                                user.image_url ||
-                                                                "https://png.pngtree.com/png-clipart/20240705/original/pngtree-web-programmer-avatar-png-image_15495270.png"
-                                                            }
-                                                            alt={user.username}
-                                                            style={{
-                                                                height: "30px",
-                                                                width: "30px",
-                                                                borderRadius:
-                                                                    "50%",
-                                                            }}
-                                                        />
-                                                    </div>
-                                                    <ul className="dropdown-menu dropdown-menu-lg-end">
-                                                        <>
-                                                            <li className="dropdown-item">
-                                                                <NavLink
-                                                                    className={({
-                                                                        isActive,
-                                                                    }) =>
-                                                                        isActive
-                                                                            ? "nav-link active"
-                                                                            : "nav-link"
-                                                                    }
-                                                                    to={
-                                                                        "/user-products"
-                                                                    }
-                                                                >
-                                                                    <i className="bi bi-ev-front-fill me-2"></i>{" "}
-                                                                    My Products
-                                                                </NavLink>
-                                                            </li>
-                                                            <li className="dropdown-item">
-                                                                <NavLink
-                                                                    className={({
-                                                                        isActive,
-                                                                    }) =>
-                                                                        isActive
-                                                                            ? "nav-link active"
-                                                                            : "nav-link"
-                                                                    }
-                                                                    to={
-                                                                        "/user-bids"
-                                                                    }
-                                                                >
-                                                                    <i className="bi bi-envelope-arrow-up-fill me-2"></i>{" "}
-                                                                    My Bids
-                                                                </NavLink>
-                                                            </li>
-                                                            <li className="dropdown-item">
-                                                                <NavLink
-                                                                    className={({
-                                                                        isActive,
-                                                                    }) =>
-                                                                        isActive
-                                                                            ? "nav-link active"
-                                                                            : "nav-link"
-                                                                    }
-                                                                    to={
-                                                                        "/user-orders"
-                                                                    }
-                                                                >
-                                                                    <i className="bi bi-briefcase-fill me-2"></i>{" "}
-                                                                    My Orders
-                                                                </NavLink>
-                                                            </li>
-                                                            <li className="dropdown-item">
-                                                                <NavLink
-                                                                    className={({
-                                                                        isActive,
-                                                                    }) =>
-                                                                        isActive
-                                                                            ? "nav-link active"
-                                                                            : "nav-link"
-                                                                    }
-                                                                    to={
-                                                                        "/user-wallet"
-                                                                    }
-                                                                >
-                                                                    <i className="bi bi-wallet-fill me-2"></i>{" "}
-                                                                    My Wallet
-                                                                </NavLink>
-                                                            </li>
-                                                            <li className="dropdown-item">
-                                                                <NavLink
-                                                                    className={({
-                                                                        isActive,
-                                                                    }) =>
-                                                                        isActive
-                                                                            ? "nav-link active"
-                                                                            : "nav-link"
-                                                                    }
-                                                                    to={
-                                                                        "/account/dashboard"
-                                                                    }
-                                                                >
-                                                                    <i className="bi bi-clipboard-data-fill me-2"></i>{" "}
-                                                                    Dashboard
-                                                                </NavLink>
-                                                            </li>
-                                                            <li className="dropdown-item">
-                                                                <NavLink
-                                                                    className={({
-                                                                        isActive,
-                                                                    }) =>
-                                                                        isActive
-                                                                            ? "nav-link"
-                                                                            : "nav-link"
-                                                                    }
-                                                                    to={
-                                                                        "/watch-list"
-                                                                    }
-                                                                >
-                                                                    <i className="bi bi-heart-fill text-danger me-2"></i>{" "}
-                                                                    Favorites
-                                                                </NavLink>
-                                                            </li>
-                                                            <li className="dropdown-item">
-                                                                <button
-                                                                    className="nav-link btn btn-link text-start w-100"
-                                                                    onClick={
-                                                                        logOut
-                                                                    }
-                                                                >
-                                                                    <i className="bi bi-box-arrow-right me-2"></i>{" "}
-                                                                    Logout
-                                                                </button>
-                                                            </li>
-                                                        </>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </>
+                                        <Nav className="align-items-center">
+                                            <i className="bi bi-bell-fill me-3 fs-5"></i>
+                                            <NavDropdown
+                                                align="end"
+                                                title={
+                                                    <Image
+                                                        src={
+                                                            user.image_url ||
+                                                            "https://png.pngtree.com/png-clipart/20240705/original/pngtree-web-programmer-avatar-png-image_15495270.png"
+                                                        }
+                                                        roundedCircle
+                                                        height={30}
+                                                        width={30}
+                                                    />
+                                                }
+                                                id="user-dropdown"
+                                            >
+                                                <NavDropdown.Item
+                                                    as={NavLink}
+                                                    to="/user-products"
+                                                >
+                                                    <i className="bi bi-ev-front-fill me-2"></i>{" "}
+                                                    My Products
+                                                </NavDropdown.Item>
+                                                <NavDropdown.Item
+                                                    as={NavLink}
+                                                    to="/user-bids"
+                                                >
+                                                    <i className="bi bi-envelope-arrow-up-fill me-2"></i>{" "}
+                                                    My Bids
+                                                </NavDropdown.Item>
+                                                <NavDropdown.Item
+                                                    as={NavLink}
+                                                    to="/user-orders"
+                                                >
+                                                    <i className="bi bi-briefcase-fill me-2"></i>{" "}
+                                                    My Orders
+                                                </NavDropdown.Item>
+
+                                                <NavDropdown.Item
+                                                    as={NavLink}
+                                                    to="/account/dashboard"
+                                                >
+                                                    <i className="bi bi-clipboard-data-fill me-2"></i>{" "}
+                                                    Dashboard
+                                                </NavDropdown.Item>
+                                                <NavDropdown.Item
+                                                    as={NavLink}
+                                                    to="/watch-list"
+                                                >
+                                                    <i className="bi bi-heart-fill text-danger me-2"></i>{" "}
+                                                    Favorites
+                                                </NavDropdown.Item>
+                                                <NavDropdown.Divider />
+                                                <NavDropdown.Item
+                                                    as="button"
+                                                    onClick={logOut}
+                                                >
+                                                    <i className="bi bi-box-arrow-right me-2"></i>{" "}
+                                                    Logout
+                                                </NavDropdown.Item>
+                                            </NavDropdown>
+                                        </Nav>
                                     ) : (
-                                        <button className="btn btn-success btn-sm mt-2">
+                                        <Button
+                                            variant="success"
+                                            size="sm"
+                                            className="mt-2"
+                                        >
                                             <NavLink
-                                                className="nav-link"
-                                                to={"/login"}
+                                                className="nav-link text-white"
+                                                to="/login"
                                             >
                                                 <i className="bi bi-box-arrow-left me-2"></i>{" "}
                                                 Login
                                             </NavLink>
-                                        </button>
+                                        </Button>
                                     )}
-                                </div>
-                            </div>
-                        </nav>
+                                </Navbar.Collapse>
+                            </Container>
+                        </Navbar>
                     </header>
+
                     <main>
                         <Outlet context={{ searchTerm }} />
                     </main>
+
                     <ScrollTopButton />
                     <Footer />
                 </motion.div>

@@ -30,7 +30,7 @@ import { useCountdown } from "../../hooks/useCountDown";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import { useAuth } from "../../context/AuthContext";
-import { useCarContext } from "../../context/CarContex";
+import { useCarContext } from "../../context/CarContext";
 dayjs.extend(duration);
 
 export default function CarDetails() {
@@ -184,7 +184,7 @@ export default function CarDetails() {
             />
 
             <Row>
-                <Col lg={8} className="mb-4">
+                <Col lg={8}>
                     <ButtonsGroup car={car} />
                     <CarDetailsTable car={car} />
                     <EquipmentSection equipments={car.equipment.split(";")} />

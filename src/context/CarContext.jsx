@@ -30,16 +30,6 @@ export const CarProvider = ({ children }) => {
         fetchCars();
     }, []);
 
-    // const getEndingSoonCars = (currentCarId) => {
-    //     const now = new Date();
-    //     return cars
-    //         .filter(
-    //             (car) => new Date(car.end_time) > now && car.id !== currentCarId
-    //         )
-    //         .sort((a, b) => new Date(a.end_time) - new Date(b.end_time))
-    //         .slice(0, 4);
-    // };
-
     const getEndingSoonCars = (currentCarId) => {
         const now = new Date();
         const in24Hours = new Date(now.getTime() + 24 * 60 * 60 * 1000); // 48 hours from now

@@ -22,7 +22,7 @@ export default function ButtonsGroup({ car }) {
     );
 
     return (
-        <div className="bg-danger rounded-3 py-2 px-2 my-3 ">
+        <div className="bg-danger rounded-3 py-2 px-2 ">
             <div className="d-flex flex-wrap justify-content-between align-items-center text-light gap-3">
                 {/* Time Left */}
                 <div className="d-flex align-items-center">

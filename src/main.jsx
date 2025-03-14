@@ -6,7 +6,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "./index.css";
 import { AuthProvider } from "./context/AuthContext.jsx";
-import { CarProvider } from "./context/CarContex.jsx";
+import { CarProvider } from "./context/CarContext.jsx";
 
 createRoot(document.getElementById("root")).render(
     <StrictMode>
