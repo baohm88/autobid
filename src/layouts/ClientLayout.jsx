@@ -99,7 +99,7 @@ export default function ClientLayout() {
                                     {/* User area */}
                                     {isAuthenticated ? (
                                         <Nav className="align-items-center">
-                                            <i className="bi bi-bell-fill me-3 fs-5"></i>
+                                            <i className="bi bi-bell-fill me-3 fs-5 text-muted"></i>
                                             <NavDropdown
                                                 align="end"
                                                 title={
@@ -117,34 +117,12 @@ export default function ClientLayout() {
                                             >
                                                 <NavDropdown.Item
                                                     as={NavLink}
-                                                    to="/user-bids"
-                                                >
-                                                    <i className="bi bi-envelope-arrow-up-fill me-2"></i>{" "}
-                                                    My Bids
-                                                </NavDropdown.Item>
-                                                <NavDropdown.Item
-                                                    as={NavLink}
-                                                    to="/user-orders"
-                                                >
-                                                    <i className="bi bi-briefcase-fill me-2"></i>{" "}
-                                                    My Orders
-                                                </NavDropdown.Item>
-
-                                                <NavDropdown.Item
-                                                    as={NavLink}
                                                     to="/account/dashboard"
                                                 >
                                                     <i className="bi bi-clipboard-data-fill me-2"></i>{" "}
                                                     Dashboard
                                                 </NavDropdown.Item>
-                                                <NavDropdown.Item
-                                                    as={NavLink}
-                                                    to="/watch-list"
-                                                >
-                                                    <i className="bi bi-heart-fill text-danger me-2"></i>{" "}
-                                                    Favorites
-                                                </NavDropdown.Item>
-                                                <NavDropdown.Divider />
+
                                                 <NavDropdown.Item
                                                     as="button"
                                                     onClick={logOut}

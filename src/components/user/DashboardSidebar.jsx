@@ -4,22 +4,9 @@ import {
     Nav,
     Button,
 } from "react-bootstrap";
-
 import { NavLink } from "react-router-dom";
+import { DASHBOARD_LINKS } from "./dummy_data";
 
-const links = [
-    {
-        to: "/account/dashboard",
-        icon: "bi-speedometer2",
-        text: "Dashboard",
-    },
-    {
-        to: "/account/listings",
-        icon: "bi-ev-front",
-        text: "My Listings",
-    },
-    { to: "/account/comments", icon: "bi-chat", text: "Comments" },
-];
 
 export default function DashboardSidebar({ collapsed, toggleSidebar }) {
     return (
@@ -50,7 +37,7 @@ export default function DashboardSidebar({ collapsed, toggleSidebar }) {
             </div>
 
             <Nav className="flex-column text-center text-sm-start">
-                {links.map(({ to, icon, text }) => (
+                {DASHBOARD_LINKS.map(({ to, icon, text }) => (
                     <Nav.Item key={to} className="mb-3">
                         <OverlayTrigger
                             placement="right"

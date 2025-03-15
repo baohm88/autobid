@@ -1,11 +1,15 @@
 // src/components/UI/PaginationComponent.jsx
 import { Pagination } from "react-bootstrap";
 
-export default function PaginationComponent({ currentPage, totalPages, onPageChange }) {
+export default function PaginationComponent({
+    currentPage,
+    totalPages,
+    onPageChange,
+}) {
     if (totalPages <= 1) return null;
 
     return (
-        <Pagination className="justify-content-center">
+        <Pagination className="justify-content-center mt-3">
             <Pagination.Prev
                 onClick={() => onPageChange(currentPage - 1)}
                 disabled={currentPage === 1}

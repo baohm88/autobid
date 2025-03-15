@@ -2,40 +2,40 @@ import { Container, Spinner } from "react-bootstrap";
 import CarItem from "./CarItem";
 import { useOutletContext } from "react-router-dom";
 import useCarFilter from "../hooks/useCarFilter";
+
 import { useState } from "react";
 import PaginationComponent from "../UI/Pagination";
 import { useCarContext } from "../context/CarContext";
 import CarFilterSortForm from "../UI/CarFilterSortForm";
 
-const INITIAL_FILTERS = {
-    yearFrom: 2000,
-    yearTo: 2025,
-    transmission: "All",
-    bodyStyle: "All",
-    sortBy: "end_soon",
-    status: "All",
-};
-
 export default function Home() {
     const { searchTerm } = useOutletContext();
     const { cars } = useCarContext();
-    const [filters, setFilters] = useState(INITIAL_FILTERS);
 
-    const updateFilter = (key, value) => {
-        setFilters((prev) => ({ ...prev, [key]: value }));
-    };
+    // State variables for filters and sorting
+    const [sortBy, setSortBy] = useState("end_soon");
+    const [transmission, setTransmission] = useState("All");
+    const [bodyStyle, setBodyStyle] = useState("All");
+    const [yearFrom, setYearFrom] = useState(2000);
+    const [yearTo, setYearTo] = useState(2025);
+    const [status, setStatus] = useState("All");
 
     const {
         loading,
-        filteredCars,
         currentCars,
+        filteredCars,
         currentPage,
-        totalPages,
         paginate,
+        totalPages,
     } = useCarFilter({
         cars,
-        filters,
         searchTerm,
+        yearFrom,
+        yearTo,
+        transmission,
+        bodyStyle,
+        sortBy,
+        status,
     });
 
     document.title = "AutoBid: Car Auctions";
@@ -59,7 +59,22 @@ export default function Home() {
         <Container expand="lg">
             <h1>Live Auctions</h1>
             {/* filter group */}
-            <CarFilterSortForm filters={filters} updateFilter={updateFilter} />
+
+            <CarFilterSortForm
+                yearFrom={yearFrom}
+                yearTo={yearTo}
+                setYearFrom={setYearFrom}
+                setYearTo={setYearTo}
+                transmission={transmission}
+                setTransmission={setTransmission}
+                bodyStyle={bodyStyle}
+                setBodyStyle={setBodyStyle}
+                sortBy={sortBy}
+                setSortBy={setSortBy}
+                status={status}
+                setStatus={setStatus}
+                showStatus={true}
+            />
 
             {/* Car Listings */}
             <div className="car-listings">

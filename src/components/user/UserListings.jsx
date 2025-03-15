@@ -46,8 +46,6 @@ export default function UserListings() {
         status,
     });
 
-
-
     if (loading) {
         return (
             <div
@@ -68,21 +66,6 @@ export default function UserListings() {
             <h1>Your Listings</h1>
 
             {/* Filter and Sort UI */}
-            {/* <CarFilterSortForm
-                yearFrom={yearFrom}
-                yearTo={yearTo}
-                setYearFrom={setYearFrom}
-                setYearTo={setYearTo}
-                transmission={transmission}
-                setTransmission={setTransmission}
-                bodyStyle={bodyStyle}
-                setBodyStyle={setBodyStyle}
-                sortBy={sortBy}
-                setSortBy={setSortBy}
-                status={status}
-                setStatus={setStatus}
-                showStatus={true}
-            /> */}
             <CarFilterSortForm
                 yearFrom={yearFrom}
                 yearTo={yearTo}
