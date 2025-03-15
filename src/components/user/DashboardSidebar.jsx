@@ -7,7 +7,6 @@ import {
 
 import { NavLink } from "react-router-dom";
 
-
 const links = [
     {
         to: "/account/dashboard",
@@ -17,23 +16,10 @@ const links = [
     {
         to: "/account/listings",
         icon: "bi-ev-front",
-        text: "All Listings",
-    },
-    { to: "/account/in-progress", icon: "bi-clock", text: "In Progress" },
-    {
-        to: "/account/live-auctions",
-        icon: "bi-lightning",
-        text: "Live Auctions",
+        text: "My Listings",
     },
     { to: "/account/comments", icon: "bi-chat", text: "Comments" },
-    {
-        to: "/account/past-listings",
-        icon: "bi-archive",
-        text: "Past Listings",
-    },
 ];
-
-
 
 export default function DashboardSidebar({ collapsed, toggleSidebar }) {
     return (

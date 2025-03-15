@@ -1,11 +1,12 @@
-import { Container, Form, Pagination, Spinner } from "react-bootstrap";
+import { Container, Spinner } from "react-bootstrap";
 import { useAuth } from "../../context/AuthContext";
 import { useCarContext } from "../../context/CarContext";
 import CarItem from "../CarItem";
 import { useState, useMemo } from "react";
 import useCarFilter from "../../hooks/useCarFilter";
-import { BODY_STYLES } from "./dummy_data";
 import { useOutletContext } from "react-router-dom";
+import PaginationComponent from "../../UI/Pagination";
+import CarFilterSortForm from "../../UI/CarFilterSortForm";
 
 export default function UserListings() {
     const { searchTerm } = useOutletContext();
@@ -47,9 +48,14 @@ export default function UserListings() {
 
     if (loading) {
         return (
-            <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
+            <div
+                className="d-flex justify-content-center align-items-center"
+                style={{ height: "100vh" }}
+            >
                 <Spinner animation="border" role="status">
-                    <span className="visually-hidden">Loading your listings...</span>
+                    <span className="visually-hidden">
+                        Loading your listings...
+                    </span>
                 </Spinner>
             </div>
         );
@@ -59,66 +65,22 @@ export default function UserListings() {
         <Container>
             <h1>Your Listings</h1>
 
-            {/* 🔽 Filter and Sort UI */}
-            <div className="d-flex justify-content-between my-3">
-                <Form className="d-flex">
-                    {/* Year */}
-                    <div className="dropdown">
-                        <button
-                            className="btn btn-outline-light dropdown-toggle text-black border-secondary-subtle"
-                            type="button"
-                            data-bs-toggle="dropdown"
-                        >
-                            {`${yearFrom} - ${yearTo}`}
-                        </button>
-                        <ul className="dropdown-menu wide-dropdown-menu">
-                            <li className="d-flex justify-content-between align-items-center px-2">
-                                <select className="form-select mx-1" value={yearFrom} onChange={(e) => setYearFrom(parseInt(e.target.value))}>
-                                    {Array.from({ length: 26 }, (_, i) => 2000 + i).map((year) => (
-                                        <option key={year} value={year}>{year}</option>
-                                    ))}
-                                </select>
-                                <p className="text-muted">To</p>
-                                <select className="form-select mx-1" value={yearTo} onChange={(e) => setYearTo(parseInt(e.target.value))}>
-                                    {Array.from({ length: 26 }, (_, i) => 2025 - i).map((year) => (
-                                        <option key={year} value={year}>{year}</option>
-                                    ))}
-                                </select>
-                            </li>
-                        </ul>
-                    </div>
-
-                    {/* Transmission */}
-                    <select className="form-select mx-1" value={transmission} onChange={(e) => setTransmission(e.target.value)}>
-                        <option value="All">All Transmissions</option>
-                        <option value="Automatic">Automatic</option>
-                        <option value="Manual">Manual</option>
-                    </select>
-
-                    {/* Body Style */}
-                    <select className="form-select mx-1" value={bodyStyle} onChange={(e) => setBodyStyle(e.target.value)}>
-                        <option value="All">All Body Styles</option>
-                        {BODY_STYLES.map((style) => (
-                            <option key={style} value={style}>{style}</option>
-                        ))}
-                    </select>
-                </Form>
-
-                {/* Sort and Status */}
-                <div className="d-flex">
-                    <select className="form-select" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-                        <option value="end_soon">Ending Soon</option>
-                        <option value="newly_listed">Newly listed</option>
-                        <option value="lowest_mileage">Lowest Mileage</option>
-                    </select>
-
-                    <select className="form-select ms-2" value={status} onChange={(e) => setStatus(e.target.value)}>
-                        <option value="All">All Listings</option>
-                        <option value="active">Active Listings</option>
-                        <option value="ended">Past Listings</option>
-                    </select>
-                </div>
-            </div>
+            {/* Filter and Sort UI */}
+            <CarFilterSortForm
+                yearFrom={yearFrom}
+                yearTo={yearTo}
+                setYearFrom={setYearFrom}
+                setYearTo={setYearTo}
+                transmission={transmission}
+                setTransmission={setTransmission}
+                bodyStyle={bodyStyle}
+                setBodyStyle={setBodyStyle}
+                sortBy={sortBy}
+                setSortBy={setSortBy}
+                status={status}
+                setStatus={setStatus}
+                showStatus={true}
+            />
 
             {/* 🧾 Car Listings */}
             <div className="car-listings">
@@ -136,27 +98,11 @@ export default function UserListings() {
             </div>
 
             {/* 📄 Pagination */}
-            {totalPages > 1 && (
-                <Pagination className="justify-content-center mt-4">
-                    <Pagination.Prev
-                        onClick={() => paginate(currentPage - 1)}
-                        disabled={currentPage === 1}
-                    />
-                    {Array.from({ length: totalPages }, (_, index) => (
-                        <Pagination.Item
-                            key={index + 1}
-                            active={currentPage === index + 1}
-                            onClick={() => paginate(index + 1)}
-                        >
-                            {index + 1}
-                        </Pagination.Item>
-                    ))}
-                    <Pagination.Next
-                        onClick={() => paginate(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                    />
-                </Pagination>
-            )}
+            <PaginationComponent
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={paginate}
+            />
         </Container>
     );
 }

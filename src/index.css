@@ -238,3 +238,9 @@
 .nav-link.active {
     font-weight: bold;
 }
+
+
+.select-wrapper:hover {
+    background-color: #f8f9fa;
+    cursor: pointer;
+  }

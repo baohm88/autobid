@@ -174,7 +174,7 @@ export default function ClientLayout() {
                         </Navbar>
                     </header>
 
-                    <main>
+                    <main className="mt-3">
                         <Outlet context={{ searchTerm }} />
                     </main>
 

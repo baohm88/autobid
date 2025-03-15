@@ -6,7 +6,7 @@ import { BODY_STYLES } from "./user/dummy_data";
 import { useState } from "react";
 import PaginationComponent from "../UI/Pagination";
 import { useCarContext } from "../context/CarContext";
-import CarFilterSortForm from "../UI/CarFilterSortForm";
+import FilterSortForm from "../UI/FilterSortForm";
 
 export default function Home() {
     const { searchTerm } = useOutletContext();
@@ -18,7 +18,14 @@ export default function Home() {
     const [bodyStyle, setBodyStyle] = useState("All");
     const [yearFrom, setYearFrom] = useState(2000);
     const [yearTo, setYearTo] = useState(2025);
-    const status = "All";
+    const [status, setStatus] = useState("All");
+
+    // Handle filter and sort by changes
+    const handleTransmissionChange = (e) => setTransmission(e.target.value);
+    const handleBodyStyleChange = (e) => setBodyStyle(e.target.value);
+    const handleYearFromChange = (e) => setYearFrom(parseInt(e.target.value));
+    const handleYearToChange = (e) => setYearTo(parseInt(e.target.value));
+    const handleSortByChange = (e) => setSortBy(e.target.value);
 
     const {
         loading,
@@ -59,18 +66,22 @@ export default function Home() {
         <Container expand="lg">
             <h1>Live Auctions</h1>
             {/* filter group */}
-            <CarFilterSortForm
+
+            <FilterSortForm
                 yearFrom={yearFrom}
                 yearTo={yearTo}
-                setYearFrom={(val) => setYearFrom(parseInt(val))}
-                setYearTo={(val) => setYearTo(parseInt(val))}
                 transmission={transmission}
-                setTransmission={setTransmission}
                 bodyStyle={bodyStyle}
-                setBodyStyle={setBodyStyle}
                 sortBy={sortBy}
-                setSortBy={setSortBy}
+                status={status}
+                onYearFromChange={setYearFrom}
+                onYearToChange={setYearTo}
+                onTransmissionChange={setTransmission}
+                onBodyStyleChange={setBodyStyle}
+                onSortByChange={setSortBy}
+                onStatusChange={setStatus}
             />
+
             {/* Car Listings */}
             <div className="car-listings">
                 {filteredCars.length === 0 ? (

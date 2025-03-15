@@ -17,10 +17,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import CarDetails from "./car/CarDetails";
 import AddCar from "./user/AddCar";
 import UpdateCar from "./user/UpdateCar";
-import InProgressListings from "./user/sidebar/InProgressListings";
-import LiveListings from "./user/sidebar/LiveListings";
 import ListingsComments from "./user/sidebar/ListingsComments";
-import PastListings from "./user/sidebar/PastListings";
 import UserProfile from "./user/UserProfile";
 
 // Admin components
@@ -107,10 +104,7 @@ export const AppRouter = createBrowserRouter([
                 ),
                 children: [
                     { path: "dashboard", element: <UserProfile /> },
-                    { path: "in-progress", element: <InProgressListings /> },
-                    { path: "live-auctions", element: <LiveListings /> },
                     { path: "comments", element: <ListingsComments /> },
-                    { path: "past-listings", element: <PastListings /> },
                     { path: "listings", element: <UserListings /> },
                 ],
             },
