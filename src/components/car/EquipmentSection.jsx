@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function EquipmentSection({ equipments }) {
     return (
         <div className="mt-4">

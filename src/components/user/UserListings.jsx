@@ -1,4 +1,4 @@
-import { Container, Spinner } from "react-bootstrap";
+import { Col, Container, Row, Spinner } from "react-bootstrap";
 import { useAuth } from "../../context/AuthContext";
 import { useCarContext } from "../../context/CarContext";
 import CarItem from "../CarItem";
@@ -82,20 +82,20 @@ export default function UserListings() {
                 showStatus={true}
             />
 
-            {/* 🧾 Car Listings */}
-            <div className="car-listings">
-                {filteredCars.length === 0 ? (
-                    <p className="text-center text-muted fs-5 my-5">
-                        Found no listings that match your filter criteria.
-                    </p>
-                ) : (
-                    currentCars.map((car) => (
-                        <div className="car-card" key={car.id}>
+            {/* Car Listings */}
+            {filteredCars.length <= 0 ? (
+                <p className="text-center text-muted fs-5 my-5">
+                    Found no listings that match your filter criteria.
+                </p>
+            ) : (
+                <Row xs={1} md={2} lg={3} className="g-4 my-3">
+                    {currentCars.map((car) => (
+                        <Col key={car.id}>
                             <CarItem car={car} />
-                        </div>
-                    ))
-                )}
-            </div>
+                        </Col>
+                    ))}
+                </Row>
+            )}
 
             {/* 📄 Pagination */}
             <PaginationComponent

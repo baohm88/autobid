@@ -62,7 +62,7 @@ export default function AdminLayout() {
                         </div>
                     )}
 
-                    <div className="d-flex min-vh-100">
+                    <div className="d-flex vh-100">
                         {/* Sidebar drawer on mobile */}
                         {(showMobileSidebar || !isMobile) && (
                             <div

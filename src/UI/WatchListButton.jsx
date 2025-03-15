@@ -13,14 +13,15 @@ const WatchListButton = ({ carId }) => {
 
     return (
         <>
-            <Button variant="warning" className="mb-3" onClick={toggleWatch}>
+            <Button variant="warning" onClick={toggleWatch}>
                 {isInWatchList(carId) ? (
                     <span>
-                        <i class="bi bi-heart-fill text-danger"></i> Watching
+                        <i className="bi bi-heart-fill text-danger"></i>{" "}
+                        Watching
                     </span>
                 ) : (
                     <span>
-                        <i class="bi bi-heart "></i> Watch
+                        <i className="bi bi-heart "></i> Watch
                     </span>
                 )}{" "}
             </Button>

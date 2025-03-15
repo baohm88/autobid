@@ -1,4 +1,4 @@
-import { Row, Col, OverlayTrigger, Tooltip, Badge } from "react-bootstrap";
+import { OverlayTrigger, Tooltip, Badge } from "react-bootstrap";
 import { BiTime, BiUpArrowAlt, BiHash, BiChat } from "react-icons/bi";
 import { formatter } from "../../utils/formatter";
 import { useCountdown } from "../../hooks/useCountDown";

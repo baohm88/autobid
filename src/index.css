@@ -29,64 +29,17 @@
 }
 
 /* listings */
-/* Responsive Card Grid */
-.car-listings {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 1rem;
-    padding: 0.5rem;
-}
-
 /* Responsive Car Card */
+
 .car-card {
-    flex: 1 1 calc(100% - 2rem); /* Full width on small screens */
-    max-width: 100%;
-    min-width: 250px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border-radius: 8px;
 }
-
-@media (min-width: 576px) {
-    .car-card {
-        flex: 1 1 calc(50% - 2rem); /* 2 per row on small-medium screens */
-        max-width: calc(50% - 2rem);
-    }
-}
-
-@media (min-width: 768px) {
-    .car-card {
-        flex: 1 1 calc(33.333% - 2rem); /* 3 per row on tablets */
-        max-width: calc(33.333% - 2rem);
-    }
-}
-
-@media (min-width: 1200px) {
-    .car-card {
-        flex: 1 1 calc(25% - 2rem); /* 4 per row on large screens */
-        max-width: calc(25% - 2rem);
-    }
-}
-
 /* Hover effect */
 .car-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
     z-index: 3;
-}
-
-/* Card Image */
-.car-card .card-img-top {
-    height: 180px;
-    object-fit: cover;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-}
-
-.card-img-top {
-    object-fit: cover;
-    height: 200px; /* or whatever looks good */
 }
 
 .badge {
@@ -243,8 +196,6 @@
     background-color: #f8f9fa;
     cursor: pointer;
 }
-
-
 
 /* ADMIN LAYOUT */
 .sidebar-wrapper {

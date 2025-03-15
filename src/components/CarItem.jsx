@@ -35,7 +35,7 @@ export default function CarItem({ car }) {
     const badgeText = getBadge(car);
 
     return (
-        <Card className="h-100">
+        <Card className="h-100 car-card">
             <div className="position-relative">
                 {badgeText && (
                     <Badge

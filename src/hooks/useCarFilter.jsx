@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { isActive, isEnded } from "../utils/helpers";
 
-const CARS_PER_PAGE = 6;
+const CARS_PER_PAGE = 3;
 
 export default function useCarFilter({
     cars = [],
@@ -78,4 +78,3 @@ export default function useCarFilter({
         totalPages,
     };
 }
-

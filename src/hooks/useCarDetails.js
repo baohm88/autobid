@@ -7,6 +7,17 @@ export const useCarDetails = (id) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
+        if (!id) {
+            setCar(null);
+            setError(null);
+            setLoading(false);
+            return;
+        }
+
+        setCar(null);
+        setError(null);
+        setLoading(true);
+
         async function fetchListing() {
             try {
                 const res = await axios.get(

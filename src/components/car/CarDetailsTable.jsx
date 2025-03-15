@@ -11,7 +11,6 @@ import {
     FaCarSide,
     FaPalette,
     FaChair,
-    FaUserTie,
 } from "react-icons/fa";
 
 const iconStyle = {

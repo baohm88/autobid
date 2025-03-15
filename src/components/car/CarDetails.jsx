@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Container, Row, Col, Button, Spinner } from "react-bootstrap";
-import { FaRegHeart, FaHeart } from "react-icons/fa";
 
 // Car components
 import CarDetailsTable from "./CarDetailsTable";
@@ -32,7 +31,6 @@ import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import { useAuth } from "../../context/AuthContext";
 import { useCarContext } from "../../context/CarContext";
-import useWatchList from "../../hooks/useWatchList";
 import WatchListButton from "../../UI/WatchListButton";
 dayjs.extend(duration);
 
@@ -61,11 +59,6 @@ export default function CarDetails() {
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
     const { countdown, isExpired } = useCountdown(car?.end_time);
-
-    const { isInWatchList, addToWatchList, removeFromWatchList } =
-        useWatchList();
-
-    const toggleWatch = ({ carId }) => {};
 
     const navigate = useNavigate();
     const isOwner = user && car && user.id === car.user;
@@ -155,35 +148,34 @@ export default function CarDetails() {
             <p className="text-danger fw-semibold">⏳ {countdown}</p>
 
             {/* Edit Button (only visible to the owner) */}
+            <div className="mb-3">
+                {isOwner && (
+                    <Button
+                        variant="primary"
+                        onClick={() => navigate(`/listings/${car.id}/edit`)}
+                    >
+                        <i className="bi bi-pencil-square me-1"></i> Edit Car
+                        Info
+                    </Button>
+                )}
 
-            {isOwner && (
-                <Button
-                    className="mb-3"
-                    variant="primary"
-                    onClick={() => navigate(`/listings/${car.id}/edit`)}
-                >
-                    <i className="bi bi-pencil-square me-1"></i> Edit Car Info
-                </Button>
-            )}
-
-            {user && !isOwner && (
-                <>
-                    {!isExpired && (
-                        <Button
-                            variant="danger"
-                            className="mb-3 me-2"
-                            onClick={handlePlaceBid}
-                        >
-                            <i className="bi bi-currency-dollar"></i> Place Bid
-                        </Button>
-                    )}
-                    {/* <Button variant="warning" className="mb-3">
-                        <i className="bi bi-heart-fill text-danger me-1"></i>{" "}
-                        Add to Watchlist
-                    </Button> */}
-                    <WatchListButton carId={car.id} />
-                </>
-            )}
+                {user && !isOwner && (
+                    <div>
+                        {!isExpired && (
+                            <Button
+                                variant="danger"
+                                className="me-2"
+                                onClick={handlePlaceBid}
+                            >
+                                <i className="bi bi-currency-dollar"></i> Place
+                                Bid
+                            </Button>
+                        )}
+                        <WatchListButton carId={car.id} />
+                    </div>
+                )}
+            </div>
+            
 
             <CarImagesSection
                 car={car}
@@ -193,7 +185,7 @@ export default function CarDetails() {
             />
 
             <Row>
-                <Col lg={8}>
+                <Col lg={8} className="mt-3">
                     <ButtonsGroup car={car} />
                     <CarDetailsTable car={car} />
                     <EquipmentSection equipments={car.equipment.split(";")} />
@@ -206,7 +198,7 @@ export default function CarDetails() {
                     <CurrentBidSection car={car} onPlaceBid={handlePlaceBid} />
                     <BidsSection car={car} />
                 </Col>
-                <Col lg={4}>
+                <Col lg={4} className="mt-3">
                     <EndingSoonTable cars={endingSoonCars} />
                 </Col>
             </Row>

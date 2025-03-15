@@ -74,7 +74,7 @@ export const AppRouter = createBrowserRouter([
     {
         path: "/admin",
         element: (
-            <ProtectedRoute>
+            <ProtectedRoute adminOnly>
                 <AdminLayout />
             </ProtectedRoute>
         ),

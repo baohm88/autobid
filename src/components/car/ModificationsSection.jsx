@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function ModificationsSection({ modifications }) {
     return (
         <div>
