@@ -124,6 +124,14 @@ export default function ClientLayout() {
                                                 </NavDropdown.Item>
 
                                                 <NavDropdown.Item
+                                                    as={NavLink}
+                                                    to="/account/watch-list"
+                                                >
+                                                    <i className="bi bi-heart-fill me-2 text-danger"></i>{" "}
+                                                    Watch List
+                                                </NavDropdown.Item>
+
+                                                <NavDropdown.Item
                                                     as="button"
                                                     onClick={logOut}
                                                 >

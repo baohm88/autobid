@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Container, Row, Col, Button, Spinner } from "react-bootstrap";
+import { FaRegHeart, FaHeart } from "react-icons/fa";
 
 // Car components
 import CarDetailsTable from "./CarDetailsTable";
@@ -31,6 +32,8 @@ import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import { useAuth } from "../../context/AuthContext";
 import { useCarContext } from "../../context/CarContext";
+import useWatchList from "../../hooks/useWatchList";
+import WatchListButton from "../../UI/WatchListButton";
 dayjs.extend(duration);
 
 export default function CarDetails() {
@@ -58,6 +61,11 @@ export default function CarDetails() {
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
     const { countdown, isExpired } = useCountdown(car?.end_time);
+
+    const { isInWatchList, addToWatchList, removeFromWatchList } =
+        useWatchList();
+
+    const toggleWatch = ({ carId }) => {};
 
     const navigate = useNavigate();
     const isOwner = user && car && user.id === car.user;
@@ -169,10 +177,11 @@ export default function CarDetails() {
                             <i className="bi bi-currency-dollar"></i> Place Bid
                         </Button>
                     )}
-                    <Button variant="warning" className="mb-3">
+                    {/* <Button variant="warning" className="mb-3">
                         <i className="bi bi-heart-fill text-danger me-1"></i>{" "}
                         Add to Watchlist
-                    </Button>
+                    </Button> */}
+                    <WatchListButton carId={car.id} />
                 </>
             )}
 
