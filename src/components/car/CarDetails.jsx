@@ -32,11 +32,13 @@ import duration from "dayjs/plugin/duration";
 import { useAuth } from "../../context/AuthContext";
 import { useCarContext } from "../../context/CarContext";
 import WatchListButton from "../../UI/WatchListButton";
+import { useWatchList } from "../../context/WatchListContext";
 dayjs.extend(duration);
 
 export default function CarDetails() {
     const { id } = useParams();
     const { user, setUser } = useAuth();
+    const { isInWatchList } = useWatchList();
     const { car, loading: fetching, error } = useCarDetails(id);
     const { getEndingSoonCars } = useCarContext();
     const endingSoonCars = getEndingSoonCars(car?.id);
@@ -58,7 +60,7 @@ export default function CarDetails() {
     const [showModal, setShowModal] = useState(false);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
-    const { countdown, isExpired } = useCountdown(car?.end_time);
+    const { isExpired } = useCountdown(car?.end_time);
 
     const navigate = useNavigate();
     const isOwner = user && car && user.id === car.user;
@@ -147,19 +149,20 @@ export default function CarDetails() {
             </p>
 
             {/* Edit Button (only visible to the owner) */}
-            <div className="mb-3">
+            <div className="d-flex align-items-center mb-3 ">
                 {isOwner && (
                     <Button
                         variant="primary"
+                        className="me-2"
                         onClick={() => navigate(`/listings/${car.id}/edit`)}
                     >
-                        <i className="bi bi-pencil-square me-1"></i> Edit Car
+                        <i className="bi bi-pencil-square me-2"></i> Edit Car
                         Info
                     </Button>
                 )}
 
                 {user && !isOwner && (
-                    <div>
+                    <>
                         {!isExpired && (
                             <Button
                                 variant="danger"
@@ -170,9 +173,15 @@ export default function CarDetails() {
                                 Bid
                             </Button>
                         )}
-                        <WatchListButton carId={car.id} />
-                    </div>
+                    </>
                 )}
+
+                <span className="d-inline-flex align-items-center bg-body px-3 rounded border">
+                    <WatchListButton carId={car.id} />{" "}
+                    <span className="ms-2 text-muted">
+                        {isInWatchList(car?.id) ? "Watching" : "Watch"}
+                    </span>
+                </span>
             </div>
 
             <CarImagesSection

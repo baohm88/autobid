@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { Badge, Button, Container, Image, Spinner } from "react-bootstrap";
+import { Badge, Container, Image, Spinner } from "react-bootstrap";
 import { useCarContext } from "../../context/CarContext";
 import "./FeaturedCarousel.css";
 import { useNavigate } from "react-router-dom";
 import { useCountdown } from "../../hooks/useCountDown";
 import IconButton from "../../UI/IconButton";
 import { ChevronLeft, ChevronRight } from "react-bootstrap-icons";
+import { isActive } from "../../utils/helpers";
 
 export default function FeaturedCarousel() {
     const { cars } = useCarContext();
@@ -16,7 +17,8 @@ export default function FeaturedCarousel() {
 
     // Randomly pick 5 featured cars once
     useEffect(() => {
-        const shuffled = [...cars].sort(() => 0.5 - Math.random());
+        const activeCars = cars.filter((car) => isActive(car));
+        const shuffled = [...activeCars].sort(() => 0.5 - Math.random());
         setFeaturedCars(shuffled.slice(0, 5));
     }, [cars]);
 
@@ -94,7 +96,7 @@ export default function FeaturedCarousel() {
 
                 {/* Countdown + Bid */}
                 <div className="position-absolute bottom-0 start-0 m-3">
-                    <Badge bg="dark" className="me-2">
+                    <Badge bg="info" className="me-2">
                         ⏳ {countdown}
                     </Badge>
                     <Badge bg="danger">

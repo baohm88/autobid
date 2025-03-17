@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Tooltip } from "bootstrap";
 
 export default function ScrollTopButton() {
     const [isVisible, setIsVisible] = useState(false);
@@ -21,7 +20,7 @@ export default function ScrollTopButton() {
         isVisible && (
             <button
                 onClick={scrollToTop}
-                className={`btn btn-danger shadow-lg scroll-top-btn ${
+                className={`btn btn-danger shadow-lg scroll-top-btn fw-bolder ${
                     isVisible ? "visible" : ""
                 }`}
                 style={{
@@ -33,10 +32,10 @@ export default function ScrollTopButton() {
                     height: "56px",
                     borderRadius: "50%",
                     fontSize: "24px",
-                    pointerEvents: isVisible ? "auto" : "none", // prevent clicks when hidden
+                    pointerEvents: isVisible ? "auto" : "none",
                 }}
             >
-                <i className="bi bi-arrow-up-short" />
+                <i className="bi bi-arrow-up" />
             </button>
         )
     );

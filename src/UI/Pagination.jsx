@@ -9,7 +9,7 @@ export default function PaginationComponent({
     if (totalPages <= 1) return null;
 
     return (
-        <Pagination className="justify-content-center mt-3">
+        <Pagination className="justify-content-center mt-5">
             <Pagination.Prev
                 onClick={() => onPageChange(currentPage - 1)}
                 disabled={currentPage === 1}

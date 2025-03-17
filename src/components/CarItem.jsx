@@ -5,6 +5,8 @@ import { useCountdown } from "../hooks/useCountDown";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import { formatter } from "../utils/formatter";
+import WatchListButton from "../UI/WatchListButton";
+import { useAuth } from "../context/AuthContext";
 dayjs.extend(duration);
 
 function getBadge(car) {
@@ -12,7 +14,12 @@ function getBadge(car) {
     const endTime = dayjs(car.end_time);
     const createdAt = dayjs(car.created_at);
 
-    if (endTime.diff(now, "hour") <= 24) return "🔥 Ending Soon";
+    if (endTime.diff(now, "hour") <= 24 && endTime.diff(now, "hour") > 0) {
+        return "🔥 Ending Soon";
+    } else if (endTime.diff(now, "hour") <= 0) {
+        return "Auction Ended";
+    }
+
     if (now.diff(createdAt, "day") < 3) return "🚗 New";
     return null;
 }
@@ -20,8 +27,11 @@ function getBadge(car) {
 const maxLength = 50;
 
 export default function CarItem({ car }) {
+    const { user } = useAuth();
     const [showFullText, setShowFullText] = useState(false);
     const { countdown, isExpired } = useCountdown(car.end_time);
+
+    const isOwner = user && car && user.id === car.user;
 
     const truncateText = (text) => {
         return text.length <= maxLength
@@ -38,14 +48,19 @@ export default function CarItem({ car }) {
         <Card className="h-100 car-card">
             <div className="position-relative">
                 {badgeText && (
-                    <Badge
-                        bg="danger"
-                        className="position-absolute top-0 start-0 m-2"
-                        style={{ zIndex: 10 }}
-                    >
-                        {badgeText}
-                    </Badge>
+                    <>
+                        <Badge
+                            bg={isExpired ? "dark" : "danger"}
+                            className="position-absolute top-0 start-0 m-2"
+                            style={{ zIndex: 10 }}
+                        >
+                            {badgeText}
+                        </Badge>
+                    </>
                 )}
+                <span className="position-absolute top-0 end-0 m-2">
+                    <WatchListButton carId={car.id} />
+                </span>
 
                 <NavLink to={`/listings/${car.id}`}>
                     <Card.Img
@@ -56,6 +71,16 @@ export default function CarItem({ car }) {
                         style={{ height: "200px", objectFit: "cover" }}
                     />
                 </NavLink>
+                {/* Countdown + Bid */}
+                <div className="position-absolute bottom-0 start-0 m-3">
+                    <Badge bg="info" className="me-2">
+                        ⏳ {countdown}
+                    </Badge>
+                    <Badge bg="danger">
+                        💰{" "}
+                        {formatter.format(car.current_bid || car.starting_bid)}
+                    </Badge>
+                </div>
             </div>
 
             <Card.Body>
@@ -74,27 +99,12 @@ export default function CarItem({ car }) {
                         </span>
                     )}
                 </Card.Text>
-
-                <Card.Text className="text-muted">
-                    <strong>⏳ {countdown}</strong>
-                </Card.Text>
-
-                <Card.Text>
-                    <strong>
-                        Starting Bid: {formatter.format(car.starting_bid)}
-                    </strong>
-                    <br />
-                    <strong>
-                        Current Bid:{" "}
-                        {formatter.format(car.starting_bid || car.current_bid)}
-                    </strong>
-                </Card.Text>
             </Card.Body>
             <Card.Footer>
                 <NavLink to={`/listings/${car.id}`}>
                     <button
                         className="btn btn-danger w-100"
-                        disabled={isExpired}
+                        disabled={isExpired || isOwner}
                     >
                         {isExpired ? "Auction Ended" : "Place Bid"}
                     </button>

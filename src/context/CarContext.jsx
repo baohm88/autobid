@@ -18,8 +18,20 @@ export const CarProvider = ({ children }) => {
     useEffect(() => {
         const fetchCars = async () => {
             try {
-                const res = await axios.get("http://localhost:8080/listings"); 
-                setCars(res.data.data);
+                const activeListings = await axios.get(
+                    "http://localhost:8080/listings"
+                );
+
+                const endedListings = await axios.get(
+                    "http://localhost:8080/listings/ended"
+                );
+
+                const allListings = [
+                    ...activeListings.data.data,
+                    ...endedListings.data.data,
+                ];
+
+                setCars(allListings);
             } catch (err) {
                 setError("Failed to fetch cars.");
             } finally {

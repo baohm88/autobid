@@ -14,7 +14,7 @@ export default function CarImagesSection({
                 <Col lg={8} className="main-image-wrapper">
                     {car?.images?.length > 0 && (
                         <div
-                            className="main-image-container"
+                            className="main-image-container position-relative"
                             onClick={() => openModal(0)}
                         >
                             <Image

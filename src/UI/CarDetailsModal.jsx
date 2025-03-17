@@ -18,7 +18,6 @@ import BidModal from "./BidModal";
 import DepositModal from "./DepositModal";
 import { useAuth } from "../context/AuthContext";
 import { useBidHandler } from "../hooks/useBidHandler";
-import useWatchList from "../hooks/useWatchList";
 import WatchListButton from "./WatchListButton";
 import { useNavigate } from "react-router-dom";
 
@@ -43,8 +42,6 @@ export default function CarDetailsModal({ show, onClose, carId }) {
         handleSaveBid,
         handleDeposit,
     } = useBidHandler({ car, user, setUser });
-
-    useWatchList();
 
     const [showImageModal, setShowImageModal] = useState(false);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);

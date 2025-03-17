@@ -7,7 +7,6 @@ import {
     FormControl,
     NavDropdown,
     Image,
-    Offcanvas,
 } from "react-bootstrap";
 import { Outlet, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
@@ -53,7 +52,7 @@ export default function ClientLayout() {
                             <Container className="d-flex justify-content-between align-items-center">
                                 <div className="d-flex align-items-center gap-3">
                                     <RiMenu2Line
-                                        className="fs-3 d-md-none"
+                                        className="fs-3 d-md-none text-danger"
                                         onClick={toggleSidebar}
                                         style={{ cursor: "pointer" }}
                                     />
@@ -68,6 +67,15 @@ export default function ClientLayout() {
                                             height={50}
                                         />
                                     </Navbar.Brand>
+                                    <Nav.Link as={NavLink} to="/add-car">
+                                        <Button
+                                            variant="danger"
+                                            size="sm"
+                                            className="rounded-pill d-none d-md-inline"
+                                        >
+                                            Sell Car
+                                        </Button>
+                                    </Nav.Link>
                                 </div>
 
                                 {/* Centered brand on mobile */}

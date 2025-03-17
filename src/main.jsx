@@ -7,13 +7,16 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "./index.css";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { CarProvider } from "./context/CarContext.jsx";
+import { WatchListProvider } from "./context/WatchListContext.jsx";
 
 createRoot(document.getElementById("root")).render(
     <StrictMode>
-        <AuthProvider>
-            <CarProvider>
-                <App />
-            </CarProvider>
-        </AuthProvider>
+        <WatchListProvider>
+            <AuthProvider>
+                <CarProvider>
+                    <App />
+                </CarProvider>
+            </AuthProvider>
+        </WatchListProvider>
     </StrictMode>
 );

@@ -57,7 +57,7 @@ export default function Home() {
     return (
         <Container expand="lg">
             <FeaturedCarousel />
-            <h1>Live Auctions</h1>
+            <h1>{status} Auctions</h1>
             {/* filter group */}
 
             <CarFilterSortForm

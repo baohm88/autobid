@@ -116,7 +116,7 @@ export default function AdminAuction() {
                 setBodyStyle={setBodyStyle}
                 sortBy={sortBy}
                 setSortBy={setSortBy}
-                showStatus={false}
+                showStatus={true}
             />
 
             {/* Table View */}

@@ -35,8 +35,8 @@ export default function useCarFilter({
 
         const matchesStatus =
             status === "All" ||
-            (status === "active" && isActive(car)) ||
-            (status === "ended" && isEnded(car));
+            (status === "Active" && isActive(car)) ||
+            (status === "Ended" && isEnded(car));
 
         return (
             matchesSearch &&

@@ -1,5 +1,5 @@
 export const ADMIN_LINKS = [
-    { to: "/admin", icon: "bi-house", label: "Home" },
+    { to: "/admin", icon: "bi-house", label: "Home", end: true },
     {
         to: "/admin/auctions",
         icon: "bi-speedometer2",

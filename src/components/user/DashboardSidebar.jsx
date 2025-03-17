@@ -21,7 +21,7 @@ export default function DashboardSidebar({ collapsed, toggleSidebar }) {
         >
             <div className="d-flex align-items-center justify-content-end mb-4">
                 <Button
-                    variant="light  "
+                    variant="light"
                     onClick={toggleSidebar}
                     className="p-1 fw-bolder"
                     size="sm"

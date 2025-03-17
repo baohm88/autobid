@@ -10,7 +10,7 @@ import { useAuth } from "../../context/AuthContext";
 import useLogOut from "../../hooks/useLogOut";
 import { ADMIN_LINKS } from "./adminLinks";
 
-export default function AdminSidebar({ collapsed, toggleSidebar, onCloseMobile, isMobile  }) {
+export default function AdminSidebar({ collapsed, toggleSidebar }) {
     const { user } = useAuth();
     const logOut = useLogOut();
 
@@ -33,21 +33,28 @@ export default function AdminSidebar({ collapsed, toggleSidebar, onCloseMobile, 
                         height={30}
                         style={{ display: collapsed ? "none" : "inline-block" }}
                     />
+
                     <Button
                         variant="light"
                         onClick={toggleSidebar}
-                        className="p-1"
+                        className="p-1 fw-bolder"
                         size="sm"
-                        aria-label={
-                            collapsed ? "Expand sidebar" : "Collapse sidebar"
-                        }
+                        style={{
+                            borderRadius: "50%",
+                            width: "30px",
+                            height: "30px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            zIndex: 1000,
+                            padding: 0,
+                        }}
                     >
                         <i
-                            className={`bi ${
-                                collapsed
-                                    ? "bi-chevron-right"
-                                    : "bi-chevron-left"
+                            className={`bi  ${
+                                collapsed ? "bi-arrow-right" : "bi-arrow-left"
                             }`}
+                            style={{ fontSize: "1.3rem" }}
                         ></i>
                     </Button>
                 </div>

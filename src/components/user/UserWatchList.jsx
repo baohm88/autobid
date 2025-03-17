@@ -1,19 +1,22 @@
 import { Col, Row, Spinner } from "react-bootstrap";
 import { useCarContext } from "../../context/CarContext";
-import useWatchList from "../../hooks/useWatchList";
+
 import CarItem from "../CarItem";
 import CarFilterSortForm from "../../UI/CarFilterSortForm";
 import { useOutletContext } from "react-router-dom";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import useCarFilter from "../../hooks/useCarFilter";
 import PaginationComponent from "../../UI/Pagination";
+import { useWatchList } from "../../context/WatchListContext";
 
 export default function UserWatchList() {
     const { searchTerm } = useOutletContext();
     const { watchList } = useWatchList();
     const { cars } = useCarContext();
 
-    const userSavedCars = cars.filter((car) => watchList.includes(car.id));
+    const userSavedCars = useMemo(() => {
+        return cars.filter((car) => watchList.includes(car.id));
+    }, [cars, watchList]);
 
     // State variables for filters and sorting
     const [sortBy, setSortBy] = useState("end_soon");
@@ -56,7 +59,9 @@ export default function UserWatchList() {
 
     return (
         <div className="container mt-3">
-            <h4>Your Watch List</h4>
+            {watchList.length > 0 && (
+                <h4>Your Watch List ({watchList.length}) </h4>
+            )}
 
             <CarFilterSortForm
                 yearFrom={yearFrom}
@@ -71,13 +76,13 @@ export default function UserWatchList() {
                 setSortBy={setSortBy}
                 status={status}
                 setStatus={setStatus}
-                showStatus={false}
+                showStatus={true}
             />
 
             {/* Car Listings */}
             {filteredCars.length === 0 ? (
                 <p className="text-center text-muted fs-5 my-5">
-                    Found no listings in your watch list.
+                    Found no listings in your watch list that matche your filter criteria.
                 </p>
             ) : (
                 <Row xs={1} md={2} lg={3} className="g-4 my-3">
