@@ -4,6 +4,7 @@ import AdminSidebar from "../components/admin/AdminSidebar";
 import ScrollTopButton from "../UI/ScrollTopButton";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "react-bootstrap";
+import { HiOutlineMenuAlt1 } from "react-icons/hi";
 
 export default function AdminLayout() {
     const [collapsed, setCollapsed] = useState(false);
@@ -49,10 +50,12 @@ export default function AdminLayout() {
                     {isMobile && (
                         <div className="d-flex justify-content-between align-items-center p-2 bg-light border-bottom">
                             <Button
-                                variant="outline-danger "
+                                variant="outline-danger"
+                                size="sm"
                                 onClick={() => setShowMobileSidebar(true)}
                             >
-                                <i className="bi bi-list fs-4"></i>
+                                {/* <i className="bi bi-list fs-4"></i> */}
+                                <HiOutlineMenuAlt1 className="fs-4" />
                             </Button>
                             <img
                                 src="/logo-autobid.svg"

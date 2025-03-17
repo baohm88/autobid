@@ -177,7 +177,7 @@ export const DASHBOARD_LINKS = [
         icon: "bi-ev-front",
         text: "My Listings",
     },
-    { to: "/account/comments", icon: "bi-chat", text: "My Comments" },
+    // { to: "/account/comments", icon: "bi-chat", text: "My Comments" },
     {
         to: "/account/user-bids",
         icon: "bi-envelope-arrow-up",

@@ -10,7 +10,7 @@ export default function ProfileCard({
 }) {
     const { user } = useAuth();
     return (
-        <Card className="mb-3 shadow-sm">
+        <Card className="mb-5 shadow-sm">
             <Row className="g-0">
                 <Col
                     md={4}
@@ -22,7 +22,7 @@ export default function ProfileCard({
                             user.image_url ||
                             "https://png.pngtree.com/png-clipart/20240705/original/pngtree-web-programmer-avatar-png-image_15495270.png"
                         }
-                        className="img-fluid rounded-circle mb-3"
+                        className="img-fluid rounded-circle mb-5"
                         alt={user.username}
                         style={{
                             width: "130px",
@@ -46,11 +46,11 @@ export default function ProfileCard({
                         <Card.Title className="mb-3 fs-3 fw-bold">
                             {user.username}
                         </Card.Title>
-                        <Card.Text className="text-muted mb-4 fs-5">
+                        <Card.Text className="text-muted mb-3 fs-5">
                             {user.bio || "No bio available."}
                         </Card.Text>
 
-                        <Card.Text className="text-muted mb-2">
+                        <Card.Text className="text-muted mb-3">
                             <strong>Listings:</strong> {userListings.length}{" "}
                             total |{" "}
                             <span className="text-success">

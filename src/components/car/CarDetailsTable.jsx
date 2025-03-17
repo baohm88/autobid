@@ -3,7 +3,6 @@ import {
     FaCar,
     FaTachometerAlt,
     FaKey,
-    FaMapMarkerAlt,
     FaUser,
     FaCogs,
     FaRoad,
@@ -47,12 +46,6 @@ export default function CarDetailsTable({ car }) {
 
                     <tr className="align-middle">
                         <th>
-                            <FaMapMarkerAlt style={iconStyle} /> Location
-                        </th>
-                        <td>Novato, CA 94945</td>
-                    </tr>
-                    <tr className="align-middle">
-                        <th>
                             <FaUser style={iconStyle} /> Seller
                         </th>
                         <td>Genau_AutoWerks</td>
@@ -91,7 +84,7 @@ export default function CarDetailsTable({ car }) {
                         <th>
                             <FaChair style={iconStyle} /> Interior Color
                         </th>
-                        <td>{car.interior_color}</td>
+                        <td>{car.interial_color}</td>
                     </tr>
                 </tbody>
             </Table>
@@ -124,16 +117,15 @@ export default function CarDetailsTable({ car }) {
 
                             <tr className="align-middle">
                                 <th>
-                                    <FaMapMarkerAlt style={iconStyle} />{" "}
-                                    Location
-                                </th>
-                                <td>Novato, CA 94945</td>
-                            </tr>
-                            <tr className="align-middle">
-                                <th>
                                     <FaUser style={iconStyle} /> Seller
                                 </th>
                                 <td>Genau_AutoWerks</td>
+                            </tr>
+                            <tr className="align-middle">
+                                <th>
+                                    <FaChair style={iconStyle} /> Interior Color
+                                </th>
+                                <td>{car.interial_color}</td>
                             </tr>
                         </tbody>
                     </Table>
@@ -173,12 +165,6 @@ export default function CarDetailsTable({ car }) {
                                     Color
                                 </th>
                                 <td>{car.exterior_color}</td>
-                            </tr>
-                            <tr className="align-middle">
-                                <th>
-                                    <FaChair style={iconStyle} /> Interior Color
-                                </th>
-                                <td>{car.interior_color}</td>
                             </tr>
                         </tbody>
                     </Table>

@@ -5,6 +5,7 @@ import { DUMMY_QA } from "../user/dummy_data";
 import QAModal from "../../UI/QAModal";
 import useQACarousel from "../../hooks/useQACarousel";
 import QAItemCard from "./QAItemCard";
+import IconButton from "../../UI/IconButton";
 
 export default function QASection() {
     const [qas, setQAs] = useState(DUMMY_QA);
@@ -104,37 +105,23 @@ export default function QASection() {
                 </div>
 
                 {/* Scroll Buttons */}
-                <Button
+                <IconButton
+                    icon={<ChevronLeft size={20} />}
                     variant="dark"
-                    disabled={!canScrollLeft}
-                    className="position-absolute top-50 start-0 translate-middle-y"
-                    style={{
-                        zIndex: 1,
-                        width: "40px",
-                        height: "40px",
-                        borderRadius: "50%",
-                        opacity: canScrollLeft ? 0.8 : 0.3,
-                    }}
                     onClick={() => scrollByCards(-2)}
-                >
-                    <ChevronLeft />
-                </Button>
-
-                <Button
+                    style={{ left: "10px", opacity: canScrollLeft ? 0.5 : 0.2 }}
+                    disabled={!canScrollLeft}
+                />
+                <IconButton
+                    icon={<ChevronRight size={20} />}
                     variant="dark"
-                    disabled={!canScrollRight}
-                    className="position-absolute top-50 end-0 translate-middle-y"
-                    style={{
-                        zIndex: 1,
-                        width: "40px",
-                        height: "40px",
-                        borderRadius: "50%",
-                        opacity: canScrollRight ? 0.8 : 0.3,
-                    }}
                     onClick={() => scrollByCards(2)}
-                >
-                    <ChevronRight />
-                </Button>
+                    style={{
+                        right: "10px",
+                        opacity: canScrollRight ? 0.5 : 0.2,
+                    }}
+                    disabled={!canScrollRight}
+                />
             </div>
 
             {/* Pagination Dots */}

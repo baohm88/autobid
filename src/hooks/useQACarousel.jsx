@@ -1,4 +1,3 @@
-// hooks/useQACarousel.js
 import { useCallback, useEffect, useRef, useState } from "react";
 
 export default function useQACarousel(qas) {
@@ -13,8 +12,7 @@ export default function useQACarousel(qas) {
         return width < 768 ? 1.25 : 2.5;
     };
 
-    
-    const updatePagination = () => {
+    const updatePagination = useCallback(() => {
         const container = scrollRef.current;
         if (!container) return;
 
@@ -27,11 +25,11 @@ export default function useQACarousel(qas) {
 
         setMaxPages(totalPages);
         setCurrentPage(current);
-        setCanScrollLeft(scrollLeft > 0);
+        setCanScrollLeft(scrollLeft > 5); // <-- add buffer
         setCanScrollRight(
-            scrollLeft + container.offsetWidth < container.scrollWidth - 10
+            scrollLeft + container.offsetWidth < container.scrollWidth - 5
         );
-    };
+    }, [qas]);
 
     const scrollByCards = (cardCount) => {
         const container = scrollRef.current;
@@ -50,7 +48,7 @@ export default function useQACarousel(qas) {
         updatePagination();
         window.addEventListener("resize", updatePagination);
         return () => window.removeEventListener("resize", updatePagination);
-    }, [qas]);
+    }, [updatePagination]);
 
     return {
         scrollRef,

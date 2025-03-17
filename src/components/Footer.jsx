@@ -2,164 +2,62 @@ import { NavLink } from "react-router-dom";
 
 export default function Footer() {
     return (
-        <div>
-            <div className="container">
-                <footer className="row row-cols-1 row-cols-sm-2 row-cols-md-5 py-5 my-5 border-top">
-                    <div className="col mb-3">
+        <div className="container">
+            <footer className="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+                <p className="col-md-4 mb-0 text-body-secondary">
+                    © 2024 Company, Inc
+                </p>
+
+                <NavLink
+                    to="/"
+                    className="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"
+                >
+                    <img src="/logo-autobid.svg" alt="auto bid" height={20} />
+                </NavLink>
+
+                <ul className="nav col-md-4 justify-content-end">
+                    <li className="nav-item">
                         <NavLink
-                            to="/"
-                            className="d-flex align-items-center mb-3 link-body-emphasis text-decoration-none"
+                            to="#"
+                            className="nav-link px-2 text-body-secondary"
                         >
-                            <img
-                                src="/logo-autobid.svg"
-                                alt="auto bid"
-                                height={50}
-                            />
+                            Home
                         </NavLink>
-                        <p className="text-body-secondary">© 2025</p>
-                    </div>
-
-                    <div className="col mb-3"></div>
-
-                    <div className="col mb-3">
-                        <h5>Section</h5>
-                        <ul className="nav flex-column">
-                            <li className="nav-item mb-2">
-                                <NavLink
-                                    to="#"
-                                    className="nav-link p-0 text-body-secondary"
-                                >
-                                    Home
-                                </NavLink>
-                            </li>
-                            <li className="nav-item mb-2">
-                                <NavLink
-                                    to="#"
-                                    className="nav-link p-0 text-body-secondary"
-                                >
-                                    Features
-                                </NavLink>
-                            </li>
-                            <li className="nav-item mb-2">
-                                <NavLink
-                                    to="#"
-                                    className="nav-link p-0 text-body-secondary"
-                                >
-                                    Pricing
-                                </NavLink>
-                            </li>
-                            <li className="nav-item mb-2">
-                                <NavLink
-                                    to="#"
-                                    className="nav-link p-0 text-body-secondary"
-                                >
-                                    FAQs
-                                </NavLink>
-                            </li>
-                            <li className="nav-item mb-2">
-                                <NavLink
-                                    to="#"
-                                    className="nav-link p-0 text-body-secondary"
-                                >
-                                    About
-                                </NavLink>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div className="col mb-3">
-                        <h5>Section</h5>
-                        <ul className="nav flex-column">
-                            <li className="nav-item mb-2">
-                                <NavLink
-                                    to="#"
-                                    className="nav-link p-0 text-body-secondary"
-                                >
-                                    Home
-                                </NavLink>
-                            </li>
-                            <li className="nav-item mb-2">
-                                <NavLink
-                                    to="#"
-                                    className="nav-link p-0 text-body-secondary"
-                                >
-                                    Features
-                                </NavLink>
-                            </li>
-                            <li className="nav-item mb-2">
-                                <NavLink
-                                    to="#"
-                                    className="nav-link p-0 text-body-secondary"
-                                >
-                                    Pricing
-                                </NavLink>
-                            </li>
-                            <li className="nav-item mb-2">
-                                <NavLink
-                                    to="#"
-                                    className="nav-link p-0 text-body-secondary"
-                                >
-                                    FAQs
-                                </NavLink>
-                            </li>
-                            <li className="nav-item mb-2">
-                                <NavLink
-                                    to="#"
-                                    className="nav-link p-0 text-body-secondary"
-                                >
-                                    About
-                                </NavLink>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div className="col mb-3">
-                        <h5>Section</h5>
-                        <ul className="nav flex-column">
-                            <li className="nav-item mb-2">
-                                <NavLink
-                                    to="#"
-                                    className="nav-link p-0 text-body-secondary"
-                                >
-                                    Home
-                                </NavLink>
-                            </li>
-                            <li className="nav-item mb-2">
-                                <NavLink
-                                    to="#"
-                                    className="nav-link p-0 text-body-secondary"
-                                >
-                                    Features
-                                </NavLink>
-                            </li>
-                            <li className="nav-item mb-2">
-                                <NavLink
-                                    to="#"
-                                    className="nav-link p-0 text-body-secondary"
-                                >
-                                    Pricing
-                                </NavLink>
-                            </li>
-                            <li className="nav-item mb-2">
-                                <NavLink
-                                    to="#"
-                                    className="nav-link p-0 text-body-secondary"
-                                >
-                                    FAQs
-                                </NavLink>
-                            </li>
-                            <li className="nav-item mb-2">
-                                <NavLink
-                                    to="#"
-                                    className="nav-link p-0 text-body-secondary"
-                                >
-                                    About
-                                </NavLink>
-                            </li>
-                        </ul>
-                    </div>
-                </footer>
-            </div>
+                    </li>
+                    <li className="nav-item">
+                        <NavLink
+                            to="#"
+                            className="nav-link px-2 text-body-secondary"
+                        >
+                            Features
+                        </NavLink>
+                    </li>
+                    <li className="nav-item">
+                        <NavLink
+                            to="#"
+                            className="nav-link px-2 text-body-secondary"
+                        >
+                            Pricing
+                        </NavLink>
+                    </li>
+                    <li className="nav-item">
+                        <NavLink
+                            to="#"
+                            className="nav-link px-2 text-body-secondary"
+                        >
+                            FAQs
+                        </NavLink>
+                    </li>
+                    <li className="nav-item">
+                        <NavLink
+                            to="#"
+                            className="nav-link px-2 text-body-secondary"
+                        >
+                            About
+                        </NavLink>
+                    </li>
+                </ul>
+            </footer>
         </div>
     );
 }

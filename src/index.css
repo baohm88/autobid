@@ -233,3 +233,40 @@
     background: rgba(0, 0, 0, 0.4);
     z-index: 1039;
 }
+
+/* FEATURED CAROUSEL */
+
+.featured-carousel {
+    position: relative;
+}
+
+.chevron-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background-color: white;
+    border-radius: 50%;
+    padding: 0.5rem 0.75rem;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.chevron-button.left {
+    left: 10px;
+}
+
+.chevron-button.right {
+    right: 10px;
+}
+
+
+/* MOBILE SIDEBAR */
+
+.active-link {
+    color: red !important;
+    font-weight: 500;
+}
+
+.nav-link:hover {
+    color: #dc3545 !important; /* Bootstrap's red */
+}

@@ -143,13 +143,10 @@ export default function UserWallet() {
     return (
         <div className="mb-5">
             <hr />
-            <h4 className="mb-4 text-center">
-                <FaWallet className="me-2" />
-                <strong>My Wallet</strong>
-            </h4>
+            <h4 className="mb-4 text-center">My Wallet</h4>
 
             <div className="row">
-                <div className="col-md-12 mb-4">
+                <div className="col-md-12 mb-5">
                     <div className="card shadow-sm p-4">
                         <h6 className="text-center mb-3 text-muted">
                             Wallet Balance Over Time

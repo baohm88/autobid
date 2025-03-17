@@ -4,8 +4,8 @@ import { DASHBOARD_LINKS } from "./dummy_data";
 
 export default function DashboardTopNav() {
     return (
-        <Navbar className="justify-content-around py-2 shadow-sm">
-            <Nav className="w-100 d-flex justify-content-around">
+        <Navbar className="justify-content-around shadow-sm rounded bg-light">
+            <Nav className="w-100 d-flex justify-content-around p-0">
                 {DASHBOARD_LINKS.map(({ to, icon }) => (
                     <NavLink
                         key={to}

@@ -26,14 +26,9 @@ export default function DashboardLayout() {
                 />
             </div>
 
-            {/* TopNav for mobile */}
-            <div className="d-md-none">
-                <DashboardTopNav />
-            </div>
-
-            <main className="flex-grow-1 p-2">
+            <div className="flex-grow-1 p-2">
                 <Outlet context={{ searchTerm }} />
-            </main>
+            </div>
         </div>
     );
 }

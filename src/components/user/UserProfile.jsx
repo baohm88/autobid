@@ -2,12 +2,11 @@ import { Col } from "react-bootstrap";
 import { useAuth } from "../../context/AuthContext";
 import ProfileCard from "./ProfileCard";
 import EditProfileModal from "./EditProfileModal";
-import QuickAccessBoxes from "./QuickAccessBoxes";
 import RandomComments from "./RandomComments";
 import { useState } from "react";
 import { useCarContext } from "../../context/CarContext";
 import UserWallet from "./UserWallet";
-
+ 
 export default function UserProfile() {
     const { user } = useAuth();
     const { cars } = useCarContext();
@@ -24,8 +23,8 @@ export default function UserProfile() {
     document.title = user?.username || "Account Details";
 
     return (
-        <Col sm className="min-vh-100 mt-3">
-            <h3 className="mb-3 text-center">Dashboard</h3>
+        <Col sm>
+            <h3 className="mb-4 text-center"> My Profile</h3>
 
             <ProfileCard
                 user={user}
@@ -34,6 +33,7 @@ export default function UserProfile() {
                 activeListings={activeListings}
                 endedListings={endedListings}
             />
+
             <UserWallet />
 
             <EditProfileModal
@@ -41,11 +41,6 @@ export default function UserProfile() {
                 handleClose={() => setShowModal(false)}
             />
 
-            <QuickAccessBoxes
-                userListings={userListings}
-                activeListings={activeListings}
-                endedListings={endedListings}
-            />
             <RandomComments />
         </Col>
     );

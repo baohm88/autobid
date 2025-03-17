@@ -7,7 +7,6 @@ import {
 import { NavLink } from "react-router-dom";
 import { DASHBOARD_LINKS } from "./dummy_data";
 
-
 export default function DashboardSidebar({ collapsed, toggleSidebar }) {
     return (
         <div
@@ -22,16 +21,26 @@ export default function DashboardSidebar({ collapsed, toggleSidebar }) {
         >
             <div className="d-flex align-items-center justify-content-end mb-4">
                 <Button
-                    variant="light"
+                    variant="light  "
                     onClick={toggleSidebar}
-                    className="p-1"
+                    className="p-1 fw-bolder"
                     size="sm"
+                    style={{
+                        borderRadius: "50%",
+                        width: "30px",
+                        height: "30px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        zIndex: 1000,
+                        padding: 0,
+                    }}
                 >
                     <i
-                        className={`bi ${
+                        className={`bi  ${
                             collapsed ? "bi-arrow-right" : "bi-arrow-left"
                         }`}
-                        style={{ fontSize: "1rem" }}
+                        style={{ fontSize: "1.3rem" }}
                     ></i>
                 </Button>
             </div>
@@ -57,8 +66,10 @@ export default function DashboardSidebar({ collapsed, toggleSidebar }) {
                                 to={to}
                                 end
                                 className={({ isActive }) =>
-                                    `nav-link d-flex align-items-center gap-2 ${
-                                        isActive ? "text-danger" : "text-dark"
+                                    `nav-link d-flex align-items-center gap-2  ${
+                                        isActive
+                                            ? "text-danger fw-bold"
+                                            : "text-muted"
                                     }`
                                 }
                             >

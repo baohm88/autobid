@@ -7,6 +7,7 @@ import { useState } from "react";
 import PaginationComponent from "../UI/Pagination";
 import { useCarContext } from "../context/CarContext";
 import CarFilterSortForm from "../UI/CarFilterSortForm";
+import FeaturedCarousel from "./car/FeaturedCarousel";
 
 export default function Home() {
     const { searchTerm } = useOutletContext();
@@ -53,10 +54,9 @@ export default function Home() {
         );
     }
 
-    console.log(cars);
-
     return (
         <Container expand="lg">
+            <FeaturedCarousel />
             <h1>Live Auctions</h1>
             {/* filter group */}
 

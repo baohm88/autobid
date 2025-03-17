@@ -24,8 +24,8 @@ export default function ImageViewerModal({
                     onClick={onClose}
                     style={{
                         position: "absolute",
-                        right: "20px",
-                        top: "20px",
+                        right: "10px",
+                        top: "30px",
                         zIndex: 1000,
                     }}
                 />

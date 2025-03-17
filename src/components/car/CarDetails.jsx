@@ -134,18 +134,17 @@ export default function CarDetails() {
     const hiddenCount = car?.images?.length > 8 ? car.images.length - 8 : 0;
 
     return (
-        <Container className="py-4">
+        <Container>
             {car && (
                 <h1 className="fw-bold">
                     {car.year_model} {car.make} {car.model}
                 </h1>
             )}
             <p className="text-muted">
+                {" "}
                 ~{car.mileage} miles, {car.transmission} {car.engine} engine,{" "}
                 {car.exterior_color} exterior
             </p>
-
-            <p className="text-danger fw-semibold">⏳ {countdown}</p>
 
             {/* Edit Button (only visible to the owner) */}
             <div className="mb-3">
@@ -175,7 +174,6 @@ export default function CarDetails() {
                     </div>
                 )}
             </div>
-            
 
             <CarImagesSection
                 car={car}

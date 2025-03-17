@@ -1,5 +1,3 @@
-import { Outlet, NavLink, useNavigate, useLocation } from "react-router-dom";
-import { useState } from "react";
 import {
     Navbar,
     Nav,
@@ -9,28 +7,35 @@ import {
     FormControl,
     NavDropdown,
     Image,
+    Offcanvas,
 } from "react-bootstrap";
+import { Outlet, NavLink, useNavigate, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { RiMenu2Line } from "react-icons/ri";
 import { useAuth } from "../context/AuthContext";
 import useLogOut from "../hooks/useLogOut";
 import ScrollToTop from "../utils/ScrollToTop";
 import ScrollTopButton from "../UI/ScrollTopButton";
 import Footer from "../components/Footer";
 import { AnimatePresence, motion } from "framer-motion";
+import MobileSidebar from "../UI/MobileSidebar";
 
 export default function ClientLayout() {
     const { user, isAuthenticated } = useAuth();
     const logOut = useLogOut();
     const location = useLocation();
-    const [searchTerm, setSearchTerm] = useState("");
     const navigate = useNavigate();
+    const [searchTerm, setSearchTerm] = useState("");
+    const [showSidebar, setShowSidebar] = useState(false);
 
     const handleSearchChange = (e) => setSearchTerm(e.target.value);
-
     const handleKeyPress = (e) => {
         if (e.key === "Enter" && searchTerm.trim() !== "") {
             navigate("/");
         }
     };
+
+    const toggleSidebar = () => setShowSidebar((prev) => !prev);
 
     return (
         <div>
@@ -44,62 +49,59 @@ export default function ClientLayout() {
                     transition={{ duration: 0.3 }}
                 >
                     <header>
-                        <Navbar expand="md" bg="light" className="shadow-sm">
-                            <Container>
-                                <Navbar.Brand as={NavLink} to="/">
+                        <Navbar bg="light" className="shadow-sm">
+                            <Container className="d-flex justify-content-between align-items-center">
+                                <div className="d-flex align-items-center gap-3">
+                                    <RiMenu2Line
+                                        className="fs-3 d-md-none"
+                                        onClick={toggleSidebar}
+                                        style={{ cursor: "pointer" }}
+                                    />
+                                    <Navbar.Brand
+                                        as={NavLink}
+                                        to="/"
+                                        className="d-none d-md-block"
+                                    >
+                                        <img
+                                            src="/logo-autobid.svg"
+                                            alt="AutoBid"
+                                            height={50}
+                                        />
+                                    </Navbar.Brand>
+                                </div>
+
+                                {/* Centered brand on mobile */}
+                                <Navbar.Brand
+                                    as={NavLink}
+                                    to="/"
+                                    className="mx-auto d-md-none"
+                                >
                                     <img
                                         src="/logo-autobid.svg"
-                                        alt="auto bid"
-                                        height={50}
+                                        alt="AutoBid"
+                                        height={30}
                                     />
                                 </Navbar.Brand>
-                                <Navbar.Toggle aria-controls="main-navbar" />
-                                <Navbar.Collapse
-                                    id="main-navbar"
-                                    className="justify-content-between"
+
+                                {/* Search bar (hidden on small) */}
+                                <Form
+                                    className="d-none d-md-flex w-50 mx-auto"
+                                    onKeyPress={handleKeyPress}
                                 >
-                                    <Nav className="me-auto">
-                                        <Nav.Link as={NavLink} to="/add-car">
-                                            <Button
-                                                variant="danger"
-                                                size="sm"
-                                                className="rounded-pill"
-                                            >
-                                                Sell Car
-                                            </Button>
-                                        </Nav.Link>
-                                    </Nav>
+                                    <FormControl
+                                        type="search"
+                                        placeholder="Search for cars (ex. BMW, Audi, Ford)"
+                                        className="me-2"
+                                        value={searchTerm}
+                                        onChange={handleSearchChange}
+                                    />
+                                </Form>
 
-                                    {/* Search form */}
-                                    <Form
-                                        className="d-flex mx-auto w-100 d-md-none mb-2"
-                                        onKeyPress={handleKeyPress}
-                                    >
-                                        <FormControl
-                                            type="search"
-                                            placeholder="Search for cars (ex. BMW, Audi, Ford)"
-                                            className="me-2"
-                                            value={searchTerm}
-                                            onChange={handleSearchChange}
-                                        />
-                                    </Form>
-                                    <Form
-                                        className="d-flex mx-auto w-50 d-none d-md-flex"
-                                        onKeyPress={handleKeyPress}
-                                    >
-                                        <FormControl
-                                            type="search"
-                                            placeholder="Search for cars (ex. BMW, Audi, Ford)"
-                                            className="me-2"
-                                            value={searchTerm}
-                                            onChange={handleSearchChange}
-                                        />
-                                    </Form>
-
-                                    {/* User area */}
-                                    {isAuthenticated ? (
-                                        <Nav className="align-items-center">
-                                            <i className="bi bi-bell-fill me-3 fs-5 text-muted"></i>
+                                {/* User controls */}
+                                {isAuthenticated ? (
+                                    <div className="d-flex align-items-center gap-3">
+                                        <i className="bi bi-bell-fill fs-5 text-muted"></i>
+                                        <Nav>
                                             <NavDropdown
                                                 align="end"
                                                 title={
@@ -119,45 +121,50 @@ export default function ClientLayout() {
                                                     as={NavLink}
                                                     to="/account/dashboard"
                                                 >
-                                                    <i className="bi bi-clipboard-data-fill me-2"></i>{" "}
+                                                    <i className="bi bi-clipboard-data-fill me-2" />
                                                     Dashboard
                                                 </NavDropdown.Item>
-
                                                 <NavDropdown.Item
                                                     as={NavLink}
                                                     to="/account/watch-list"
                                                 >
-                                                    <i className="bi bi-heart-fill me-2 text-danger"></i>{" "}
+                                                    <i className="bi bi-heart-fill me-2 text-danger" />
                                                     Watch List
                                                 </NavDropdown.Item>
-
                                                 <NavDropdown.Item
                                                     as="button"
                                                     onClick={logOut}
                                                 >
-                                                    <i className="bi bi-box-arrow-right me-2"></i>{" "}
+                                                    <i className="bi bi-box-arrow-right me-2" />
                                                     Logout
                                                 </NavDropdown.Item>
                                             </NavDropdown>
                                         </Nav>
-                                    ) : (
-                                        <Button
-                                            variant="success"
-                                            size="sm"
-                                            className="mt-2"
+                                    </div>
+                                ) : (
+                                    <Button variant="success" size="sm">
+                                        <NavLink
+                                            className="nav-link text-white"
+                                            to="/login"
                                         >
-                                            <NavLink
-                                                className="nav-link text-white"
-                                                to="/login"
-                                            >
-                                                <i className="bi bi-box-arrow-left me-2"></i>{" "}
-                                                Login
-                                            </NavLink>
-                                        </Button>
-                                    )}
-                                </Navbar.Collapse>
+                                            <i className="bi bi-box-arrow-left me-2"></i>
+                                            Login
+                                        </NavLink>
+                                    </Button>
+                                )}
                             </Container>
                         </Navbar>
+
+                        {/* Offcanvas sidebar with animation and theme */}
+                        <MobileSidebar
+                            show={showSidebar}
+                            onHide={toggleSidebar}
+                            searchTerm={searchTerm}
+                            handleSearchChange={handleSearchChange}
+                            handleKeyPress={handleKeyPress}
+                            isAuthenticated={isAuthenticated}
+                            logOut={logOut}
+                        />
                     </header>
 
                     <main className="mt-3">
