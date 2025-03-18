@@ -12,11 +12,7 @@ import {
     Spinner,
     Alert,
 } from "react-bootstrap";
-import {
-    BODY_STYLES,
-    MODIFIED_OPTIONS,
-    TRANSMISSION_OPTIONS,
-} from "./dummy_data";
+import { BODY_STYLES, MODIFIED_OPTIONS, TRANSMISSION_OPTIONS } from "./dummy_data";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { useAuth } from "../../context/AuthContext";
@@ -35,36 +31,16 @@ const validationSchema = yup.object().shape({
     exterior_color: yup.string().required("Exterior color is required"),
     starting_bid: yup.number().required("Starting bid is required"),
     start_time: yup.date().required("Start time is required"),
-    end_time: yup
-        .date()
-        .required("End time is required")
-        .test(
-            "min-duration",
-            "End time must be at least 1 day after start time",
-            function (value) {
-                const { start_time } = this.parent;
-                if (!start_time || !value) return true;
-                const diffInMs = value - start_time;
-                const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
-                return diffInDays >= 1;
-            }
-        ),
-
+    end_time: yup.date().required("End time is required"),
     equipment: yup.string(),
     modified: yup.string(),
     modifications: yup.string().when("modified", {
-        is: (value) => {
-            console.log("Modified value:", value);
-            return value === "Modified";
-        },
-        then: yup.string().required("Please list the modifications"),
+        is: "modified",
+        then: yup.string().required("Modifications are required"),
     }),
     flaw: yup.string(),
     flaws: yup.string().when("flaw", {
-        is: (value) => {
-            console.log("Flaw value:", value);
-            return value === "Yes";
-        },
+        is: "yes",
         then: yup.string().required("Please list the flaws"),
     }),
 });
@@ -461,54 +437,28 @@ export default function AddCar() {
                         {/* Image upload */}
                         <Form.Group controlId="imageUpload" className="mb-3">
                             <Form.Label>Upload Images</Form.Label>
-                            <Form.Control
-                                type="file"
-                                multiple
-                                onChange={handleImageUpload}
-                            />
+                            <Form.Control type="file" multiple onChange={handleImageUpload} />
                         </Form.Group>
 
                         {/* Display Uploaded Images */}
                         <Row className="mb-3">
                             {uploadedImages.map((image, index) => (
                                 <Col key={index} md={2} className="mb-2">
-                                    <Image
-                                        src={image}
-                                        thumbnail
-                                        className="mr-2"
+                                    <Image src={image} thumbnail className="mr-2"
                                     />
-                                    <Button
-                                        variant="danger"
-                                        size="sm"
-                                        onClick={() => handleRemoveImage(index)}
-                                    >
-                                        Remove
-                                    </Button>
+                                    <Button variant="danger" size="sm" onClick={() => handleRemoveImage(index)}>Remove</Button>
                                 </Col>
                             ))}
                         </Row>
 
-                        {imageError && (
-                            <Alert variant="danger">{imageError}</Alert>
-                        )}
+                        {imageError && ( <Alert variant="danger">{imageError}</Alert> )}
 
                         {/* Submit Button */}
-                        <Button
-                            type="submit"
-                            variant="danger"
-                            disabled={loading}
+                        <Button type="submit" variant="danger" disabled={loading}
                         >
                             {loading ? (
                                 <>
-                                    <Spinner
-                                        as="span"
-                                        animation="grow"
-                                        size="sm"
-                                        role="status"
-                                        aria-hidden="true"
-                                        className="me-2"
-                                    />
-                                    Saving Car...
+                                    <Spinner as="span" animation="grow" size="sm" role="status" aria-hidden="true"/>Saving Car...
                                 </>
                             ) : (
                                 "Register Car"

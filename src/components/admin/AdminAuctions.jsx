@@ -91,7 +91,7 @@ export default function AdminAuction() {
     };
 
     return (
-        <div className="px-3 py-2">
+        <div>
             <h2 className="mb-3">Manage Car Listings</h2>
 
             {/* Search Box */}

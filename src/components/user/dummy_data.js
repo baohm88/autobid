@@ -22,15 +22,27 @@ export const DUMMY_COMMENTS = [
 ];
 
 export const BODY_STYLES = [
-    "Coupe",
-    "Convertible",
-    "Hatchback",
-    "Sedan",
-    "SUV/Crossover",
-    "Truck",
-    "Van/Minivan",
-    "Wagon",
+    { value: "", label: "Choose Body Style" },
+    { value: "Coupe", label: "Coupe" },
+    { value: "Convertible", label: "Convertible" },
+    { value: "Sedan", label: "Sedan" },
+    { value: "SUV/Crossover", label: "SUV/Crossover" },
+    { value: "Truck", label: "Truck" },
+    { value: "Van/Minivan", label: "Van/Minivan" },
+    { value: "Wagon", label: "Wagon" },
 ];
+
+export const TRANSMISSION_OPTIONS = [
+    { value: "", label: "Select Transmission" },
+    { value: "Automatic", label: "Automatic" },
+    { value: "Manual", label: "Manual" },
+];
+
+export const MODIFIED_OPTIONS = [
+    { value: "", label: "Choose" },
+    { value: "new", label: "Brand New" },
+    { value: "modified", label: "Modified" },
+]
 
 export const DUMMY_QA = [
     {

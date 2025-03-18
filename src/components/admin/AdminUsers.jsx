@@ -234,7 +234,7 @@ export default function AdminUsers() {
     };
 
     return (
-        <Container fluid className="py-3">
+        <div>
             {/* Toolbar */}
             <Row className="mb-3">
                 <Col>
@@ -604,6 +604,6 @@ export default function AdminUsers() {
                     </Button>
                 </Modal.Footer>
             </Modal>
-        </Container>
+        </div>
     );
 }

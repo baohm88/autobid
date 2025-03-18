@@ -86,7 +86,7 @@ export default function AdminHome() {
     ];
 
     return (
-        <Container fluid>
+        <div>
             <h3 className="mb-4">Admin Dashboard</h3>
 
             {/* Metrics */}
@@ -147,6 +147,6 @@ export default function AdminHome() {
                     </Card>
                 </Col>
             </Row>
-        </Container>
+        </div>
     );
 }

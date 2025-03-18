@@ -1,25 +1,34 @@
-import { Button, Col, Container, Modal, Row, Spinner } from "react-bootstrap";
-import { useCarDetails } from "../hooks/useCarDetails";
-import { AlertBox } from "./AlertBox";
-import { useCountdown } from "../hooks/useCountDown";
-import CarImagesSection from "../components/car/CarImagesSection";
 import { useEffect, useState } from "react";
+import { Button, Col, Container, Modal, Row, Spinner } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+
+// Hooks
+import { useCarDetails } from "../hooks/useCarDetails";
+import { useCountdown } from "../hooks/useCountDown";
+import { useBidHandler } from "../hooks/useBidHandler";
+
+// Context
+import { useWatchList } from "../context/WatchListContext";
+import { useAuth } from "../context/AuthContext";
+
+// UI
+import { AlertBox } from "./AlertBox";
 import ImageViewerModal from "./ImageViewerModal";
+import BidModal from "./BidModal";
+import DepositModal from "./DepositModal";
+import WatchListButton from "./WatchListButton";
+
+// Car components
+import BidsSection from "../components/car/BidsSection";
+import QASection from "../components/car/QASection";
+import VideosSection from "../components/car/VideosSection";
 import ButtonsGroup from "../components/car/ButtonsGroup";
 import CarDetailsTable from "../components/car/CarDetailsTable";
 import EquipmentSection from "../components/car/EquipmentSection";
 import ModificationsSection from "../components/car/ModificationsSection";
+import CarImagesSection from "../components/car/CarImagesSection";
 import FlawsSection from "../components/car/FlawsSection";
-import VideosSection from "../components/car/VideosSection";
-import QASection from "../components/car/QASection";
-import BidsSection from "../components/car/BidsSection";
 import CurrentBidSection from "../components/car/CurrentBidSection";
-import BidModal from "./BidModal";
-import DepositModal from "./DepositModal";
-import { useAuth } from "../context/AuthContext";
-import { useBidHandler } from "../hooks/useBidHandler";
-import WatchListButton from "./WatchListButton";
-import { useNavigate } from "react-router-dom";
 
 export default function CarDetailsModal({ show, onClose, carId }) {
     const navigate = useNavigate();
@@ -45,7 +54,8 @@ export default function CarDetailsModal({ show, onClose, carId }) {
 
     const [showImageModal, setShowImageModal] = useState(false);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-    const { countdown, isExpired } = useCountdown(car?.end_time);
+    const { isInWatchList } = useWatchList();
+    const { isExpired } = useCountdown(car?.end_time);
 
     const isOwner = user && car && user.id === car.user;
 
@@ -140,26 +150,24 @@ export default function CarDetailsModal({ show, onClose, carId }) {
                             ~{car.mileage} miles, {car.transmission}{" "}
                             {car.engine} engine, {car.exterior_color} exterior
                         </p>
-                        <p className="text-danger fw-semibold">
-                            ⏳ {countdown}
-                        </p>
 
                         {/* Edit Button (only visible to the owner) */}
-                        <div className="mb-3">
+                        <div className="d-flex align-items-center mb-3 ">
                             {isOwner && (
                                 <Button
                                     variant="primary"
+                                    className="me-2"
                                     onClick={() =>
                                         navigate(`/listings/${car.id}/edit`)
                                     }
                                 >
-                                    <i className="bi bi-pencil-square me-1"></i>{" "}
+                                    <i className="bi bi-pencil-square me-2"></i>{" "}
                                     Edit Car Info
                                 </Button>
                             )}
 
                             {user && !isOwner && (
-                                <div>
+                                <>
                                     {!isExpired && (
                                         <Button
                                             variant="danger"
@@ -170,9 +178,17 @@ export default function CarDetailsModal({ show, onClose, carId }) {
                                             Place Bid
                                         </Button>
                                     )}
-                                    <WatchListButton carId={car.id} />
-                                </div>
+                                </>
                             )}
+
+                            <span className="d-inline-flex align-items-center bg-body px-3 rounded border">
+                                <WatchListButton carId={car.id} />{" "}
+                                <span className="ms-2 text-muted">
+                                    {isInWatchList(car?.id)
+                                        ? "Watching"
+                                        : "Watch"}
+                                </span>
+                            </span>
                         </div>
 
                         <CarImagesSection

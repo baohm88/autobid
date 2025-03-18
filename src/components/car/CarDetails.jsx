@@ -122,7 +122,9 @@ export default function CarDetails() {
         return (
             <Container className="text-center mt-5">
                 <Spinner animation="border" role="status">
-                    <span className="visually-hidden">Loading...</span>
+                    <span className="visually-hidden">
+                        Loading car details...
+                    </span>
                 </Spinner>
             </Container>
         );

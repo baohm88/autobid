@@ -85,9 +85,9 @@ export default function CarFilterSortForm({
                         onChange={(e) => setBodyStyle(e.target.value)}
                     >
                         <option value="All">All Body Styles</option>
-                        {BODY_STYLES.map((style) => (
-                            <option key={style} value={style}>
-                                {style}
+                        {BODY_STYLES.map(({ value, label }) => (
+                            <option key={value} value={value}>
+                                {label}
                             </option>
                         ))}
                     </select>

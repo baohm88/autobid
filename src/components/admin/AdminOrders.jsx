@@ -157,7 +157,7 @@ export default function AdminOrders() {
     };
 
     return (
-        <Container fluid className="py-3">
+        <div>
             {/* Toolbar */}
             <Row className="mb-3">
                 <Col>
@@ -423,6 +423,6 @@ export default function AdminOrders() {
                     </Button>
                 </Modal.Footer>
             </Modal>
-        </Container>
+        </div>
     );
 }

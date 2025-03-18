@@ -167,8 +167,8 @@ export default function UpdateCar() {
 
         // Submit updated car data to the backend
         try {
-            const res = await axios.post(
-                `http://localhost:8080/listings/update-listings/${id}`,
+            const res = await axios.put(
+                `http://localhost:8080/listings/update-listing/${id}`,
                 carData,
                 {
                     headers: { "Content-Type": "application/json" },
@@ -286,9 +286,9 @@ export default function UpdateCar() {
                                         defaultValue={car?.body_style || ""}
                                     >
                                         <option>Select Body Style</option>
-                                        {BODY_STYLES.map((style) => (
-                                            <option key={style} value={style}>
-                                                {style}
+                                        {BODY_STYLES.map(({ value, label }) => (
+                                            <option key={value} value={value}>
+                                                {label}
                                             </option>
                                         ))}
                                     </Form.Select>
