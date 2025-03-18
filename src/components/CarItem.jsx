@@ -16,8 +16,6 @@ function getBadge(car) {
 
     if (endTime.diff(now, "hour") <= 24 && endTime.diff(now, "hour") > 0) {
         return "🔥 Ending Soon";
-    } else if (endTime.diff(now, "hour") <= 0) {
-        return "Auction Ended";
     }
 
     if (now.diff(createdAt, "day") < 3) return "🚗 New";
@@ -42,7 +40,7 @@ export default function CarItem({ car }) {
     const text = `~${car.mileage} Miles, ${car.transmission} ${car.engine} engine, ${car.exterior_color} exterior`;
     const displayText = showFullText ? text : truncateText(text);
 
-    const badgeText = getBadge(car);
+    const badgeText = !isExpired && getBadge(car);
 
     return (
         <Card className="h-100 car-card">

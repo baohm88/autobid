@@ -28,7 +28,7 @@ export function useCountdown(endTime) {
             }
 
             const dur = dayjs.duration(diff);
-            const days = dur.days();
+            const days = Math.floor(dur.asDays());
             const hours = dur.hours().toString().padStart(2, "0");
             const minutes = dur.minutes().toString().padStart(2, "0");
             const seconds = dur.seconds().toString().padStart(2, "0");

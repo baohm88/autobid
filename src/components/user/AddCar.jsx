@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { X } from "react-bootstrap-icons";
 import {
     Container,
     Card,
@@ -16,58 +17,16 @@ import {
     BODY_STYLES,
     MODIFIED_OPTIONS,
     TRANSMISSION_OPTIONS,
+    INITIAL_CAR_FORM_VALUES,
+    headers,
 } from "./dummy_data";
-import * as yup from "yup";
-import { useFormik } from "formik";
+
 import { useAuth } from "../../context/AuthContext";
 import FormInput from "../../UI/FormInput";
 import FormTextArea from "../../UI/FormTextArea";
-
-const validationSchema = yup.object().shape({
-    year_model: yup.string().required("Year is required"),
-    make: yup.string().required("Make is required"),
-    model: yup.string().required("Model is required"),
-    transmission: yup.string().required("Transmission is required"),
-    mileage: yup.number().required("Mileage is required"),
-    engine: yup.string().required("Engine is required"),
-    body_style: yup.string().required("Body style is required"),
-    interial_color: yup.string().required("Interior color is required"),
-    exterior_color: yup.string().required("Exterior color is required"),
-    starting_bid: yup.number().required("Starting bid is required"),
-    start_time: yup.date().required("Start time is required"),
-    end_time: yup
-        .date()
-        .required("End time is required")
-        .test(
-            "min-duration",
-            "End time must be at least 1 day after start time",
-            function (value) {
-                const { start_time } = this.parent;
-                if (!start_time || !value) return true;
-                const diffInMs = value - start_time;
-                const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
-                return diffInDays >= 1;
-            }
-        ),
-
-    equipment: yup.string(),
-    modified: yup.string(),
-    modifications: yup.string().when("modified", {
-        is: (value) => {
-            console.log("Modified value:", value);
-            return value === "Modified";
-        },
-        then: yup.string().required("Please list the modifications"),
-    }),
-    flaw: yup.string(),
-    flaws: yup.string().when("flaw", {
-        is: (value) => {
-            console.log("Flaw value:", value);
-            return value === "Yes";
-        },
-        then: yup.string().required("Please list the flaws"),
-    }),
-});
+import IconButton from "../../UI/IconButton";
+import useCarForm from "../../hooks/useCarForm";
+import { toast } from "react-toastify";
 
 export default function AddCar() {
     const [uploadedImages, setUploadedImages] = useState([]);
@@ -79,75 +38,51 @@ export default function AddCar() {
 
     document.title = "Add new car";
 
-    const formik = useFormik({
-        initialValues: {
-            year_model: "",
-            make: "",
-            model: "",
-            transmission: "",
-            mileage: "",
-            engine: "",
-            body_style: "",
-            interial_color: "",
-            exterior_color: "",
-            starting_bid: "",
-            start_time: "",
-            end_time: "",
-            equipment: "",
-            modified: "",
-            modifications: "",
-            flaw: "",
-            flaws: "",
-        },
-        validationSchema: validationSchema,
-        onSubmit: async (values) => {
-            if (uploadedImages.length < 10) {
-                setImageError("Please upload at least 10 images.");
-                return;
+    const handleSubmit = async (values) => {
+        if (uploadedImages.length < 10) {
+            setImageError("Please upload at least 10 images.");
+            return;
+        }
+
+        setLoading(true);
+        setImageError("");
+
+        // Upload images to Cloudinary and get their URLs
+        const uploadedUrls = [];
+        for (const image of uploadedImages) {
+            const file = dataURLtoFile(image, `image_${Date.now()}.jpg`);
+            const url = await uploadImageToCloudinary(file);
+            if (url) {
+                uploadedUrls.push(url);
             }
+        }
 
-            setLoading(true);
-            setImageError("");
+        // Add the URLs to carData
+        const carData = { ...values, user: user.id, images: uploadedUrls };
 
-            // Upload images to Cloudinary and get their URLs
-            const uploadedUrls = [];
-            for (const image of uploadedImages) {
-                const file = dataURLtoFile(image, `image_${Date.now()}.jpg`);
-                const url = await uploadImageToCloudinary(file);
-                if (url) {
-                    uploadedUrls.push(url);
-                }
+        // Submit car data to the backend
+        try {
+            const res = await axios.post(
+                "http://localhost:8080/listings/add-listing",
+                carData,
+                headers
+            );
+
+            if (res.status === 200) {
+                toast.success(res.data.message);
+                console.log(res.data);
+                navigate("/");
+            } else {
+                console.log("Something went wrong");
             }
+        } catch (error) {
+            console.error("Failed to add a listing!", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-            // Add the URLs to carData
-            const carData = { ...values, user: user.id, images: uploadedUrls };
-            carData.description = `~${carData.mileage}, ${carData.engine}, ${carData.exterior_color}`;
-
-            console.log(carData);
-
-            // Submit car data to the backend
-            try {
-                const res = await axios.post(
-                    "http://localhost:8080/listings/add-listing",
-                    carData,
-                    {
-                        headers: { "Content-Type": "application/json" },
-                    }
-                );
-
-                if (res.status === 200) {
-                    alert(res.data.message);
-                    navigate("/");
-                } else {
-                    console.log("Something went wrong");
-                }
-            } catch (error) {
-                console.error("Failed to add a listing!", error);
-            } finally {
-                setLoading(false);
-            }
-        },
-    });
+    const formik = useCarForm(INITIAL_CAR_FORM_VALUES, handleSubmit);
 
     // Handle image upload
     const handleImageUpload = (event) => {
@@ -477,13 +412,18 @@ export default function AddCar() {
                                         thumbnail
                                         className="mr-2"
                                     />
-                                    <Button
+                                    <IconButton
+                                        icon={<X size={20} />}
                                         variant="danger"
-                                        size="sm"
                                         onClick={() => handleRemoveImage(index)}
-                                    >
-                                        Remove
-                                    </Button>
+                                        style={{
+                                            position: "absolute",
+                                            right: "15px",
+                                            top: "15px",
+                                            width: "25px",
+                                            height: "25px",
+                                        }}
+                                    />
                                 </Col>
                             ))}
                         </Row>
@@ -495,7 +435,7 @@ export default function AddCar() {
                         {/* Submit Button */}
                         <Button
                             type="submit"
-                            variant="danger"
+                            variant="primary"
                             disabled={loading}
                         >
                             {loading ? (

@@ -7,6 +7,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useState } from "react";
 import { formatter } from "../../utils/formatter";
 import { toast } from "react-toastify";
+import { headers } from "./dummy_data";
 
 export default function EditProfileModal({ show, handleClose }) {
     const { user, setUser } = useAuth();
@@ -70,13 +71,8 @@ export default function EditProfileModal({ show, handleClose }) {
                 const res = await axios.put(
                     "http://localhost:8080/update-account",
                     updatedUser,
-                    {
-                        headers: { "Content-Type": "application/json" },
-                    }
+                    headers
                 );
-                console.log(updatedUser);
-
-                console.log(res.data);
 
                 if (res.status === 200) {
                     toast.success("Profile updated!");

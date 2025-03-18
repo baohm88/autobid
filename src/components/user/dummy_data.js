@@ -42,7 +42,7 @@ export const MODIFIED_OPTIONS = [
     { value: "", label: "Choose" },
     { value: "new", label: "Brand New" },
     { value: "modified", label: "Modified" },
-]
+];
 
 export const DUMMY_QA = [
     {
@@ -189,7 +189,6 @@ export const DASHBOARD_LINKS = [
         icon: "bi-ev-front",
         text: "My Listings",
     },
-    // { to: "/account/comments", icon: "bi-chat", text: "My Comments" },
     {
         to: "/account/user-bids",
         icon: "bi-envelope-arrow-up",
@@ -206,3 +205,25 @@ export const DASHBOARD_LINKS = [
         text: "My Watch List",
     },
 ];
+
+export const INITIAL_CAR_FORM_VALUES = {
+    year_model: "",
+    make: "",
+    model: "",
+    transmission: "",
+    mileage: "",
+    engine: "",
+    body_style: "",
+    interial_color: "",
+    exterior_color: "",
+    starting_bid: "",
+    start_time: "",
+    end_time: "",
+    equipment: "",
+    modified: "",
+    modifications: "",
+    flaw: "",
+    flaws: "",
+};
+
+export const headers = { "Content-Type": "application/json" };
