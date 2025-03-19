@@ -32,6 +32,11 @@ export function useBidHandler({ car, user, setUser }) {
                 { user_id: user.id, bid_amount: amount }
             );
 
+            if (!res.data.success === true) {
+                toast.error(res.data.message);
+                return;
+            }
+
             updateUser(res.data);
             toast.success("🎉 Bid placed successfully!");
             setShowBidModal(false);

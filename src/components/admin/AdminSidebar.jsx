@@ -95,7 +95,7 @@ export default function AdminSidebar({ collapsed, toggleSidebar }) {
                     ))}
                 </Nav>
 
-                <div className="mt-auto text-center">
+                <div className="mt-auto border-top pt-2 d-flex justify-content-start">
                     <Dropdown>
                         <Dropdown.Toggle
                             variant="light"
@@ -121,7 +121,10 @@ export default function AdminSidebar({ collapsed, toggleSidebar }) {
 
                         <Dropdown.Menu align="end">
                             <Dropdown.Item as="button" onClick={logOut}>
-                                <i className="bi bi-box-arrow-right me-2"></i>
+                                <i
+                                    className="bi bi-box-arrow-right me-2"
+                                    style={{ zIndex: 9 }}
+                                ></i>
                                 Logout
                             </Dropdown.Item>
                         </Dropdown.Menu>

@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
 import { Table, Button, Form, Modal } from "react-bootstrap";
-
 import moment from "moment";
-import { toast } from "react-toastify";
 import { useCarContext } from "../../context/CarContext";
 import CarFilterSortForm from "../../UI/CarFilterSortForm";
 import CarDetailsModal from "../../UI/CarDetailsModal";
 
 export default function AdminAuction() {
-    const { cars } = useCarContext();
+    const { cars, setCars } = useCarContext();
     const [filteredCars, setFilteredCars] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [yearFrom, setYearFrom] = useState(2000);
@@ -19,10 +17,10 @@ export default function AdminAuction() {
 
     // Modal state
     const [showModal, setShowModal] = useState(false);
-    const [rejectionNote, setRejectionNote] = useState("");
     const [selectedCarId, setSelectedCarId] = useState(null);
     const [showDetailsModal, setShowDetailsModal] = useState(false);
     const [selectedCarDetailsId, setSelectedCarDetailsId] = useState(null);
+    const [rejectionMessage, setRejectionMessage] = useState("");
 
     useEffect(() => {
         filterAndSortCars();
@@ -72,23 +70,36 @@ export default function AdminAuction() {
         }
     };
 
-    const handleStatusChange = (carId, status) => {
-        if (status === "rejected") {
-            setSelectedCarId(carId);
-            setShowModal(true);
-        } else {
-            toast.success("Listing approved successfully");
-            // You would send API request to update status here
-        }
+    const handleApprove = (carId) => {
+        const updatedCars = cars.map((car) =>
+            car.id === carId
+                ? { ...car, status: "approved", adminMessage: "" }
+                : car
+        );
+        setCars(updatedCars);
+    };
+
+    const handleRejectClick = (carId) => {
+        setSelectedCarId(carId);
+        setRejectionMessage("");
+        setShowModal(true);
     };
 
     const handleRejectSubmit = () => {
-        toast.info(`Rejection note sent to owner: ${rejectionNote}`);
+        const updatedCars = cars.map((car) =>
+            car.id === selectedCarId
+                ? {
+                      ...car,
+                      status: "rejected",
+                      adminMessage: rejectionMessage,
+                  }
+                : car
+        );
+        setCars(updatedCars);
         setShowModal(false);
-        setRejectionNote("");
-        setSelectedCarId(null);
-        // Send rejection note to owner via API
     };
+
+    console.log(cars);
 
     return (
         <div>
@@ -133,6 +144,7 @@ export default function AdminAuction() {
                             <th>Start - End</th>
                             <th>Status</th>
                             <th>Actions</th>
+                            <th>Admin Message</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -144,6 +156,11 @@ export default function AdminAuction() {
                                         alt="car"
                                         width="200"
                                         className="rounded"
+                                        onClick={() => {
+                                            setSelectedCarDetailsId(car.id);
+                                            setShowDetailsModal(true);
+                                        }}
+                                        style={{ cursor: "pointer" }}
                                     />
                                 </td>
                                 <td>
@@ -160,59 +177,48 @@ export default function AdminAuction() {
                                     {moment(car.end_time).format("MMM D")}
                                 </td>
                                 <td>
-                                    {car.status ? (
-                                        <span className="text-success fw-semibold">
-                                            Approved
-                                        </span>
+                                    <span
+                                        className={`badge ${
+                                            car.status === "approved"
+                                                ? "bg-success"
+                                                : car.status === "pending"
+                                                ? "bg-warning text-dark"
+                                                : "bg-danger"
+                                        }`}
+                                    >
+                                        {car.status}
+                                    </span>
+                                </td>
+                                <td>
+                                    {car.status === "pending" ||
+                                    car.status === "rejected" ? (
+                                        <Button
+                                            size="sm"
+                                            variant="success"
+                                            className="me-1 fw-bold"
+                                            onClick={() =>
+                                                handleApprove(car.id)
+                                            }
+                                        >
+                                            Approve
+                                        </Button>
                                     ) : (
-                                        <span className="text-warning fw-semibold">
-                                            Pending
-                                        </span>
+                                        <Button
+                                            size="sm"
+                                            variant="danger"
+                                            className="me-1 fw-bold"
+                                            onClick={() =>
+                                                handleRejectClick(car.id)
+                                            }
+                                        >
+                                            Reject
+                                        </Button>
                                     )}
                                 </td>
                                 <td>
-                                    {!car.status && (
-                                        <>
-                                            <Button
-                                                size="sm"
-                                                variant="success"
-                                                className="me-1"
-                                                onClick={() =>
-                                                    handleStatusChange(
-                                                        car.id,
-                                                        "approved"
-                                                    )
-                                                }
-                                            >
-                                                Approve
-                                            </Button>
-                                            <Button
-                                                size="sm"
-                                                variant="danger"
-                                                className="me-1"
-                                                onClick={() =>
-                                                    handleStatusChange(
-                                                        car.id,
-                                                        "rejected"
-                                                    )
-                                                }
-                                            >
-                                                Reject
-                                            </Button>
-                                            <Button
-                                                size="sm"
-                                                variant="primary"
-                                                onClick={() => {
-                                                    setSelectedCarDetailsId(
-                                                        car.id
-                                                    );
-                                                    setShowDetailsModal(true);
-                                                }}
-                                            >
-                                                View
-                                            </Button>
-                                        </>
-                                    )}
+                                    {car.adminMessage !== null
+                                        ? car.adminMessage
+                                        : ""}
                                 </td>
                             </tr>
                         ))}
@@ -221,21 +227,27 @@ export default function AdminAuction() {
             </div>
 
             {/* Rejection Modal */}
-            <Modal show={showModal} onHide={() => setShowModal(false)}>
+            <Modal show={showModal} onHide={() => setShowModal(false)} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title>Send Rejection Note</Modal.Title>
+                    <Modal.Title>Rejection Message</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form.Group>
-                        <Form.Label>Reason for Rejection</Form.Label>
-                        <Form.Control
-                            as="textarea"
-                            rows={4}
-                            value={rejectionNote}
-                            onChange={(e) => setRejectionNote(e.target.value)}
-                            placeholder="Explain what needs to be modified..."
-                        />
-                    </Form.Group>
+                    <Form>
+                        <Form.Group controlId="rejectionMessage">
+                            <Form.Label>
+                                Why is this car rejected? (Visible to owner)
+                            </Form.Label>
+                            <Form.Control
+                                as="textarea"
+                                rows={3}
+                                value={rejectionMessage}
+                                onChange={(e) =>
+                                    setRejectionMessage(e.target.value)
+                                }
+                                placeholder="Please explain what needs to be changed..."
+                            />
+                        </Form.Group>
+                    </Form>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
@@ -245,7 +257,7 @@ export default function AdminAuction() {
                         Cancel
                     </Button>
                     <Button variant="danger" onClick={handleRejectSubmit}>
-                        Send Note
+                        Reject Car
                     </Button>
                 </Modal.Footer>
             </Modal>

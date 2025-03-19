@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 // get all comments => http://localhost:8080/comments/car/
 
 export default function QASection({ carId, user }) {
-    const [questions, setQuestions] = useState(DUMMY_QA);
+    const [questions, setQuestions] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedQA, setSelectedQA] = useState(null);
     const [questionInput, setQuestionInput] = useState("");
@@ -26,10 +26,9 @@ export default function QASection({ carId, user }) {
             if (!res.data.success === true) {
                 toast.error("Failed to fetch comments");
             }
-
             setQuestions(res.data.data);
         };
-        ``;
+
         fetchQuestions();
     }, [carId]);
 
@@ -86,7 +85,7 @@ export default function QASection({ carId, user }) {
             const resData = res.data.data[0];
 
             const newQuestion = {
-                id: Date.now(),
+                id: Date.now(), // fallback if id not returned
                 askerName: user.username || "You",
                 askerImage: user.image_url || "/images/default-user.png",
                 askerScore: user.score || 5,

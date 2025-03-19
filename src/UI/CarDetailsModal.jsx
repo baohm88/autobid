@@ -128,6 +128,16 @@ export default function CarDetailsModal({ show, onClose, carId }) {
         return <AlertBox variant="danger" message={error} onClose={() => {}} />;
     }
 
+    if (!car) {
+        return (
+            <AlertBox
+                variant="warning"
+                message="Car not found."
+                onClose={() => {}}
+            />
+        );
+    }
+
     return (
         <Modal show={show} onHide={onClose} centered scrollable size="xl">
             <Modal.Header closeButton>
@@ -210,7 +220,7 @@ export default function CarDetailsModal({ show, onClose, carId }) {
                                 />
                                 <FlawsSection flaws={car.flaws.split(";")} />
                                 <VideosSection car={car} />
-                                <QASection car={car} />
+                                <QASection carId={car.id} user={user} />
                                 <CurrentBidSection
                                     car={car}
                                     onPlaceBid={handlePlaceBid}

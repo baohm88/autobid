@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
-export const useCarDetails = (id) => {
+export const useCarDetails = (carId) => {
     const [car, setCar] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        if (!id) {
+        if (!carId) {
             setCar(null);
             setError(null);
             return;
@@ -20,8 +21,13 @@ export const useCarDetails = (id) => {
             try {
                 setLoading(true);
                 const res = await axios.get(
-                    `http://localhost:8080/listings/${id}`
+                    `http://localhost:8080/listings/${carId}`
                 );
+
+                if (!res.data.success === true) {
+                    toast.error(res.data.message);
+                }
+
                 setCar(res.data.data[0]);
             } catch (err) {
                 setError("Failed to fetch car details: ", err);
@@ -31,7 +37,7 @@ export const useCarDetails = (id) => {
         }
 
         fetchListing();
-    }, [id]);
+    }, [carId]);
 
     return { car, loading, error };
 };

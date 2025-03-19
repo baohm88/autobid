@@ -192,7 +192,7 @@ export default function EditProfileModal({ show, handleClose }) {
                         </Col>
                     </Row>
 
-                    <Row>
+                    {/* <Row>
                         <Col>
                             <span>Current Balance: </span>
                             <span className="fw-bold">
@@ -216,7 +216,7 @@ export default function EditProfileModal({ show, handleClose }) {
                                 </Form.Control.Feedback>
                             </FloatingLabel>
                         </Col>
-                    </Row>
+                    </Row> */}
 
                     <FloatingLabel label="Bio" className="mb-3">
                         <Form.Control

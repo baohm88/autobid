@@ -8,15 +8,13 @@ const CarContext = createContext({
     getEndingSoonCars: (id) => {
         id;
     },
-    addNewCar: (newCar) => {},
 });
 
 export const CarProvider = ({ children }) => {
-    const [cars, setCarsState] = useState([]);
+    const [cars, setCars] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // Load cars from localstorage or fetch from server
     useEffect(() => {
         const fetchCars = async () => {
             try {
@@ -28,13 +26,12 @@ export const CarProvider = ({ children }) => {
                     "http://localhost:8080/listings/ended"
                 );
 
-                const combined = [
+                const allListings = [
                     ...activeListings.data.data,
                     ...endedListings.data.data,
                 ];
 
-                setCarsState(combined);
-                localStorage.setItem("cars", JSON.stringify(combined));
+                setCars(allListings);
             } catch (err) {
                 setError("Failed to fetch cars.");
             } finally {
@@ -44,23 +41,6 @@ export const CarProvider = ({ children }) => {
 
         fetchCars();
     }, []);
-
-    // Keep localStorage in sync when cars change
-    const setCars = (updatedCars) => {
-        setCarsState(updatedCars);
-        localStorage.setItem("cars", JSON.stringify(updatedCars));
-    };
-
-    // Add a new car (status = pending, adminMessage = null)
-    const addNewCar = (newCar) => {
-        const newCarWithDefaults = {
-            ...newCar,
-            status: "pending",
-            adminMessage: null,
-        };
-        const updated = [...cars, newCarWithDefaults];
-        setCars(updated);
-    };
 
     const getEndingSoonCars = (currentCarId) => {
         if (!currentCarId || !cars || cars.length === 0) return [];
@@ -83,14 +63,7 @@ export const CarProvider = ({ children }) => {
 
     return (
         <CarContext.Provider
-            value={{
-                cars,
-                loading,
-                error,
-                getEndingSoonCars,
-                setCars,
-                addNewCar,
-            }}
+            value={{ cars, loading, error, getEndingSoonCars }}
         >
             {children}
         </CarContext.Provider>

@@ -19,7 +19,7 @@ export default function Home() {
     const [bodyStyle, setBodyStyle] = useState("All");
     const [yearFrom, setYearFrom] = useState(2000);
     const [yearTo, setYearTo] = useState(2025);
-    const [status, setStatus] = useState("All");
+    const [status, setStatus] = useState("Active");
 
     const {
         loading,

@@ -27,6 +27,7 @@ import FormTextArea from "../../UI/FormTextArea";
 import IconButton from "../../UI/IconButton";
 import useCarForm from "../../hooks/useCarForm";
 import { toast } from "react-toastify";
+import { useCarContext } from "../../context/CarContext";
 
 export default function AddCar() {
     const [uploadedImages, setUploadedImages] = useState([]);
@@ -34,6 +35,7 @@ export default function AddCar() {
     const [loading, setLoading] = useState(false);
     const [imageError, setImageError] = useState("");
     const { user } = useAuth();
+    const { addNewCar } = useCarContext();
     const navigate = useNavigate();
 
     document.title = "Add new car";
@@ -69,7 +71,11 @@ export default function AddCar() {
             );
 
             if (res.status === 200) {
+                addNewCar(res.data.data);
                 toast.success(res.data.message);
+                toast.success(
+                    "Your list has been added and pending approval by the admin"
+                );
                 console.log(res.data);
                 navigate("/");
             } else {

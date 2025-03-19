@@ -41,7 +41,7 @@ export default function CarDetails() {
     const { isInWatchList } = useWatchList();
     const { car, loading: fetching, error } = useCarDetails(id);
     const { getEndingSoonCars } = useCarContext();
-    const endingSoonCars = getEndingSoonCars(car?.id);
+    const endingSoonCars = car?.id ? getEndingSoonCars(car.id) : [];
 
     const {
         bidAmount,
@@ -89,7 +89,7 @@ export default function CarDetails() {
             document.title = `${car.year_model} ${car.make} ${car.model}`;
         }
         return () => {
-            document.title = "Listing Details"; // cleanup (optional)
+            document.title = "Listing Details";
         };
     }, [car]);
 
@@ -118,6 +118,8 @@ export default function CarDetails() {
         }
     };
 
+    console.log(car);
+
     if (fetching) {
         return (
             <Container className="text-center mt-5">
@@ -137,18 +139,30 @@ export default function CarDetails() {
     const visibleThumbnails = car?.images?.slice(0, 8) || [];
     const hiddenCount = car?.images?.length > 8 ? car.images.length - 8 : 0;
 
+    if (!car) {
+        return (
+            <AlertBox
+                variant="warning"
+                message="Car not found."
+                onClose={() => {}}
+            />
+        );
+    }
+
     return (
         <Container>
             {car && (
-                <h1 className="fw-bold">
-                    {car.year_model} {car.make} {car.model}
-                </h1>
+                <>
+                    <h1 className="fw-bold">
+                        {car.year_model} {car.make} {car.model}
+                    </h1>
+                    <p className="text-muted">
+                        {" "}
+                        ~{car.mileage} miles, {car.transmission} {car.engine}{" "}
+                        engine, {car.exterior_color} exterior
+                    </p>
+                </>
             )}
-            <p className="text-muted">
-                {" "}
-                ~{car.mileage} miles, {car.transmission} {car.engine} engine,{" "}
-                {car.exterior_color} exterior
-            </p>
 
             {/* Edit Button (only visible to the owner) */}
             <div className="d-flex align-items-center mb-3 ">
@@ -179,9 +193,9 @@ export default function CarDetails() {
                 )}
 
                 <span className="d-inline-flex align-items-center bg-body px-3 rounded border">
-                    <WatchListButton carId={car.id} />{" "}
+                    {car && <WatchListButton carId={car.id} />}{" "}
                     <span className="ms-2 text-muted">
-                        {isInWatchList(car?.id) ? "Watching" : "Watch"}
+                        {car && isInWatchList(car.id) ? "Watching" : "Watch"}
                     </span>
                 </span>
             </div>
@@ -203,7 +217,7 @@ export default function CarDetails() {
                     />
                     <FlawsSection flaws={car.flaws.split(";")} />
                     <VideosSection car={car} />
-                    <QASection car={car} />
+                    <QASection carId={car.id} user={user} />
                     <CurrentBidSection car={car} onPlaceBid={handlePlaceBid} />
                     <BidsSection car={car} />
                 </Col>
