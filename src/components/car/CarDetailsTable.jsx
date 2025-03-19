@@ -48,7 +48,7 @@ export default function CarDetailsTable({ car }) {
                         <th>
                             <FaUser style={iconStyle} /> Seller
                         </th>
-                        <td>Genau_AutoWerks</td>
+                        <td>{car.username}</td>
                     </tr>
                     <tr className="align-middle">
                         <th>
@@ -119,7 +119,7 @@ export default function CarDetailsTable({ car }) {
                                 <th>
                                     <FaUser style={iconStyle} /> Seller
                                 </th>
-                                <td>Genau_AutoWerks</td>
+                                <td>{car.username}</td>
                             </tr>
                             <tr className="align-middle">
                                 <th>
