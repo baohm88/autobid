@@ -1,11 +1,9 @@
-// src/components/user/EditProfileModal.jsx
 import { Modal, Button, Form, Row, Col, FloatingLabel } from "react-bootstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
 import { useState } from "react";
-import { formatter } from "../../utils/formatter";
 import { toast } from "react-toastify";
 import { headers } from "./dummy_data";
 
@@ -15,23 +13,17 @@ export default function EditProfileModal({ show, handleClose }) {
     const [loading, setLoading] = useState(false);
 
     const validationSchema = Yup.object({
-        email: Yup.string().email("Invalid email").required("Required"),
         username: Yup.string().min(3).required("Required"),
-        password: Yup.string()
-            .min(6, "Minimum 6 characters")
-            .required("Required"),
         bio: Yup.string(),
-        balance: Yup.number().min(0, "Must be positive").required("Required"),
+        email: Yup.string().email("Invalid email").required("Required"),
     });
 
     const formik = useFormik({
         initialValues: {
-            email: user.email || "",
             username: user.username || "",
-            password: user.password || "",
             bio: user.bio || "",
-            balance: user.balance || 0,
-            image: null,
+            email: user.email || "",
+            image: user.image_url || null,
         },
         validationSchema,
         onSubmit: async (values) => {
@@ -57,27 +49,28 @@ export default function EditProfileModal({ show, handleClose }) {
                 }
             }
 
-            const updatedUser = {
-                ...user,
-                email: values.email,
-                username: values.username,
-                password: values.password,
-                bio: values.bio,
-                balance: values.balance,
-                image_url: imageUrl,
-            };
+            formik.values.id = user.id;
+
+            if (imageUrl) {
+                formik.values.image_url = imageUrl;
+            }
 
             try {
                 const res = await axios.put(
                     "http://localhost:8080/update-account",
-                    updatedUser,
+                    formik.values,
                     headers
                 );
 
+                console.log(res);
+
                 if (res.status === 200) {
-                    toast.success("Profile updated!");
-                    setUser(updatedUser);
-                    localStorage.setItem("user", JSON.stringify(updatedUser));
+                    toast.success(res.data.message);
+                    setUser(res.data.data[0]);
+                    localStorage.setItem(
+                        "user",
+                        JSON.stringify(res.data.data[0])
+                    );
                     handleClose();
                 }
             } catch (err) {
@@ -140,22 +133,24 @@ export default function EditProfileModal({ show, handleClose }) {
                         </Button>
                     </div>
 
-                    <FloatingLabel label="Email" className="mb-3">
-                        <Form.Control
-                            type="email"
-                            name="email"
-                            value={formik.values.email}
-                            onChange={formik.handleChange}
-                            isInvalid={
-                                formik.touched.email && !!formik.errors.email
-                            }
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            {formik.errors.email}
-                        </Form.Control.Feedback>
-                    </FloatingLabel>
-
                     <Row>
+                        <Col>
+                            <FloatingLabel label="Email" className="mb-3">
+                                <Form.Control
+                                    type="email"
+                                    name="email"
+                                    value={formik.values.email}
+                                    onChange={formik.handleChange}
+                                    isInvalid={
+                                        formik.touched.email &&
+                                        !!formik.errors.email
+                                    }
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    {formik.errors.email}
+                                </Form.Control.Feedback>
+                            </FloatingLabel>
+                        </Col>
                         <Col>
                             <FloatingLabel label="Username" className="mb-3">
                                 <Form.Control
@@ -173,50 +168,7 @@ export default function EditProfileModal({ show, handleClose }) {
                                 </Form.Control.Feedback>
                             </FloatingLabel>
                         </Col>
-                        <Col>
-                            <FloatingLabel label="Password" className="mb-3">
-                                <Form.Control
-                                    type="password"
-                                    name="password"
-                                    value={formik.values.password}
-                                    onChange={formik.handleChange}
-                                    isInvalid={
-                                        formik.touched.password &&
-                                        !!formik.errors.password
-                                    }
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    {formik.errors.password}
-                                </Form.Control.Feedback>
-                            </FloatingLabel>
-                        </Col>
                     </Row>
-
-                    {/* <Row>
-                        <Col>
-                            <span>Current Balance: </span>
-                            <span className="fw-bold">
-                                {formatter.format(user.balance)}
-                            </span>
-                        </Col>
-                        <Col>
-                            <FloatingLabel label="Deposit" className="mb-3">
-                                <Form.Control
-                                    type="number"
-                                    name="balance"
-                                    value={formik.values.balance}
-                                    onChange={formik.handleChange}
-                                    isInvalid={
-                                        formik.touched.balance &&
-                                        !!formik.errors.balance
-                                    }
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    {formik.errors.balance}
-                                </Form.Control.Feedback>
-                            </FloatingLabel>
-                        </Col>
-                    </Row> */}
 
                     <FloatingLabel label="Bio" className="mb-3">
                         <Form.Control
