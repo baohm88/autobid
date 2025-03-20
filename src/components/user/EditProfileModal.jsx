@@ -5,6 +5,7 @@ import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { headers } from "./dummy_data";
 
 export default function EditProfileModal({ show, handleClose }) {
     const { user, setUser } = useAuth();
@@ -12,11 +13,14 @@ export default function EditProfileModal({ show, handleClose }) {
     const [loading, setLoading] = useState(false);
 
     const validationSchema = Yup.object({
-        username: Yup.string().min(3, "Username must be at least 3 characters").required("Username is required"),
-        email: Yup.string().email("Invalid email").required("Email is required"),
+        username: Yup.string()
+            .min(3, "Username must be at least 3 characters")
+            .required("Username is required"),
+        email: Yup.string()
+            .email("Invalid email")
+            .required("Email is required"),
         password: Yup.string().min(6, "Password must be at least 6 characters"),
         bio: Yup.string().max(200, "Bio must be under 200 characters"),
-
     });
 
     const formik = useFormik({
@@ -24,7 +28,6 @@ export default function EditProfileModal({ show, handleClose }) {
             id: user.id,
             username: user.username || "",
             email: user.email || "",
-            password: "", 
             bio: user.bio || "",
             image: user.image_url || null,
             password: "",
@@ -69,12 +72,20 @@ export default function EditProfileModal({ show, handleClose }) {
                 };
 
                 const res = await axios.put(
-                    "http://localhost:8080/update-account", updatedUser,headers);
+                    "http://localhost:8080/update-account",
+                    updatedUser,
+                    headers
+                );
+
+                console.log(res);
 
                 if (res.status === 200) {
                     toast.success(res.data.message);
-                    setUser(res.data.data[0]); 
-                    localStorage.setItem("user", JSON.stringify(res.data.data[0]));
+                    setUser(res.data.data[0]);
+                    localStorage.setItem(
+                        "user",
+                        JSON.stringify(res.data.data[0])
+                    );
                     handleClose();
                 }
             } catch (err) {
@@ -96,9 +107,16 @@ export default function EditProfileModal({ show, handleClose }) {
             }
 
             // Kiểm tra định dạng file (JPG, PNG, WebP)
-            const validTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
+            const validTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/jpg",
+                "image/webp",
+            ];
             if (!validTypes.includes(file.type)) {
-                toast.error("Invalid file type! Only JPG, PNG, and WebP allowed.");
+                toast.error(
+                    "Invalid file type! Only JPG, PNG, and WebP allowed."
+                );
                 return;
             }
 
@@ -119,14 +137,34 @@ export default function EditProfileModal({ show, handleClose }) {
                 <Form onSubmit={formik.handleSubmit}>
                     <div className="d-flex flex-column align-items-center gap-3 mb-3">
                         <img
-                            src={avatarPreview || "https://png.pngtree.com/png-clipart/20240705/original/pngtree-web-programmer-avatar-png-image_15495270.png"}
+                            src={
+                                avatarPreview ||
+                                "https://png.pngtree.com/png-clipart/20240705/original/pngtree-web-programmer-avatar-png-image_15495270.png"
+                            }
                             className="img-fluid rounded-circle"
                             alt="Preview"
-                            style={{ width: "130px", height: "130px", objectFit: "cover" }}
+                            style={{
+                                width: "130px",
+                                height: "130px",
+                                objectFit: "cover",
+                            }}
                         />
-                        <Form.Control type="file" accept="image/*" onChange={handleAvatarChange} style={{ display: "none" }} id="avatar-upload" />
-                        <Button variant="warning" size="sm" onClick={() => document.getElementById("avatar-upload").click()}>
-                            <i className="bi bi-person-bounding-box"></i> Choose a different picture
+                        <Form.Control
+                            type="file"
+                            accept="image/*"
+                            onChange={handleAvatarChange}
+                            style={{ display: "none" }}
+                            id="avatar-upload"
+                        />
+                        <Button
+                            variant="warning"
+                            size="sm"
+                            onClick={() =>
+                                document.getElementById("avatar-upload").click()
+                            }
+                        >
+                            <i className="bi bi-person-bounding-box"></i> Choose
+                            a different picture
                         </Button>
                     </div>
 
@@ -136,32 +174,54 @@ export default function EditProfileModal({ show, handleClose }) {
                             name="email"
                             value={formik.values.email}
                             onChange={formik.handleChange}
-                            isInvalid={formik.touched.email && !!formik.errors.email}
+                            isInvalid={
+                                formik.touched.email && !!formik.errors.email
+                            }
                         />
-                        <Form.Control.Feedback type="invalid">{formik.errors.email}</Form.Control.Feedback>
+                        <Form.Control.Feedback type="invalid">
+                            {formik.errors.email}
+                        </Form.Control.Feedback>
                     </FloatingLabel>
 
-                    <FloatingLabel label="Username" className="mb-3">
-                        <Form.Control
-                            type="text"
-                            name="username"
-                            value={formik.values.username}
-                            onChange={formik.handleChange}
-                            isInvalid={formik.touched.username && !!formik.errors.username}
-                        />
-                        <Form.Control.Feedback type="invalid">{formik.errors.username}</Form.Control.Feedback>
-                    </FloatingLabel>
-
-                    <FloatingLabel label="New Password (leave blank to keep current password)" className="mb-3">
-                        <Form.Control
-                            type="password"
-                            name="password"
-                            value={formik.values.password}
-                            onChange={formik.handleChange}
-                            isInvalid={formik.touched.password && !!formik.errors.password}
-                        />
-                        <Form.Control.Feedback type="invalid">{formik.errors.password}</Form.Control.Feedback>
-                    </FloatingLabel>
+                    <Row>
+                        <Col>
+                            <FloatingLabel label="Username" className="mb-3">
+                                <Form.Control
+                                    type="text"
+                                    name="username"
+                                    value={formik.values.username}
+                                    onChange={formik.handleChange}
+                                    isInvalid={
+                                        formik.touched.username &&
+                                        !!formik.errors.username
+                                    }
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    {formik.errors.username}
+                                </Form.Control.Feedback>
+                            </FloatingLabel>
+                        </Col>
+                        <Col>
+                            <FloatingLabel
+                                label="New Password"
+                                className="mb-3"
+                            >
+                                <Form.Control
+                                    type="password"
+                                    name="password"
+                                    value={formik.values.password}
+                                    onChange={formik.handleChange}
+                                    isInvalid={
+                                        formik.touched.password &&
+                                        !!formik.errors.password
+                                    }
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    {formik.errors.password}
+                                </Form.Control.Feedback>
+                            </FloatingLabel>
+                        </Col>
+                    </Row>
 
                     <FloatingLabel label="Bio (Optional)" className="mb-3">
                         <Form.Control
@@ -173,8 +233,15 @@ export default function EditProfileModal({ show, handleClose }) {
                     </FloatingLabel>
 
                     <Modal.Footer>
-                        <Button variant="light" size="sm" onClick={handleClose}>Close</Button>
-                        <Button variant="danger" size="sm" type="submit" disabled={loading}>
+                        <Button variant="light" size="sm" onClick={handleClose}>
+                            Close
+                        </Button>
+                        <Button
+                            variant="danger"
+                            size="sm"
+                            type="submit"
+                            disabled={loading}
+                        >
                             {loading ? "Saving..." : "Save"}
                         </Button>
                     </Modal.Footer>

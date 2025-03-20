@@ -6,7 +6,8 @@ import RandomComments from "./RandomComments";
 import { useState } from "react";
 import { useCarContext } from "../../context/CarContext";
 import UserWallet from "./UserWallet";
- 
+import ChangePassword from "./ChangePassword";
+
 export default function UserProfile() {
     const { user } = useAuth();
     const { cars } = useCarContext();
@@ -18,7 +19,9 @@ export default function UserProfile() {
         (car) => new Date(car.end_time) <= new Date()
     );
 
-    const [showModal, setShowModal] = useState(false);
+    const [showEditProfileModal, setShowEditProfileModal] = useState(false);
+    const [showChangePasswordModal, setShowChangePasswordModal] =
+        useState(false);
 
     document.title = user?.username || "Account Details";
 
@@ -28,7 +31,8 @@ export default function UserProfile() {
 
             <ProfileCard
                 user={user}
-                onEdit={() => setShowModal(true)}
+                onEditProfile={() => setShowEditProfileModal(true)}
+                onChangePassword={() => setShowChangePasswordModal(true)}
                 userListings={userListings}
                 activeListings={activeListings}
                 endedListings={endedListings}
@@ -37,8 +41,12 @@ export default function UserProfile() {
             <UserWallet />
 
             <EditProfileModal
-                show={showModal}
-                handleClose={() => setShowModal(false)}
+                show={showEditProfileModal}
+                handleClose={() => setShowEditProfileModal(false)}
+            />
+            <ChangePassword
+                show={showChangePasswordModal}
+                handleClose={() => setShowChangePasswordModal(false)}
             />
 
             <RandomComments />

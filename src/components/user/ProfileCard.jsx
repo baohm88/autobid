@@ -3,7 +3,8 @@ import { Card, Button, Col, Row } from "react-bootstrap";
 import { useAuth } from "../../context/AuthContext";
 
 export default function ProfileCard({
-    onEdit,
+    onEditProfile,
+    onChangePassword,
     userListings,
     activeListings,
     endedListings,
@@ -32,15 +33,26 @@ export default function ProfileCard({
                             boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
                         }}
                     />
-                    <Button
-                        variant="warning"
-                        size="sm"
-                        className="w-75"
-                        onClick={onEdit}
-                    >
-                        <i className="bi bi-person-fill-gear"></i> Edit Profile
-                    </Button>
+                    <div className="d-flex gap-2 flex-wrap justify-content-center">
+                        <Button
+                            variant="warning"
+                            size="sm"
+                            onClick={onEditProfile}
+                        >
+                            <i className="bi bi-person-fill-gear"></i> Edit
+                            Profile
+                        </Button>
+                        <Button
+                            variant="danger"
+                            size="sm"
+                            onClick={onChangePassword}
+                        >
+                            <i className="bi bi-pencil-square"></i> Change
+                            Password
+                        </Button>
+                    </div>
                 </Col>
+
                 <Col md={8} lg={9} className="p-4">
                     <Card.Body className="h-100 d-flex flex-column justify-content-center">
                         <Card.Title className="mb-3 fs-3 fw-bold">
