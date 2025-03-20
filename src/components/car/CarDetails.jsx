@@ -65,6 +65,7 @@ export default function CarDetails() {
     const navigate = useNavigate();
     const isOwner = user && car && user.id === car.user;
 
+
     // Handle keyboard navigation
     useEffect(() => {
         const handleKeyDown = (event) => {
