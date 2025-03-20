@@ -16,16 +16,18 @@ export default function EditProfileModal({ show, handleClose }) {
         email: Yup.string().email("Invalid email").required("Email is required"),
         password: Yup.string().min(6, "Password must be at least 6 characters"),
         bio: Yup.string().max(200, "Bio must be under 200 characters"),
+
     });
 
     const formik = useFormik({
         initialValues: {
-            id: user.id, // Thêm ID của user
+            id: user.id,
             username: user.username || "",
             email: user.email || "",
-            password: "", // Không điền password cũ vì bảo mật
+            password: "", 
             bio: user.bio || "",
-            image: null,
+            image: user.image_url || null,
+            password: "",
         },
         validationSchema,
         onSubmit: async (values) => {
@@ -67,14 +69,11 @@ export default function EditProfileModal({ show, handleClose }) {
                 };
 
                 const res = await axios.put(
-                    "http://localhost:8080/update-account",
-                    updatedUser,
-                    { headers: { "Content-Type": "application/json" } }
-                );
+                    "http://localhost:8080/update-account", updatedUser,headers);
 
                 if (res.status === 200) {
                     toast.success(res.data.message);
-                    setUser(res.data.data[0]); // Cập nhật user trong context
+                    setUser(res.data.data[0]); 
                     localStorage.setItem("user", JSON.stringify(res.data.data[0]));
                     handleClose();
                 }
