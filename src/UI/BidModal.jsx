@@ -80,7 +80,6 @@ export default function BidModal({
     loading,
 }) {
     const [countdown, setCountdown] = useState(null);
-
     useEffect(() => {
         if (countdown === null) return;
 
@@ -94,9 +93,8 @@ export default function BidModal({
             return () => clearTimeout(timer);
         }
     }, [countdown]);
-
     const parsedBid = parseFloat(bidAmount);
-    const currentBid = car?.current_bid || car?.starting_bid || 0;
+    const currentBid = car?.price || car?.starting_bid || 0;
     const isValidBid = !isNaN(parsedBid) && parsedBid > currentBid;
 
     const handleCountdownSubmit = () => {
