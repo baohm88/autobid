@@ -1,9 +1,11 @@
+// src/components/user/EditProfileModal.jsx
 import { Modal, Button, Form, Row, Col, FloatingLabel } from "react-bootstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
 import { useState } from "react";
+import { formatter } from "../../utils/formatter";
 import { toast } from "react-toastify";
 import { headers } from "./dummy_data";
 
@@ -16,17 +18,20 @@ export default function EditProfileModal({ show, handleClose }) {
         username: Yup.string().min(3).required("Required"),
         bio: Yup.string(),
         email: Yup.string().email("Invalid email").required("Required"),
-        password: Yup.string().min(6, "Password must be at least 6 characters"),
+        // password: Yup.string()
+        //     .min(6, "Minimum 6 characters")
+        //     .required("Required"),
+        // balance: Yup.number().min(0, "Must be positive").required("Required"),
     });
 
     const formik = useFormik({
         initialValues: {
-            id: user.id,
             username: user.username || "",
             bio: user.bio || "",
             email: user.email || "",
             image: user.image_url || null,
-            password: "",
+            // password: user.password || "",
+            // balance: user.balance || 0,
         },
         validationSchema,
         onSubmit: async (values) => {
@@ -52,40 +57,27 @@ export default function EditProfileModal({ show, handleClose }) {
                 }
             }
 
-            if (imageUrl) {
-                formik.values.image_url = imageUrl;
-            }
+            const updatedUser = {
+                ...user,
+                username: values.username,
+                bio: values.bio,
+                email: values.email,
+                // password: values.password,
+                // balance: values.balance,
+                image_url: imageUrl,
+            };
 
             try {
-                const updatedUser = {
-                    id: user.id,
-                    username: values.username,
-                    email: values.email,
-                    password: values.password || null, // Không gửi password nếu không thay đổi
-                    bio: values.bio,
-                    image_url: imageUrl,
-                };
-
-                // const res = await axios.put(
-                //     "http://localhost:8080/update-account",
-                //     formik.values,
-                //     headers
-                // );
                 const res = await axios.put(
                     "http://localhost:8080/update-account",
                     updatedUser,
                     headers
                 );
 
-                console.log(res);
-
                 if (res.status === 200) {
-                    toast.success(res.data.message);
-                    setUser(res.data.data[0]);
-                    localStorage.setItem(
-                        "user",
-                        JSON.stringify(res.data.data[0])
-                    );
+                    toast.success("Profile updated!");
+                    setUser(updatedUser);
+                    localStorage.setItem("user", JSON.stringify(updatedUser));
                     handleClose();
                 }
             } catch (err) {
@@ -183,7 +175,50 @@ export default function EditProfileModal({ show, handleClose }) {
                                 </Form.Control.Feedback>
                             </FloatingLabel>
                         </Col>
+                        {/* <Col>
+                            <FloatingLabel label="Password" className="mb-3">
+                                <Form.Control
+                                    type="password"
+                                    name="password"
+                                    value={formik.values.password}
+                                    onChange={formik.handleChange}
+                                    isInvalid={
+                                        formik.touched.password &&
+                                        !!formik.errors.password
+                                    }
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    {formik.errors.password}
+                                </Form.Control.Feedback>
+                            </FloatingLabel>
+                        </Col> */}
                     </Row>
+
+                    {/* <Row>
+                        <Col>
+                            <span>Current Balance: </span>
+                            <span className="fw-bold">
+                                {formatter.format(user.balance)}
+                            </span>
+                        </Col>
+                        <Col>
+                            <FloatingLabel label="Deposit" className="mb-3">
+                                <Form.Control
+                                    type="number"
+                                    name="balance"
+                                    value={formik.values.balance}
+                                    onChange={formik.handleChange}
+                                    isInvalid={
+                                        formik.touched.balance &&
+                                        !!formik.errors.balance
+                                    }
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    {formik.errors.balance}
+                                </Form.Control.Feedback>
+                            </FloatingLabel>
+                        </Col>
+                    </Row> */}
 
                     <FloatingLabel label="Bio" className="mb-3">
                         <Form.Control
